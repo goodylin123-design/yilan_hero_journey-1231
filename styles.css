@@ -177,10 +177,8 @@ body {
 
 .title {
     font-size: 3.5rem;
-    color: #FFFFFF;
-    text-shadow: 
-        0 0 20px rgba(135, 206, 235, 0.5),
-        0 4px 10px rgba(0, 0, 0, 0.3);
+    color: #000000;
+    text-shadow: none;
     margin-bottom: 15px;
     font-weight: 700;
     letter-spacing: 2px;
@@ -188,8 +186,8 @@ body {
 
 .subtitle {
     font-size: 1.5rem;
-    color: #E0F2FE;
-    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    color: #000000;
+    text-shadow: none;
     font-weight: 300;
 }
 
