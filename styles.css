@@ -571,11 +571,15 @@ body {
 /* 響應式設計 */
 @media (max-width: 768px) {
     .title {
-        font-size: 2.5rem;
+        font-size: 1.5rem;
+        letter-spacing: 0.5px;
+        line-height: 1.2;
+        word-break: keep-all;
+        padding: 0 5px;
     }
     
     .subtitle {
-        font-size: 1.2rem;
+        font-size: 0.9rem;
     }
     
     .card {
