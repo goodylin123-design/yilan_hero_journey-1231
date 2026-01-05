@@ -249,29 +249,48 @@ function showLocationResult(overlay, result, taskKey) {
                     <strong>提示：</strong>請前往 ${taskLocation.description} 附近，然後重新載入頁面。
                 </p>
             </div>
-            <button id="location-check-retry" style="
-                padding: 12px 30px;
-                background: linear-gradient(135deg, #3B82F6, #2563EB);
-                color: white;
-                border: none;
-                border-radius: 25px;
-                font-size: 1rem;
-                font-weight: 600;
-                cursor: pointer;
-                margin-right: 10px;
-                transition: transform 0.3s ease;
-            ">重新檢查</button>
-            <button id="location-check-back" style="
-                padding: 12px 30px;
-                background: #E5E7EB;
-                color: #374151;
-                border: none;
-                border-radius: 25px;
-                font-size: 1rem;
-                font-weight: 600;
-                cursor: pointer;
-                transition: transform 0.3s ease;
-            ">返回首頁</button>
+            <div style="margin-bottom: 15px;">
+                <button id="location-check-test-mode" style="
+                    padding: 12px 30px;
+                    background: linear-gradient(135deg, #10B981, #059669);
+                    color: white;
+                    border: none;
+                    border-radius: 25px;
+                    font-size: 1rem;
+                    font-weight: 600;
+                    cursor: pointer;
+                    width: 100%;
+                    margin-bottom: 10px;
+                    transition: transform 0.3s ease;
+                ">🧪 體驗測試模式</button>
+                <p style="color: #64748B; font-size: 0.85rem; margin: 0;">（跳過位置驗證，方便測試）</p>
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <button id="location-check-retry" style="
+                    padding: 12px 30px;
+                    background: linear-gradient(135deg, #3B82F6, #2563EB);
+                    color: white;
+                    border: none;
+                    border-radius: 25px;
+                    font-size: 1rem;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: transform 0.3s ease;
+                    flex: 1;
+                ">重新檢查</button>
+                <button id="location-check-back" style="
+                    padding: 12px 30px;
+                    background: #E5E7EB;
+                    color: #374151;
+                    border: none;
+                    border-radius: 25px;
+                    font-size: 1rem;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: transform 0.3s ease;
+                    flex: 1;
+                ">返回首頁</button>
+            </div>
         `;
     }
 
@@ -281,6 +300,7 @@ function showLocationResult(overlay, result, taskKey) {
     const closeBtn = document.getElementById('location-check-close');
     const retryBtn = document.getElementById('location-check-retry');
     const backBtn = document.getElementById('location-check-back');
+    const testModeBtn = document.getElementById('location-check-test-mode');
 
     closeBtn?.addEventListener('click', () => {
         overlay.remove();
@@ -293,6 +313,67 @@ function showLocationResult(overlay, result, taskKey) {
 
     backBtn?.addEventListener('click', () => {
         window.location.href = 'index.html';
+    });
+
+    // 體驗測試模式：跳過位置驗證
+    testModeBtn?.addEventListener('click', () => {
+        // 設置測試模式標記（5 分鐘內有效）
+        const verificationData = {
+            taskKey,
+            timestamp: Date.now(),
+            expiresAt: Date.now() + 5 * 60 * 1000, // 5 分鐘
+            isTestMode: true // 標記為測試模式
+        };
+        sessionStorage.setItem(`location_verified_${taskKey}`, JSON.stringify(verificationData));
+        
+        // 顯示測試模式確認
+        overlay.innerHTML = '';
+        const testCard = document.createElement('div');
+        testCard.style.cssText = `
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        `;
+        testCard.innerHTML = `
+            <div style="font-size: 4rem; margin-bottom: 20px;">🧪</div>
+            <h2 style="color: #10B981; margin-bottom: 15px;">體驗測試模式已啟用</h2>
+            <p style="color: #475569; margin-bottom: 10px;">已跳過位置驗證</p>
+            <p style="color: #64748B; font-size: 0.9rem; margin-bottom: 25px;">您可以開始體驗任務內容</p>
+            <div style="
+                background: #ECFDF5;
+                border-left: 4px solid #10B981;
+                padding: 15px;
+                border-radius: 10px;
+                margin-bottom: 20px;
+                text-align: left;
+            ">
+                <p style="color: #065F46; margin: 0; font-size: 0.9rem;">
+                    <strong>注意：</strong>此為測試模式，實際使用時請前往指定地點。
+                </p>
+            </div>
+            <button id="location-check-close-test" style="
+                padding: 12px 30px;
+                background: linear-gradient(135deg, #10B981, #059669);
+                color: white;
+                border: none;
+                border-radius: 25px;
+                font-size: 1rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: transform 0.3s ease;
+            ">開始任務</button>
+        `;
+        overlay.appendChild(testCard);
+        
+        document.getElementById('location-check-close-test')?.addEventListener('click', () => {
+            overlay.remove();
+            // 觸發頁面重新載入以顯示任務內容
+            window.location.reload();
+        });
     });
 }
 
@@ -352,6 +433,37 @@ async function initLocationCheck(taskKey) {
         document.getElementById('location-check-back-error')?.addEventListener('click', () => {
             window.location.href = 'index.html';
         });
+
+        // 在錯誤情況下也添加體驗測試按鈕
+        const errorTestBtn = document.createElement('button');
+        errorTestBtn.id = 'location-check-test-mode-error';
+        errorTestBtn.textContent = '🧪 體驗測試模式';
+        errorTestBtn.style.cssText = `
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #10B981, #059669);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            width: 100%;
+            transition: transform 0.3s ease;
+        `;
+        errorTestBtn.addEventListener('click', () => {
+            // 設置測試模式標記
+            const verificationData = {
+                taskKey,
+                timestamp: Date.now(),
+                expiresAt: Date.now() + 5 * 60 * 1000,
+                isTestMode: true
+            };
+            sessionStorage.setItem(`location_verified_${taskKey}`, JSON.stringify(verificationData));
+            overlay.remove();
+            window.location.reload();
+        });
+        errorCard.appendChild(errorTestBtn);
     }
 }
 
@@ -403,16 +515,31 @@ function blockTaskContent(taskKey) {
             <div style="font-size: 4rem; margin-bottom: 20px;">🔒</div>
             <h2 style="color: #0F172A; margin-bottom: 15px;">需要位置驗證</h2>
             <p style="color: #475569; margin-bottom: 20px;">此任務需要在 ${taskLocation.name} 附近才能開啟</p>
-            <button id="start-location-check" style="
-                padding: 12px 30px;
-                background: linear-gradient(135deg, #3B82F6, #2563EB);
-                color: white;
-                border: none;
-                border-radius: 25px;
-                font-size: 1rem;
-                font-weight: 600;
-                cursor: pointer;
-            ">開始位置檢查</button>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <button id="start-location-check" style="
+                    padding: 12px 30px;
+                    background: linear-gradient(135deg, #3B82F6, #2563EB);
+                    color: white;
+                    border: none;
+                    border-radius: 25px;
+                    font-size: 1rem;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: transform 0.3s ease;
+                ">開始位置檢查</button>
+                <button id="start-test-mode" style="
+                    padding: 12px 30px;
+                    background: linear-gradient(135deg, #10B981, #059669);
+                    color: white;
+                    border: none;
+                    border-radius: 25px;
+                    font-size: 1rem;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: transform 0.3s ease;
+                ">🧪 體驗測試模式</button>
+                <p style="color: #64748B; font-size: 0.85rem; margin: 0;">（跳過位置驗證，方便測試）</p>
+            </div>
         </div>
     `;
 
@@ -422,6 +549,21 @@ function blockTaskContent(taskKey) {
     document.getElementById('start-location-check')?.addEventListener('click', () => {
         blockOverlay.remove();
         initLocationCheck(taskKey);
+    });
+
+    // 體驗測試模式：直接跳過驗證
+    document.getElementById('start-test-mode')?.addEventListener('click', () => {
+        // 設置測試模式標記
+        const verificationData = {
+            taskKey,
+            timestamp: Date.now(),
+            expiresAt: Date.now() + 5 * 60 * 1000,
+            isTestMode: true
+        };
+        sessionStorage.setItem(`location_verified_${taskKey}`, JSON.stringify(verificationData));
+        blockOverlay.remove();
+        // 觸發頁面重新載入以顯示任務內容
+        window.location.reload();
     });
 }
 
