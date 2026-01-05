@@ -175,8 +175,100 @@
     <!-- QR 碼掃描庫 -->
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
     <script src="task-progress.js"></script>
+    <script src="hero-music.js"></script>
     <script src="script.js"></script>
     <script src="index-script.js"></script>
+    <script>
+        // 主頁面自動播放海浪背景音
+        let waveSoundGenerator = null;
+        let waveSoundSource = null;
+        let waveSoundGain = null;
+
+        async function initWaveSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // 生成海浪背景音（持續循環）
+                const bufferSize = audioContext.sampleRate * 2; // 2 秒緩衝
+                const buffer = audioContext.createBuffer(1, bufferSize, audioContext.sampleRate);
+                const data = buffer.getChannelData(0);
+
+                // 生成海浪般的白噪音
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = (Math.random() * 2 - 1) * 0.05; // 降低音量
+                }
+
+                const source = audioContext.createBufferSource();
+                source.buffer = buffer;
+                source.loop = true;
+
+                // 低通濾波器模擬海浪聲
+                const filter = audioContext.createBiquadFilter();
+                filter.type = 'lowpass';
+                filter.frequency.value = 600; // 更柔和的頻率
+                filter.Q.value = 1;
+
+                // 音量控制（輕微音量）
+                const gainNode = audioContext.createGain();
+                gainNode.gain.value = 0.15; // 輕微音量
+
+                source.connect(filter);
+                filter.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+
+                // 保存引用以便後續控制
+                waveSoundGenerator = { audioContext, source, gainNode };
+                waveSoundSource = source;
+                waveSoundGain = gainNode;
+
+                // 嘗試播放（可能需要用戶互動）
+                try {
+                    source.start(0);
+                } catch (error) {
+                    // 如果無法自動播放，等待用戶互動
+                    console.log('需要用戶互動才能播放音訊');
+                    
+                    // 添加一個隱藏的播放按鈕或等待用戶點擊
+                    const playOnInteraction = () => {
+                        if (audioContext.state === 'suspended') {
+                            audioContext.resume().then(() => {
+                                source.start(0);
+                            });
+                        } else {
+                            source.start(0);
+                        }
+                        document.removeEventListener('click', playOnInteraction);
+                        document.removeEventListener('touchstart', playOnInteraction);
+                    };
+                    
+                    document.addEventListener('click', playOnInteraction, { once: true });
+                    document.addEventListener('touchstart', playOnInteraction, { once: true });
+                }
+            } catch (error) {
+                console.error('無法初始化海浪聲:', error);
+            }
+        }
+
+        // 頁面載入時初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            // 延遲一點再播放，讓頁面先載入
+            setTimeout(() => {
+                initWaveSound();
+            }, 500);
+        });
+
+        // 提供停止海浪聲的函數（可選）
+        function stopWaveSound() {
+            if (waveSoundSource && waveSoundGain) {
+                waveSoundGain.gain.linearRampToValueAtTime(0, waveSoundGenerator.audioContext.currentTime + 1);
+                setTimeout(() => {
+                    try {
+                        waveSoundSource.stop();
+                    } catch (e) {}
+                }, 1000);
+            }
+        }
+    </script>
     <script>
         // 更新主頁面的任務進度顯示
         document.addEventListener('DOMContentLoaded', () => {
