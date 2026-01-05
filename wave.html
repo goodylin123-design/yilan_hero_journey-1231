@@ -153,15 +153,21 @@
     </div>
     
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <script src="task-progress.js"></script>
     <script src="location-check.js"></script>
     <script src="script.js"></script>
     <script src="task-script.js"></script>
     <script>
-        // 頁面載入時檢查位置
+        // 頁面載入時檢查任務解鎖和位置
         document.addEventListener('DOMContentLoaded', () => {
             const taskKey = 'wave';
             
-            // 檢查是否已驗證（5 分鐘內有效）
+            // 先檢查任務是否解鎖
+            if (TaskProgress.blockUnlockedTask(taskKey)) {
+                return; // 任務未解鎖，已顯示阻止畫面
+            }
+            
+            // 檢查位置驗證（5 分鐘內有效）
             if (!isLocationVerified(taskKey)) {
                 // 阻止任務內容顯示
                 blockTaskContent(taskKey);

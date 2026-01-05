@@ -466,6 +466,14 @@ elements.btnSaveNote?.addEventListener('click', () => {
     notes.unshift(note); // 新增到最前面
     localStorage.setItem('whisperNotes', JSON.stringify(notes));
     
+    // 標記第一關任務為完成（如果是在 wave.html 頁面）
+    if (window.location.pathname.includes('wave.html') && window.TaskProgress) {
+        const completed = window.TaskProgress.completeTask('wave');
+        if (completed) {
+            window.TaskProgress.showTaskCompleteNotification('wave');
+        }
+    }
+    
     // 使用更溫暖的提示
     const saveMessage = document.createElement('div');
     saveMessage.style.cssText = 'position: fixed; top: 20px; right: 20px; background: linear-gradient(135deg, #10B981, #059669); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); z-index: 10000; animation: slideInRight 0.3s ease;';

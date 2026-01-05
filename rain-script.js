@@ -30,6 +30,14 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         notes.unshift(note);
         localStorage.setItem('whisperNotes', JSON.stringify(notes));
+        
+        // 標記第二關任務為完成
+        if (window.TaskProgress) {
+            const completed = window.TaskProgress.completeTask('rain');
+            if (completed) {
+                window.TaskProgress.showTaskCompleteNotification('rain');
+            }
+        }
 
         // 顯示成功訊息
         const successMsg = document.createElement('div');

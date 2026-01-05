@@ -44,25 +44,36 @@
                     <h3 class="hero-missions-title">選擇今天的英雄任務</h3>
                     <p class="hero-missions-subtitle">依照當下的狀態，挑一個任務，開始你的內在成長旅程。</p>
 
-                    <div class="hero-missions-buttons">
-                        <a href="wave.html" class="mission-btn-link">
+                    <div class="hero-missions-buttons" id="mission-buttons">
+                        <a href="wave.html" class="mission-btn-link" data-task="wave">
                             <button type="button" class="mission-btn" data-mission="wave">
                                 🌊 海風中的呢喃任務
                                 <span class="mission-location">📍 蜜月灣</span>
+                                <span class="mission-status" id="status-wave"></span>
                             </button>
                         </a>
-                        <a href="rain.html" class="mission-btn-link">
+                        <a href="rain.html" class="mission-btn-link" data-task="rain">
                             <button type="button" class="mission-btn" data-mission="rain">
                                 🌧 蘭陽細雨陪伴任務
-                                <span class="mission-location">📍 蘭陽海岸</span>
+                                <span class="mission-location">📍 壯圍沙丘生態園區</span>
+                                <span class="mission-status" id="status-rain"></span>
                             </button>
                         </a>
-                        <a href="dawn.html" class="mission-btn-link">
+                        <a href="dawn.html" class="mission-btn-link" data-task="dawn">
                             <button type="button" class="mission-btn" data-mission="dawn">
                                 🌅 情人灣日出勇氣任務
                                 <span class="mission-location">📍 情人灣</span>
+                                <span class="mission-status" id="status-dawn"></span>
                             </button>
                         </a>
+                    </div>
+                    
+                    <!-- 任務進度顯示 -->
+                    <div class="task-progress-display" id="task-progress-display">
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" id="progress-bar"></div>
+                        </div>
+                        <p class="progress-text" id="progress-text">進度：0%</p>
                     </div>
 
                     <div class="qr-scan-section">
@@ -154,8 +165,67 @@
     
     <!-- QR 碼掃描庫 -->
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <script src="task-progress.js"></script>
     <script src="script.js"></script>
     <script src="index-script.js"></script>
+    <script>
+        // 更新主頁面的任務進度顯示
+        document.addEventListener('DOMContentLoaded', () => {
+            function updateTaskProgress() {
+                const progress = TaskProgress.getTaskProgress();
+                const percentage = TaskProgress.getProgressPercentage();
+                
+                // 更新進度條
+                const progressBar = document.getElementById('progress-bar');
+                const progressText = document.getElementById('progress-text');
+                if (progressBar) {
+                    progressBar.style.width = percentage + '%';
+                }
+                if (progressText) {
+                    progressText.textContent = `進度：${percentage}% (${progress.completed.length}/3)`;
+                }
+                
+                // 更新每個任務按鈕的狀態
+                ['wave', 'rain', 'dawn'].forEach(taskKey => {
+                    const status = TaskProgress.showTaskLockStatus(taskKey);
+                    const statusEl = document.getElementById(`status-${taskKey}`);
+                    const btnLink = document.querySelector(`[data-task="${taskKey}"]`);
+                    const btn = btnLink?.querySelector('.mission-btn');
+                    
+                    if (statusEl) {
+                        statusEl.textContent = status.message;
+                        statusEl.className = 'mission-status ' + status.status;
+                    }
+                    
+                    if (btnLink && btn) {
+                        if (status.status === 'locked') {
+                            btnLink.style.pointerEvents = 'none';
+                            btn.style.opacity = '0.6';
+                            btn.style.cursor = 'not-allowed';
+                            btnLink.href = 'javascript:void(0)';
+                            btnLink.addEventListener('click', (e) => {
+                                e.preventDefault();
+                                alert(`需要先完成 ${status.requiredTask} 才能進入此任務`);
+                            });
+                        } else {
+                            btnLink.style.pointerEvents = 'auto';
+                            btn.style.opacity = '1';
+                            btn.style.cursor = 'pointer';
+                            btnLink.href = `${taskKey}.html`;
+                        }
+                    }
+                });
+            }
+            
+            // 初始更新
+            updateTaskProgress();
+            
+            // 監聽任務完成事件
+            window.addEventListener('taskCompleted', () => {
+                updateTaskProgress();
+            });
+        });
+    </script>
 </body>
 </html>
 

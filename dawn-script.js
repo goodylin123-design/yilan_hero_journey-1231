@@ -26,6 +26,14 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         notes.unshift(note);
         localStorage.setItem('whisperNotes', JSON.stringify(notes));
+        
+        // 標記第三關任務為完成
+        if (window.TaskProgress) {
+            const completed = window.TaskProgress.completeTask('dawn');
+            if (completed) {
+                window.TaskProgress.showTaskCompleteNotification('dawn');
+            }
+        }
 
         // 顯示成功訊息
         const successMsg = document.createElement('div');
