@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="情人灣日出勇氣任務 - 迎接晨曦，整理旅程洞見">
+    <title>🌅 情人灣日出勇氣任務</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="ocean-background" aria-hidden="true">
+        <div class="wave wave1"></div>
+        <div class="wave wave2"></div>
+        <div class="wave wave3"></div>
+    </div>
+    
+    <div class="coastline" aria-hidden="true">
+        <div class="dune dune-front"></div>
+        <div class="dune dune-mid"></div>
+        <div class="dune dune-back"></div>
+        <div class="coastline-highlight"></div>
+    </div>
+    
+    <div class="container">
+        <header class="header">
+            <a href="index.html" class="back-link">← 返回首頁</a>
+            <h1 class="title">🌅 情人灣日出勇氣任務</h1>
+            <p class="subtitle">📍 情人灣・第三關</p>
+        </header>
+        
+        <main id="main-content" class="content">
+            <section class="card" aria-labelledby="dawn-title">
+                <h2 id="dawn-title">第三關｜回歸：情人灣日出港</h2>
+                <p class="mission-intro">選擇這個任務的你，心裡其實已經有一小塊地方準備好迎接新的開始。就像日出前的那片暗藍，只要再多撐一會兒，天邊那條光一定會為你亮起。</p>
+                
+                <div class="mission-content">
+                    <div class="ai-guide-area">
+                        <div class="ai-avatar">🌅</div>
+                        <div class="ai-message">
+                            <p>你內心的那份準備，就是最珍貴的種子。相信它，也相信你自己。這趟旅程，你會發現比想像中更多的可能性。</p>
+                        </div>
+                    </div>
+
+                    <div class="journey-summary">
+                        <h3>📝 整理你的旅程洞見</h3>
+                        <p>回顧這三關的旅程，寫下你的收穫：</p>
+                        <textarea 
+                            id="dawn-insights" 
+                            placeholder="在這趟旅程中，你發現了什麼？學到了什麼？想要帶著什麼繼續前行？"
+                            rows="8"
+                        ></textarea>
+                        <button type="button" class="btn-submit" id="btn-save-insights">
+                            <span>💾 保存洞見</span>
+                        </button>
+                    </div>
+
+                    <div class="courage-badge">
+                        <h3>⚓ 勇氣徽章</h3>
+                        <div class="badge-display" id="badge-display">
+                            <div class="badge-icon">🏅</div>
+                            <p>完成所有任務後，你將獲得這枚勇氣徽章</p>
+                        </div>
+                        <button type="button" class="btn-adventure" id="btn-claim-badge">
+                            <span>🎖️ 領取勇氣徽章</span>
+                        </button>
+                    </div>
+
+                    <div class="share-section">
+                        <h3>💬 分享你的故事</h3>
+                        <p>想要分享這趟旅程給朋友嗎？</p>
+                        <button type="button" class="btn-save" id="btn-share-story">
+                            <span>📤 分享旅程</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- QR 碼掃描區域 -->
+            <section class="qr-section card">
+                <h3>📷 掃描 QR 碼完成旅程</h3>
+                <p>完成所有任務後，掃描 QR 碼返回首頁查看完整記錄</p>
+                <button type="button" class="btn-qr-scan" id="btn-scan-qr">
+                    <span>📷 掃描 QR 碼</span>
+                </button>
+                <div id="qr-reader" style="display: none; margin-top: 20px;"></div>
+            </section>
+        </main>
+    </div>
+    
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <script src="location-check.js"></script>
+    <script src="task-script.js"></script>
+    <script src="dawn-script.js"></script>
+    <script>
+        // 頁面載入時檢查位置
+        document.addEventListener('DOMContentLoaded', () => {
+            const taskKey = 'dawn';
+            
+            // 檢查是否已驗證（5 分鐘內有效）
+            if (!isLocationVerified(taskKey)) {
+                // 阻止任務內容顯示
+                blockTaskContent(taskKey);
+            } else {
+                // 已驗證，允許使用任務
+                console.log('位置驗證通過，任務已解鎖');
+            }
+        });
+    </script>
+</body>
+</html>
+

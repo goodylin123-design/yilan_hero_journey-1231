@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="蘭陽細雨陪伴任務 - 在風雨中練習穩住呼吸與腳步">
+    <title>🌧 蘭陽細雨陪伴任務</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="ocean-background" aria-hidden="true">
+        <div class="wave wave1"></div>
+        <div class="wave wave2"></div>
+        <div class="wave wave3"></div>
+    </div>
+    
+    <div class="coastline" aria-hidden="true">
+        <div class="dune dune-front"></div>
+        <div class="dune dune-mid"></div>
+        <div class="dune dune-back"></div>
+        <div class="coastline-highlight"></div>
+    </div>
+    
+    <div class="container">
+        <header class="header">
+            <a href="index.html" class="back-link">← 返回首頁</a>
+            <h1 class="title">🌧 蘭陽細雨陪伴任務</h1>
+            <p class="subtitle">📍 壯圍沙丘生態園區・第二關</p>
+        </header>
+        
+        <main id="main-content" class="content">
+            <section class="card" aria-labelledby="rain-title">
+                <h2 id="rain-title">第二關｜跨越：蘭陽細雨與海風</h2>
+                <p class="mission-intro">如果你最近常覺得有點累、有點撐著，那就讓蘭陽的細雨陪你一下吧。就像雨水溫柔落在海面上，允許自己的情緒慢慢釋放，而不是硬撐到看不見海岸線。</p>
+                
+                <div class="mission-content">
+                    <div class="ai-guide-area">
+                        <div class="ai-avatar">🌧</div>
+                        <div class="ai-message">
+                            <p>在細雨中，我們練習面對不確定。閉上眼睛，感受雨滴落在身上的觸感，聽聽雨聲與海浪聲的交織。這一關，我們不追求完美，只求真實地面對自己。</p>
+                        </div>
+                    </div>
+
+                    <div class="reflection-area">
+                        <h3>💭 反思練習</h3>
+                        <textarea 
+                            id="rain-reflection" 
+                            placeholder="請分享：當你面對不確定時，內心有什麼感受？細雨和海風教會了你什麼？"
+                            rows="6"
+                        ></textarea>
+                        <button type="button" class="btn-submit" id="btn-submit-reflection">
+                            <span>💾 保存反思</span>
+                        </button>
+                    </div>
+
+                    <div class="breathing-exercise">
+                        <h3>🌬️ 呼吸練習</h3>
+                        <p>跟著節奏，練習穩住呼吸：</p>
+                        <div class="breathing-circle" id="breathing-circle">
+                            <span id="breathing-text">準備開始</span>
+                        </div>
+                        <button type="button" class="btn-timer" id="btn-start-breathing">開始呼吸練習</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- QR 碼掃描區域 -->
+            <section class="qr-section card">
+                <h3>📷 掃描 QR 碼進入下一個任務</h3>
+                <p>完成此任務後，掃描下一個任務的 QR 碼繼續旅程</p>
+                <button type="button" class="btn-qr-scan" id="btn-scan-qr">
+                    <span>📷 掃描 QR 碼</span>
+                </button>
+                <div id="qr-reader" style="display: none; margin-top: 20px;"></div>
+            </section>
+        </main>
+    </div>
+    
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <script src="location-check.js"></script>
+    <script src="task-script.js"></script>
+    <script src="rain-script.js"></script>
+    <script>
+        // 頁面載入時檢查位置
+        document.addEventListener('DOMContentLoaded', () => {
+            const taskKey = 'rain';
+            
+            // 檢查是否已驗證（5 分鐘內有效）
+            if (!isLocationVerified(taskKey)) {
+                // 阻止任務內容顯示
+                blockTaskContent(taskKey);
+            } else {
+                // 已驗證，允許使用任務
+                console.log('位置驗證通過，任務已解鎖');
+            }
+        });
+    </script>
+</body>
+</html>
+
