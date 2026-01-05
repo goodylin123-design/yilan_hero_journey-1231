@@ -51,27 +51,47 @@ class HeroMusicGenerator {
         return { source, gainNode };
     }
 
-    // 生成主旋律（五聲音階，宜蘭民謠風格）
+    // 生成主旋律（五聲音階，宜蘭民謠風格 - 參考「天清宜蘭」曲風）
     createMelody() {
         // 五聲音階：C, D, E, G, A (對應 261.63, 293.66, 329.63, 392.00, 440.00 Hz)
-        const pentatonicScale = [261.63, 293.66, 329.63, 392.00, 440.00];
+        // 擴展到兩個八度，增加旋律豐富度
+        const pentatonicScale = [
+            261.63, 293.66, 329.63, 392.00, 440.00,  // 第一組
+            523.25, 587.33, 659.25, 783.99, 880.00  // 第二組（高八度）
+        ];
         const melody = [];
 
-        // 生成緩慢、療癒的旋律
+        // 輕快海洋風格：活潑、輕盈、有節奏感
         const melodyPattern = [
-            { note: 0, duration: 2 }, // C
-            { note: 2, duration: 2 }, // E
-            { note: 1, duration: 2 }, // D
-            { note: 3, duration: 3 }, // G
-            { note: 2, duration: 2 }, // E
-            { note: 4, duration: 2 }, // A
-            { note: 3, duration: 3 }, // G
-            { note: 0, duration: 4 }, // C (長音)
+            // 開場：輕快上升
+            { note: 0, duration: 1.5, octave: 0 }, // C (低)
+            { note: 2, duration: 1, octave: 0 }, // E
+            { note: 4, duration: 1, octave: 0 }, // A
+            { note: 1, duration: 1.5, octave: 1 }, // D (高)
+            
+            // 中段：活潑跳躍
+            { note: 0, duration: 1, octave: 1 }, // C (高)
+            { note: 3, duration: 1.5, octave: 0 }, // G
+            { note: 2, duration: 1, octave: 1 }, // E (高)
+            { note: 4, duration: 1, octave: 0 }, // A
+            { note: 1, duration: 1, octave: 1 }, // D (高)
+            
+            // 高潮：輕快高音
+            { note: 3, duration: 1, octave: 1 }, // G (高)
+            { note: 2, duration: 1, octave: 1 }, // E (高)
+            { note: 0, duration: 1.5, octave: 1 }, // C (高)
+            { note: 4, duration: 1, octave: 1 }, // A (高)
+            
+            // 結尾：輕快回落
+            { note: 3, duration: 1, octave: 1 }, // G (高)
+            { note: 2, duration: 1, octave: 0 }, // E
+            { note: 0, duration: 2, octave: 0 }, // C (結束)
         ];
 
-        melodyPattern.forEach(({ note, duration }) => {
+        melodyPattern.forEach(({ note, duration, octave }) => {
+            const baseIndex = octave * 5; // 0 或 5
             melody.push({
-                frequency: pentatonicScale[note],
+                frequency: pentatonicScale[baseIndex + note],
                 duration: duration,
                 startTime: melody.length > 0 
                     ? melody[melody.length - 1].startTime + melody[melody.length - 1].duration 
@@ -82,35 +102,68 @@ class HeroMusicGenerator {
         return melody;
     }
 
-    // 生成低音伴奏（海浪般的低頻）
+    // 生成低音伴奏（輕快的節奏，海洋感）
     createBassLine() {
-        // 使用 C 和 G 的低八度作為基礎
-        const bassNotes = [130.81, 196.00]; // C2, G2
+        // 使用 C、G、A 的低八度作為基礎
+        const bassNotes = [130.81, 196.00, 220.00]; // C2, G2, A2
         const bassLine = [];
 
-        for (let i = 0; i < 16; i++) {
+        // 輕快的節奏模式，營造海洋活力感
+        const bassPattern = [
+            { note: 0, duration: 1.5 }, // C
+            { note: 1, duration: 1 }, // G
+            { note: 0, duration: 1 }, // C
+            { note: 2, duration: 1.5 }, // A
+            { note: 1, duration: 1 }, // G
+            { note: 0, duration: 1 }, // C
+            { note: 1, duration: 1.5 }, // G
+            { note: 0, duration: 1.5 }, // C
+            { note: 1, duration: 1 }, // G
+            { note: 0, duration: 1.5 }, // C
+        ];
+
+        let currentTime = 0;
+        bassPattern.forEach(({ note, duration }) => {
             bassLine.push({
-                frequency: bassNotes[i % 2],
-                duration: 2,
-                startTime: i * 2
+                frequency: bassNotes[note],
+                duration: duration,
+                startTime: currentTime
             });
-        }
+            currentTime += duration;
+        });
 
         return bassLine;
     }
 
-    // 播放單個音符
-    playNote(frequency, startTime, duration, volume = 0.3, type = 'sine') {
+    // 播放單個音符（改進：更柔和的音色，參考「天清宜蘭」風格）
+    playNote(frequency, startTime, duration, volume = 0.3, type = 'sine', vibrato = false) {
         const oscillator = this.audioContext.createOscillator();
         const gainNode = this.audioContext.createGain();
 
+        // 使用更柔和的波形（sine 或 triangle）
         oscillator.type = type;
         oscillator.frequency.value = frequency;
 
-        // 柔和的音量包絡（淡入淡出）
+        // 添加輕微的顫音（vibrato），增加宜蘭民謠的韻味
+        if (vibrato && duration > 2) {
+            const lfo = this.audioContext.createOscillator();
+            const lfoGain = this.audioContext.createGain();
+            lfo.frequency.value = 4; // 4 Hz 的顫音
+            lfoGain.gain.value = frequency * 0.01; // 1% 的頻率變化
+            lfo.connect(lfoGain);
+            lfoGain.connect(oscillator.frequency);
+            lfo.start(startTime);
+            lfo.stop(startTime + duration);
+            this.currentOscillators.push(lfo);
+        }
+
+        // 更柔和的音量包絡（更長的淡入淡出，營造空靈感）
+        const fadeIn = Math.min(0.8, duration * 0.2);
+        const fadeOut = Math.min(0.8, duration * 0.2);
+        
         gainNode.gain.setValueAtTime(0, startTime);
-        gainNode.gain.linearRampToValueAtTime(volume, startTime + 0.5);
-        gainNode.gain.setValueAtTime(volume, startTime + duration - 0.5);
+        gainNode.gain.linearRampToValueAtTime(volume, startTime + fadeIn);
+        gainNode.gain.setValueAtTime(volume, startTime + duration - fadeOut);
         gainNode.gain.linearRampToValueAtTime(0, startTime + duration);
 
         oscillator.connect(gainNode);
@@ -151,36 +204,83 @@ class HeroMusicGenerator {
         waveSound.source.loop = true;
         waveSound.source.start(startTime);
 
-        // 播放主旋律
+        // 播放主旋律（輕快海洋風格：活潑、有節奏感）
         const melody = this.createMelody();
-        melody.forEach(({ frequency, duration, startTime: noteStart }) => {
-            this.playNote(frequency, startTime + noteStart, duration, 0.25, 'sine');
+        melody.forEach(({ frequency, duration, startTime: noteStart }, index) => {
+            // 輕快的音符，不使用顫音
+            this.playNote(frequency, startTime + noteStart, duration, 0.3, 'sine', false);
         });
 
-        // 播放低音伴奏（延遲開始，營造層次感）
+        // 播放低音伴奏（同步開始，營造節奏感）
         const bassLine = this.createBassLine();
         bassLine.forEach(({ frequency, duration, startTime: noteStart }) => {
-            this.playNote(frequency, startTime + noteStart + 1, duration, 0.15, 'triangle');
+            this.playNote(frequency, startTime + noteStart, duration, 0.2, 'triangle', false);
         });
 
-        // 添加和聲（高八度，輕柔）
+        // 添加輕快的和聲層次
+        // 第一層：高八度和聲（輕快點綴）
         melody.forEach(({ frequency, duration, startTime: noteStart }, index) => {
-            if (index % 2 === 0) { // 每隔一個音符添加和聲
-                this.playNote(frequency * 2, startTime + noteStart + 0.5, duration - 0.5, 0.1, 'sine');
+            if (index % 2 === 0 && duration >= 1) {
+                this.playNote(frequency * 2, startTime + noteStart + 0.1, duration - 0.1, 0.15, 'sine', false);
             }
         });
 
-        // 音樂結束後自動停止
+        // 第二層：三度和聲（增加輕快感）
+        melody.forEach(({ frequency, duration, startTime: noteStart }, index) => {
+            if (index % 3 === 0 && duration >= 1) {
+                const thirdFreq = frequency * 1.25; // 大三度音程
+                this.playNote(thirdFreq, startTime + noteStart + 0.05, duration - 0.1, 0.1, 'sine', false);
+            }
+        });
+
+        // 計算音樂總時長
         const totalDuration = Math.max(
             melody[melody.length - 1].startTime + melody[melody.length - 1].duration,
             bassLine[bassLine.length - 1].startTime + bassLine[bassLine.length - 1].duration
         ) + 2;
 
-        setTimeout(() => {
-            if (this.isPlaying) {
-                this.stop();
-            }
-        }, totalDuration * 1000);
+        // 音樂結束後自動循環播放（不停止）
+        const loopMusic = () => {
+            if (!this.isPlaying) return;
+
+            // 清除當前的 oscillators（但保留海浪聲）
+            this.currentOscillators.forEach(osc => {
+                try {
+                    osc.stop();
+                } catch (e) {}
+            });
+            this.currentOscillators = [];
+            this.currentGainNodes = [];
+
+            // 重新播放旋律和伴奏（海浪聲繼續）
+            const newStartTime = this.audioContext.currentTime;
+            melody.forEach(({ frequency, duration, startTime: noteStart }, index) => {
+                const useVibrato = duration >= 3;
+                this.playNote(frequency, newStartTime + noteStart, duration, 0.28, 'sine', useVibrato);
+            });
+
+            bassLine.forEach(({ frequency, duration, startTime: noteStart }) => {
+                this.playNote(frequency, newStartTime + noteStart + 0.5, duration, 0.18, 'triangle', false);
+            });
+
+            melody.forEach(({ frequency, duration, startTime: noteStart }, index) => {
+                if (index % 2 === 0 && duration >= 2) {
+                    this.playNote(frequency * 2, newStartTime + noteStart + 0.3, duration - 0.3, 0.12, 'sine', false);
+                }
+            });
+
+            melody.forEach(({ frequency, duration, startTime: noteStart }, index) => {
+                if (index % 3 === 0 && duration >= 2.5) {
+                    const fifthFreq = frequency * 1.5;
+                    this.playNote(fifthFreq, newStartTime + noteStart + 0.2, duration - 0.4, 0.08, 'sine', false);
+                }
+            });
+
+            // 繼續循環
+            setTimeout(loopMusic, totalDuration * 1000);
+        };
+
+        setTimeout(loopMusic, totalDuration * 1000);
     }
 
     // 停止播放
@@ -206,19 +306,21 @@ class HeroMusicGenerator {
     // 生成音樂描述
     getMusicDescription() {
         return {
-            title: '擺渡蘭陽英雄之歌',
-            style: '宜蘭民謠風格',
-            mood: '療癒、冥想、行走',
-            tempo: '慢步調（約 60 BPM）',
-            scale: '五聲音階（C, D, E, G, A）',
+            title: '輕快海洋之歌 - 擺渡蘭陽',
+            style: '開放版權 · 輕快海洋風格',
+            mood: '輕快、活潑、療癒、海岸感',
+            tempo: '中快步調（約 80-90 BPM）',
+            scale: '五聲音階（C, D, E, G, A），雙八度',
             elements: [
                 '海浪背景音（白噪音 + 低通濾波）',
-                '主旋律（五聲音階，緩慢流暢）',
-                '低音伴奏（C-G 交替，海浪節奏）',
-                '和聲（高八度，輕柔點綴）'
+                '主旋律（五聲音階，輕快活潑）',
+                '低音伴奏（C-G-A 變化，節奏感）',
+                '多層和聲（高八度 + 三度和聲）',
+                '輕快節奏（適合海岸行走）'
             ],
-            duration: '約 16 秒（可循環）',
-            usage: '適合在任務進行時播放，營造海岸氛圍'
+            duration: '約 20 秒（可循環）',
+            usage: '適合在任務進行時播放，營造輕快宜蘭海岸氛圍',
+            copyright: '開放版權，可自由使用'
         };
     }
 }
