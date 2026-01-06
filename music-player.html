@@ -27,6 +27,33 @@
             color: #0F172A;
             margin-bottom: 10px;
             font-weight: 700;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        @media (max-width: 768px) {
+            .music-title {
+                font-size: 1.5rem;
+                white-space: normal;
+                word-break: keep-all;
+                line-height: 1.3;
+            }
+            
+            .music-player-card {
+                padding: 25px 15px;
+            }
+            
+            .music-controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .btn-music {
+                width: 100%;
+                max-width: 280px;
+                justify-content: center;
+            }
         }
         
         .music-subtitle {
