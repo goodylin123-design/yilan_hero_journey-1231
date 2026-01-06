@@ -22,54 +22,71 @@
     </div>
     
     <div class="container">
+        <!-- 語言選擇器 -->
+        <div class="language-selector" id="language-selector">
+            <button type="button" class="lang-toggle-btn" id="lang-toggle-btn" aria-label="選擇語言">
+                <span class="lang-icon">🌐</span>
+                <span class="lang-current" id="lang-current">繁體中文</span>
+                <span class="lang-arrow">▼</span>
+            </button>
+            <div class="lang-dropdown" id="lang-dropdown" style="display: none;">
+                <button type="button" class="lang-option" data-lang="zh-TW">繁體中文</button>
+                <button type="button" class="lang-option" data-lang="zh-CN">简体中文</button>
+                <button type="button" class="lang-option" data-lang="en">English</button>
+                <button type="button" class="lang-option" data-lang="ja">日本語</button>
+                <button type="button" class="lang-option" data-lang="ko">한국어</button>
+            </div>
+        </div>
+        
         <header class="header">
-            <a href="index.html" class="back-link">← 返回首頁</a>
-            <h1 class="title">🌅 情人灣日出勇氣任務</h1>
-            <p class="subtitle">📍 情人灣・第三關</p>
+            <a href="index.html" class="back-link" data-i18n="backToHome">← 返回首頁</a>
+            <h1 class="title" data-i18n="dawnTitle">🌅 情人灣日出勇氣任務</h1>
+            <p class="subtitle" data-i18n="dawnSubtitle">📍 情人灣・第三關</p>
         </header>
         
         <main id="main-content" class="content">
             <section class="card" aria-labelledby="dawn-title">
-                <h2 id="dawn-title">第三關｜回歸：情人灣日出港</h2>
-                <p class="mission-intro">選擇這個任務的你，心裡其實已經有一小塊地方準備好迎接新的開始。就像日出前的那片暗藍，只要再多撐一會兒，天邊那條光一定會為你亮起。</p>
+                <h2 id="dawn-title" data-i18n="dawnPageTitle">第三關｜回歸：情人灣日出港</h2>
+                <p class="mission-intro" data-i18n="dawnPageIntro">選擇這個任務的你，心裡其實已經有一小塊地方準備好迎接新的開始。就像日出前的那片暗藍，只要再多撐一會兒，天邊那條光一定會為你亮起。</p>
                 
                 <div class="mission-content">
                     <div class="ai-guide-area">
                         <div class="ai-avatar">🌅</div>
                         <div class="ai-message">
-                            <p>你內心的那份準備，就是最珍貴的種子。相信它，也相信你自己。這趟旅程，你會發現比想像中更多的可能性。</p>
+                            <p data-i18n="dawnAIMessage">你內心的那份準備，就是最珍貴的種子。相信它，也相信你自己。這趟旅程，你會發現比想像中更多的可能性。</p>
                         </div>
                     </div>
 
                     <div class="journey-summary">
-                        <h3>📝 整理你的旅程洞見</h3>
-                        <p>回顧這三關的旅程，寫下你的收穫：</p>
+                        <h3 data-i18n="journeyInsights">📝 整理你的旅程洞見</h3>
+                        <p data-i18n="insightsDesc">回顧這三關的旅程，寫下你的收穫：</p>
                         <textarea 
                             id="dawn-insights" 
+                            data-i18n-placeholder="insightsPlaceholder"
                             placeholder="在這趟旅程中，你發現了什麼？學到了什麼？想要帶著什麼繼續前行？"
                             rows="8"
                         ></textarea>
                         <button type="button" class="btn-submit" id="btn-save-insights">
-                            <span>💾 保存洞見</span>
+                            <span data-i18n="btnSaveInsights">💾 保存洞見</span>
                         </button>
                     </div>
 
                     <div class="courage-badge">
-                        <h3>⚓ 勇氣徽章</h3>
+                        <h3 data-i18n="courageBadge">⚓ 勇氣徽章</h3>
                         <div class="badge-display" id="badge-display">
                             <div class="badge-icon">🏅</div>
-                            <p>完成所有任務後，你將獲得這枚勇氣徽章</p>
+                            <p data-i18n="badgeDesc">完成所有任務後，你將獲得這枚勇氣徽章</p>
                         </div>
                         <button type="button" class="btn-adventure" id="btn-claim-badge">
-                            <span>🎖️ 領取勇氣徽章</span>
+                            <span data-i18n="btnClaimBadge">🎖️ 領取勇氣徽章</span>
                         </button>
                     </div>
 
                     <div class="share-section">
-                        <h3>💬 分享你的故事</h3>
-                        <p>想要分享這趟旅程給朋友嗎？</p>
+                        <h3 data-i18n="shareStory">💬 分享你的故事</h3>
+                        <p data-i18n="shareDesc">想要分享這趟旅程給朋友嗎？</p>
                         <button type="button" class="btn-save" id="btn-share-story">
-                            <span>📤 分享旅程</span>
+                            <span data-i18n="btnShareStory">📤 分享旅程</span>
                         </button>
                     </div>
                 </div>
@@ -77,10 +94,10 @@
 
             <!-- QR 碼掃描區域 -->
             <section class="qr-section card">
-                <h3>📷 掃描 QR 碼完成旅程</h3>
-                <p>完成所有任務後，掃描 QR 碼返回首頁查看完整記錄</p>
+                <h3 data-i18n="scanQRComplete">📷 掃描 QR 碼完成旅程</h3>
+                <p data-i18n="scanQRNextDesc">完成此任務後，掃描下一個任務的 QR 碼繼續旅程</p>
                 <button type="button" class="btn-qr-scan" id="btn-scan-qr">
-                    <span>📷 掃描 QR 碼</span>
+                    <span data-i18n="btnScanQR">📷 掃描 QR 碼</span>
                 </button>
                 <div id="qr-reader" style="display: none; margin-top: 20px;"></div>
             </section>
@@ -88,12 +105,14 @@
     </div>
     
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <script src="i18n.js"></script>
     <script src="task-progress.js"></script>
     <script src="location-check.js"></script>
     <script src="esg-stats.js"></script>
     <script src="traveler-store.js"></script>
     <script src="task-script.js"></script>
     <script src="dawn-script.js"></script>
+    <script src="page-i18n.js"></script>
     <script>
         // 頁面載入時檢查任務解鎖和位置
         document.addEventListener('DOMContentLoaded', () => {

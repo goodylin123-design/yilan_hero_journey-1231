@@ -22,16 +22,32 @@
     </div>
     
     <div class="container">
+        <!-- 語言選擇器 -->
+        <div class="language-selector" id="language-selector">
+            <button type="button" class="lang-toggle-btn" id="lang-toggle-btn" aria-label="選擇語言">
+                <span class="lang-icon">🌐</span>
+                <span class="lang-current" id="lang-current">繁體中文</span>
+                <span class="lang-arrow">▼</span>
+            </button>
+            <div class="lang-dropdown" id="lang-dropdown" style="display: none;">
+                <button type="button" class="lang-option" data-lang="zh-TW">繁體中文</button>
+                <button type="button" class="lang-option" data-lang="zh-CN">简体中文</button>
+                <button type="button" class="lang-option" data-lang="en">English</button>
+                <button type="button" class="lang-option" data-lang="ja">日本語</button>
+                <button type="button" class="lang-option" data-lang="ko">한국어</button>
+            </div>
+        </div>
+        
         <header class="header">
-            <a href="index.html" class="back-link">← 返回首頁</a>
-            <h1 class="title">📋 旅行資訊指南</h1>
-            <p class="subtitle">蘭陽海岸・完整旅行資訊</p>
+            <a href="index.html" class="back-link" data-i18n="backToHome">← 返回首頁</a>
+            <h1 class="title" data-i18n="travelInfoTitle">📋 旅行資訊指南</h1>
+            <p class="subtitle" data-i18n="travelInfoSubtitle">蘭陽海岸・完整旅行資訊</p>
         </header>
         
         <main id="main-content" class="content">
             <!-- 食 -->
             <section class="card" aria-labelledby="food-title">
-                <h2 id="food-title">🍽️ 食</h2>
+                <h2 id="food-title" data-i18n="food">🍽️ 食</h2>
                 <div class="info-grid">
                     <div class="info-item">
                         <h3>頭城老街</h3>
@@ -56,7 +72,7 @@
             
             <!-- 醫 -->
             <section class="card" aria-labelledby="medical-title">
-                <h2 id="medical-title">🏥 醫</h2>
+                <h2 id="medical-title" data-i18n="medical">🏥 醫</h2>
                 <div class="info-grid">
                     <div class="info-item">
                         <h3>頭城鎮衛生所</h3>
@@ -260,8 +276,10 @@
         </main>
     </div>
     
+    <script src="i18n.js"></script>
     <script src="task-progress.js"></script>
     <script src="traveler-store.js"></script>
+    <script src="page-i18n.js"></script>
 </body>
 </html>
 

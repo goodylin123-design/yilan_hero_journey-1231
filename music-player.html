@@ -204,17 +204,33 @@
     </div>
     
     <div class="container">
+        <!-- 語言選擇器 -->
+        <div class="language-selector" id="language-selector">
+            <button type="button" class="lang-toggle-btn" id="lang-toggle-btn" aria-label="選擇語言">
+                <span class="lang-icon">🌐</span>
+                <span class="lang-current" id="lang-current">繁體中文</span>
+                <span class="lang-arrow">▼</span>
+            </button>
+            <div class="lang-dropdown" id="lang-dropdown" style="display: none;">
+                <button type="button" class="lang-option" data-lang="zh-TW">繁體中文</button>
+                <button type="button" class="lang-option" data-lang="zh-CN">简体中文</button>
+                <button type="button" class="lang-option" data-lang="en">English</button>
+                <button type="button" class="lang-option" data-lang="ja">日本語</button>
+                <button type="button" class="lang-option" data-lang="ko">한국어</button>
+            </div>
+        </div>
+        
         <header class="header">
-            <a href="index.html" class="back-link">← 返回首頁</a>
-            <h1 class="title">🎵 英雄主題音樂</h1>
-            <p class="subtitle">擺渡蘭陽英雄之歌</p>
+            <a href="index.html" class="back-link" data-i18n="backToHome">← 返回首頁</a>
+            <h1 class="title" data-i18n="musicPlayerTitle">🎵 英雄主題音樂</h1>
+            <p class="subtitle" data-i18n="musicPlayerSubtitle">擺渡蘭陽英雄之歌</p>
         </header>
         
         <main class="content">
             <div class="music-player-container">
                 <section class="music-player-card">
-                    <h2 class="music-title">《擺渡蘭陽・英雄之旅》</h2>
-                    <p class="music-subtitle">英雄主題音樂 · 海岸療癒系</p>
+                    <h2 class="music-title" data-i18n="musicTitle">《擺渡蘭陽・英雄之旅》</h2>
+                    <p class="music-subtitle" data-i18n="musicSubtitle">英雄主題音樂 · 海岸療癒系</p>
                     
                     <!-- 隱藏的 audio 元素 -->
                     <audio id="hero-music-audio" loop>
@@ -225,17 +241,17 @@
                     <div class="music-controls">
                         <button type="button" class="btn-music btn-play" id="btn-play-music">
                             <span>▶️</span>
-                            <span>播放音樂</span>
+                            <span data-i18n="btnPlayMusic">播放音樂</span>
                         </button>
                         <button type="button" class="btn-music btn-stop" id="btn-stop-music" style="display: none;">
                             <span>⏹️</span>
-                            <span>停止播放</span>
+                            <span data-i18n="btnStopMusic">停止播放</span>
                         </button>
                     </div>
                     
                     <div id="music-status" style="color: #64748B; font-size: 0.9rem;">
                         <span class="status-indicator" id="status-indicator"></span>
-                        <span id="status-text">準備就緒</span>
+                        <span id="status-text" data-i18n="ready">準備就緒</span>
                     </div>
                     
                     <!-- 音量控制 -->
@@ -248,7 +264,7 @@
                 
                 <!-- 歌詞區塊 -->
                 <section class="card" style="margin-top: 30px; background: linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(254, 243, 199, 0.95));">
-                    <h3 style="color: #0F172A; margin-bottom: 20px; text-align: center; font-size: 1.5rem;">📝 歌詞</h3>
+                    <h3 style="color: #0F172A; margin-bottom: 20px; text-align: center; font-size: 1.5rem;" data-i18n="lyrics">📝 歌詞</h3>
                     <div class="lyrics-container" style="line-height: 2; color: #334155; font-size: 1.05rem; text-align: center; padding: 20px;">
                         <div class="lyrics-verse" style="margin-bottom: 25px;">
                             <p style="margin: 8px 0; color: #0F172A; font-weight: 500;">請來蘭陽，浪為你點燈</p>
@@ -301,7 +317,7 @@
                 </section>
                 
                 <section class="card" style="margin-top: 30px;">
-                    <h3>💡 關於這首歌</h3>
+                    <h3 data-i18n="aboutSong">💡 關於這首歌</h3>
                     <p style="color: #475569; line-height: 1.7;">
                         《擺渡蘭陽・英雄之旅》是專為「擺渡蘭陽英雄之旅」創作的主題音樂。
                         歌詞描繪了在蘭陽海岸的旅程中，透過感受孤獨、找回自己的英雄之旅。
@@ -414,6 +430,8 @@
             });
         });
     </script>
+    <script src="i18n.js"></script>
+    <script src="page-i18n.js"></script>
 </body>
 </html>
 

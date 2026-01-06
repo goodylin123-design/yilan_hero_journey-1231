@@ -193,10 +193,26 @@
     </div>
     
     <div class="container">
+        <!-- 語言選擇器 -->
+        <div class="language-selector" id="language-selector">
+            <button type="button" class="lang-toggle-btn" id="lang-toggle-btn" aria-label="選擇語言">
+                <span class="lang-icon">🌐</span>
+                <span class="lang-current" id="lang-current">繁體中文</span>
+                <span class="lang-arrow">▼</span>
+            </button>
+            <div class="lang-dropdown" id="lang-dropdown" style="display: none;">
+                <button type="button" class="lang-option" data-lang="zh-TW">繁體中文</button>
+                <button type="button" class="lang-option" data-lang="zh-CN">简体中文</button>
+                <button type="button" class="lang-option" data-lang="en">English</button>
+                <button type="button" class="lang-option" data-lang="ja">日本語</button>
+                <button type="button" class="lang-option" data-lang="ko">한국어</button>
+            </div>
+        </div>
+        
         <header class="header">
-            <a href="index.html" class="back-link">← 返回首頁</a>
-            <h1 class="title">🗺️ 英雄旅程路線</h1>
-            <p class="subtitle">蜜月灣 → 壯圍沙丘 → 情人灣</p>
+            <a href="index.html" class="back-link" data-i18n="backToHome">← 返回首頁</a>
+            <h1 class="title" data-i18n="routeTitle">🗺️ 英雄旅程路線</h1>
+            <p class="subtitle" data-i18n="routeSubtitle">擺渡蘭陽・實體互動路線</p>
         </header>
         
         <main class="content">
@@ -334,7 +350,9 @@
         </main>
     </div>
     
+    <script src="i18n.js"></script>
     <script src="task-progress.js"></script>
+    <script src="page-i18n.js"></script>
     <script>
         // 檢查任務解鎖狀態
         document.addEventListener('DOMContentLoaded', () => {
