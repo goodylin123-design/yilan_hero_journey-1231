@@ -32,6 +32,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const completed = window.TaskProgress.completeTask('dawn');
             if (completed) {
                 window.TaskProgress.showTaskCompleteNotification('dawn');
+                // 更新 ESG 統計：完成次數 + 筆記數 + 自評分數 + 實地路程與環保點數
+                if (window.EsgStats) {
+                    window.EsgStats.recordMissionCompletion('dawn', {
+                        notesAdded: 1,
+                        askRating: true
+                    });
+                }
             }
         }
 
