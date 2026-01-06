@@ -248,7 +248,9 @@ body {
 .hero-missions {
     margin-top: 30px;
     padding-top: 20px;
+    padding-bottom: 20px;
     border-top: 1px dashed rgba(148, 163, 184, 0.6);
+    margin-bottom: 0;
 }
 
 .hero-missions-title {
@@ -337,8 +339,8 @@ body {
     justify-items: center;
     align-items: center;
     max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px 0;
+    margin: 20px auto 0;
+    padding: 0;
 }
 
 .btn-link {
@@ -713,13 +715,23 @@ body {
     
     .button-group {
         gap: 15px;
-        padding: 15px 0;
+        padding: 0;
+        margin-top: 0;
     }
     
     .button-group > button,
     .button-group > .btn-link > button {
         min-width: unset;
         max-width: 300px;
+        margin: 0;
+    }
+    
+    .qr-scan-section {
+        margin-bottom: 15px;
+    }
+    
+    .hero-missions {
+        margin-bottom: 15px;
     }
     
     .features {
@@ -1310,7 +1322,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 20px 0;
+    margin: 0 0 20px 0;
     padding: 0;
 }
 
