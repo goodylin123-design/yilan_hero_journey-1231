@@ -186,8 +186,14 @@
         <main class="content">
             <div class="music-player-container">
                 <section class="music-player-card">
-                    <h2 class="music-title">擺渡蘭陽英雄之歌</h2>
-                    <p class="music-subtitle">宜蘭民謠風格 · 海岸感 · 療癒系</p>
+                    <h2 class="music-title">擺渡蘭陽英雄之旅</h2>
+                    <p class="music-subtitle">英雄主題音樂 · 海岸療癒系</p>
+                    
+                    <!-- 隱藏的 audio 元素 -->
+                    <audio id="hero-music-audio" loop>
+                        <source src="擺渡蘭陽英雄之旅.mp3" type="audio/mpeg">
+                        您的瀏覽器不支援音訊播放。
+                    </audio>
                     
                     <div class="music-controls">
                         <button type="button" class="btn-music btn-play" id="btn-play-music">
@@ -203,6 +209,13 @@
                     <div id="music-status" style="color: #64748B; font-size: 0.9rem;">
                         <span class="status-indicator" id="status-indicator"></span>
                         <span id="status-text">準備就緒</span>
+                    </div>
+                    
+                    <!-- 音量控制 -->
+                    <div style="margin-top: 20px; display: flex; align-items: center; justify-content: center; gap: 15px;">
+                        <label for="volume-control" style="color: #475569; font-size: 0.9rem;">音量：</label>
+                        <input type="range" id="volume-control" min="0" max="100" value="70" style="width: 200px; cursor: pointer;">
+                        <span id="volume-value" style="color: #3B82F6; font-weight: 600; min-width: 40px;">70%</span>
                     </div>
                 </section>
                 
@@ -226,17 +239,17 @@
                     </div>
                     <div class="music-info-item">
                         <span class="music-info-label">時長：</span>
-                        <span id="info-duration">約 16 秒（可循環）</span>
+                        <span id="info-duration">完整版（可循環播放）</span>
                     </div>
                 </section>
                 
                 <section class="music-elements">
-                    <h3>🎼 音樂元素</h3>
+                    <h3>🎼 音樂特色</h3>
                     <ul id="music-elements-list">
-                        <li>海浪背景音（白噪音 + 低通濾波）</li>
-                        <li>主旋律（五聲音階，緩慢流暢）</li>
-                        <li>低音伴奏（C-G 交替，海浪節奏）</li>
-                        <li>和聲（高八度，輕柔點綴）</li>
+                        <li>宜蘭海岸主題音樂</li>
+                        <li>療癒系背景音樂</li>
+                        <li>適合冥想與行走</li>
+                        <li>循環播放設計</li>
                     </ul>
                 </section>
                 
@@ -254,49 +267,52 @@
         </main>
     </div>
     
-    <script src="hero-music.js"></script>
     <script>
-        let musicGenerator = null;
+        let audio = null;
         let isPlaying = false;
 
-        document.addEventListener('DOMContentLoaded', async () => {
-            musicGenerator = new HeroMusicGenerator();
-            
-            // 載入音樂資訊
-            const description = musicGenerator.getMusicDescription();
-            document.getElementById('info-style').textContent = description.style;
-            document.getElementById('info-mood').textContent = description.mood;
-            document.getElementById('info-tempo').textContent = description.tempo;
-            document.getElementById('info-scale').textContent = description.scale;
-            document.getElementById('info-duration').textContent = description.duration;
-
+        document.addEventListener('DOMContentLoaded', () => {
+            audio = document.getElementById('hero-music-audio');
             const btnPlay = document.getElementById('btn-play-music');
             const btnStop = document.getElementById('btn-stop-music');
             const statusIndicator = document.getElementById('status-indicator');
             const statusText = document.getElementById('status-text');
+            const volumeControl = document.getElementById('volume-control');
+            const volumeValue = document.getElementById('volume-value');
 
-            btnPlay.addEventListener('click', async () => {
-                if (!isPlaying) {
-                    // 初始化 Audio Context（首次點擊時）
-                    if (!musicGenerator.audioContext) {
-                        statusText.textContent = '正在初始化音訊系統...';
-                        await musicGenerator.init();
-                    }
+            // 設定初始音量
+            audio.volume = 0.7;
+            volumeControl.value = 70;
 
-                    // 播放音樂
-                    statusText.textContent = '正在播放...';
-                    statusIndicator.classList.add('playing');
-                    btnPlay.style.display = 'none';
-                    btnStop.style.display = 'flex';
-                    isPlaying = true;
+            // 音量控制
+            volumeControl.addEventListener('input', (e) => {
+                const volume = parseInt(e.target.value) / 100;
+                audio.volume = volume;
+                volumeValue.textContent = e.target.value + '%';
+            });
 
-                    await musicGenerator.play();
+            // 播放按鈕
+            btnPlay.addEventListener('click', () => {
+                if (audio && !isPlaying) {
+                    audio.play().then(() => {
+                        statusText.textContent = '正在播放...';
+                        statusIndicator.classList.add('playing');
+                        btnPlay.style.display = 'none';
+                        btnStop.style.display = 'flex';
+                        isPlaying = true;
+                    }).catch((error) => {
+                        console.error('播放失敗:', error);
+                        statusText.textContent = '播放失敗，請檢查瀏覽器設定';
+                        alert('無法播放音樂。請確認瀏覽器允許自動播放音訊，或點擊頁面後再試。');
+                    });
                 }
             });
 
+            // 停止按鈕
             btnStop.addEventListener('click', () => {
-                if (isPlaying) {
-                    musicGenerator.stop();
+                if (audio && isPlaying) {
+                    audio.pause();
+                    audio.currentTime = 0; // 重置到開頭
                     statusText.textContent = '已停止';
                     statusIndicator.classList.remove('playing');
                     btnPlay.style.display = 'flex';
@@ -305,16 +321,46 @@
                 }
             });
 
-            // 監聽音樂結束
-            setInterval(() => {
-                if (isPlaying && !musicGenerator.isPlaying) {
-                    statusText.textContent = '播放完成';
-                    statusIndicator.classList.remove('playing');
-                    btnPlay.style.display = 'flex';
-                    btnStop.style.display = 'none';
-                    isPlaying = false;
-                }
-            }, 500);
+            // 監聽音訊事件
+            audio.addEventListener('play', () => {
+                statusText.textContent = '正在播放...';
+                statusIndicator.classList.add('playing');
+                btnPlay.style.display = 'none';
+                btnStop.style.display = 'flex';
+                isPlaying = true;
+            });
+
+            audio.addEventListener('pause', () => {
+                statusText.textContent = '已暫停';
+                statusIndicator.classList.remove('playing');
+                btnPlay.style.display = 'flex';
+                btnStop.style.display = 'none';
+                isPlaying = false;
+            });
+
+            audio.addEventListener('ended', () => {
+                // 由於設定了 loop，理論上不會觸發 ended
+                statusText.textContent = '播放完成';
+                statusIndicator.classList.remove('playing');
+                btnPlay.style.display = 'flex';
+                btnStop.style.display = 'none';
+                isPlaying = false;
+            });
+
+            audio.addEventListener('error', (e) => {
+                console.error('音訊載入錯誤:', e);
+                statusText.textContent = '音樂載入失敗，請檢查檔案是否存在';
+                alert('無法載入音樂檔案。請確認「擺渡蘭陽英雄之旅.mp3」檔案存在於網站目錄中。');
+            });
+
+            // 顯示音樂時長（載入後）
+            audio.addEventListener('loadedmetadata', () => {
+                const duration = audio.duration;
+                const minutes = Math.floor(duration / 60);
+                const seconds = Math.floor(duration % 60);
+                document.getElementById('info-duration').textContent = 
+                    `${minutes}:${String(seconds).padStart(2, '0')}（可循環播放）`;
+            });
         });
     </script>
 </body>
