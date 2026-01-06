@@ -625,11 +625,36 @@ body {
     
     .button-group {
         flex-direction: column;
+        align-items: center;
     }
     
-    .btn {
+    .btn,
+    .btn-qr-scan {
         width: 100%;
         max-width: 300px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .mission-btn {
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    .hero-missions-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .mission-btn-link {
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    .qr-scan-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
     
     .features {
