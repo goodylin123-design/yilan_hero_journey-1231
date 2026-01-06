@@ -581,16 +581,24 @@ body {
     }
     
     .header {
-        padding: 50px 80px 0 5px; /* 上方留空間給語言選擇器，右側留空間給語言選擇器 */
-        text-align: center; /* 確保文字置中 */
+        padding-top: 50px; /* 上方留空間給語言選擇器 */
+        padding-left: 10px;
+        padding-right: 90px; /* 右側留空間給語言選擇器 */
+        padding-bottom: 0;
+        text-align: center !important;
+        width: 100%;
+        box-sizing: border-box;
     }
     
     .title,
     .subtitle,
     .hero-guide-message {
-        text-align: center; /* 確保所有文字置中 */
-        margin-left: auto;
-        margin-right: auto;
+        text-align: center !important;
+        margin: 0 auto !important;
+        width: 100%;
+        max-width: 100%;
+        padding: 0;
+        display: block;
     }
     
     .subtitle {
@@ -1976,24 +1984,22 @@ body {
     /* 為 header 添加 padding-top，避免標題被語言選擇器遮擋 */
     .header {
         padding-top: 50px;
-        padding-left: 80px; /* 左側也留相同空間，保持對稱 */
-        padding-right: 80px; /* 為語言選擇器留出空間 */
-        text-align: center !important; /* 確保文字置中 */
+        padding-left: 10px;
+        padding-right: 90px; /* 右側留空間給語言選擇器 */
+        padding-bottom: 0;
+        text-align: center !important;
         width: 100%;
         box-sizing: border-box;
-        display: flex;
-        flex-direction: column;
-        align-items: center; /* 使用 flexbox 確保置中 */
     }
     
     .title,
     .subtitle,
     .hero-guide-message {
-        text-align: center !important; /* 確保所有文字置中 */
-        margin-left: auto !important;
-        margin-right: auto !important;
-        max-width: calc(100% - 160px); /* 減去左右 padding */
+        text-align: center !important;
+        margin: 0 auto !important;
         width: 100%;
+        max-width: 100%;
+        padding: 0;
         display: block;
     }
     
