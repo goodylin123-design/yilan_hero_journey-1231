@@ -56,7 +56,23 @@ const TRANSLATIONS = {
         progress: '進度',
         statusCompleted: '✅ 已完成',
         statusUnlocked: '🔓 可進行',
-        statusLocked: '🔒 尚未解鎖'
+        statusLocked: '🔒 尚未解鎖',
+        // 語音引導文字
+        voiceGuideWave: [
+            '先找一個讓身體可以放鬆的姿勢，輕輕地坐好。',
+            '如果願意，可以慢慢閉上眼睛，讓視線從外在世界收回到自己心裡。',
+            '聽一聽，海風正輕輕吹過，海浪一層一層推向岸邊。',
+            '把注意力放在呼吸上——吸氣的時候，想像自己被海風溫柔地擁抱；',
+            '吐氣的時候，讓今天累積的緊繃和疲憊，順著呼吸交給海浪帶走。',
+            '現在，在心裡望向遠方的龜山島，感受自己正安穩地坐在這片海岸上。',
+            '問問自己：這些海浪的律動，像你的內心嗎？此刻，它想對你說些什麼？',
+            '你不需要急著找到答案，也不用勉強整理成很好聽的句子。',
+            '只要誠實地，看見現在真實的自己，就已經很勇敢了。',
+            '當你準備好，可以慢慢把剛剛浮現的畫面、情緒，或是一小句話，說出來或寫下來。',
+            '無論你看見的是平靜、起伏、迷惘，還是說不太上來的感覺，都沒有關係。',
+            '我會在這裡，安靜地陪你，把這段海邊的對話留給真正的你自己。'
+        ].join(' '),
+        voiceTimerEnd: '靜坐時間結束，感謝你給自己這段時間。'
     },
     'zh-CN': {
         title: '🌊 摆渡兰阳英雄之旅',
@@ -104,7 +120,23 @@ const TRANSLATIONS = {
         progress: '进度',
         statusCompleted: '✅ 已完成',
         statusUnlocked: '🔓 可进行',
-        statusLocked: '🔒 尚未解锁'
+        statusLocked: '🔒 尚未解锁',
+        // 語音引導文字（簡體中文使用繁體中文版本）
+        voiceGuideWave: [
+            '先找一个让身体可以放松的姿势，轻轻地坐好。',
+            '如果愿意，可以慢慢闭上眼睛，让视线从外在世界收回到自己心里。',
+            '听一听，海风正轻轻吹过，海浪一层一层推向岸边。',
+            '把注意力放在呼吸上——吸气的时候，想像自己被海风温柔地拥抱；',
+            '吐气的时候，让今天累积的紧绷和疲惫，顺着呼吸交给海浪带走。',
+            '现在，在心里望向远方的龟山岛，感受自己正安稳地坐在这片海岸上。',
+            '问问自己：这些海浪的律动，像你的内心吗？此刻，它想对你说些什么？',
+            '你不需要急着找到答案，也不用勉强整理成很好听的句子。',
+            '只要诚实地，看见现在真实的自己，就已经很勇敢了。',
+            '当你准备好，可以慢慢把刚刚浮现的画面、情绪，或是一小句话，说出来或写下来。',
+            '无论你看见的是平静、起伏、迷惘，还是说不太上来的感觉，都没有关系。',
+            '我会在这里，安静地陪你，把这段海边的对话留给真正的你自己。'
+        ].join(' '),
+        voiceTimerEnd: '静坐时间结束，感谢你给自己这段时间。'
     },
     'en': {
         title: '🌊 Lanyang Hero Journey',
@@ -152,7 +184,23 @@ const TRANSLATIONS = {
         progress: 'Progress',
         statusCompleted: '✅ Completed',
         statusUnlocked: '🔓 Available',
-        statusLocked: '🔒 Locked'
+        statusLocked: '🔒 Locked',
+        // 語音引導文字（英文）
+        voiceGuideWave: [
+            'First, find a comfortable position where your body can relax, and sit gently.',
+            'If you\'re willing, slowly close your eyes and bring your attention from the outer world back to your inner self.',
+            'Listen—the sea breeze is gently blowing, and waves are rolling toward the shore, layer by layer.',
+            'Focus on your breathing—when you inhale, imagine being gently embraced by the sea breeze;',
+            'when you exhale, let the tension and fatigue accumulated today flow away with your breath, carried by the waves.',
+            'Now, in your mind, look toward the distant Turtle Island and feel yourself sitting peacefully on this coast.',
+            'Ask yourself: Does the rhythm of these waves resemble your inner self? What does it want to tell you at this moment?',
+            'You don\'t need to rush to find an answer, nor force yourself to organize it into beautiful sentences.',
+            'Simply being honest and seeing your true self right now is already very brave.',
+            'When you\'re ready, you can slowly express the images, emotions, or words that have emerged—speak them or write them down.',
+            'Whether what you see is calm, turbulent, confused, or something indescribable, it\'s all okay.',
+            'I\'ll be here, quietly accompanying you, leaving this seaside conversation for your true self.'
+        ].join(' '),
+        voiceTimerEnd: 'Meditation time has ended. Thank you for giving yourself this time.'
     },
     'ja': {
         title: '🌊 蘭陽ヒーロー旅',
@@ -200,7 +248,23 @@ const TRANSLATIONS = {
         progress: '進捗',
         statusCompleted: '✅ 完了',
         statusUnlocked: '🔓 利用可能',
-        statusLocked: '🔒 ロック'
+        statusLocked: '🔒 ロック',
+        // 語音引導文字（日文）
+        voiceGuideWave: [
+            'まず、体がリラックスできる姿勢を見つけて、そっと座ってください。',
+            'もしよろしければ、ゆっくり目を閉じて、視線を外の世界から自分の心の中に戻してください。',
+            '聞いてください。海風がそっと吹き、波が一層一層岸に向かって押し寄せています。',
+            '呼吸に注意を向けてください——吸うとき、海風に優しく抱かれていると想像してください；',
+            '吐くとき、今日積み重ねた緊張や疲れを、呼吸とともに波に託してください。',
+            '今、心の中で遠くの亀山島を眺め、自分がこの海岸に安らかに座っていることを感じてください。',
+            '自分に問いかけてください：これらの波のリズムは、あなたの心に似ていますか？今、それはあなたに何を伝えたいですか？',
+            '急いで答えを見つける必要はありませんし、無理に美しい文章にまとめる必要もありません。',
+            'ただ正直に、今の本当の自分を見るだけで、それはすでにとても勇気のあることです。',
+            '準備ができたら、今浮かんできたイメージ、感情、または小さな言葉を、ゆっくりと話したり書いたりしてください。',
+            'あなたが見るものが、平静、起伏、迷い、または言い表せない感覚であっても、すべて大丈夫です。',
+            '私はここにいて、静かにあなたに寄り添い、この海辺の対話を本当のあなた自身に残します。'
+        ].join(' '),
+        voiceTimerEnd: '瞑想時間が終わりました。自分にこの時間を与えてくれてありがとうございます。'
     },
     'ko': {
         title: '🌊 란양 히어로 여정',
@@ -248,7 +312,23 @@ const TRANSLATIONS = {
         progress: '진행률',
         statusCompleted: '✅ 완료',
         statusUnlocked: '🔓 이용 가능',
-        statusLocked: '🔒 잠금'
+        statusLocked: '🔒 잠금',
+        // 語音引導文字（韓文）
+        voiceGuideWave: [
+            '먼저 몸이 편안해질 수 있는 자세를 찾아 부드럽게 앉아보세요.',
+            '원하시면 천천히 눈을 감고, 시선을 외부 세계에서 자신의 마음 속으로 되돌려보세요.',
+            '들어보세요. 바닷바람이 부드럽게 불고, 파도가 한 겹 한 겹 해안으로 밀려오고 있습니다.',
+            '호흡에 주의를 기울이세요——숨을 들이쉴 때, 바닷바람에 부드럽게 안겨 있다고 상상해보세요；',
+            '숨을 내쉴 때, 오늘 쌓인 긴장과 피로를 호흡과 함께 파도에게 맡겨보세요.',
+            '이제 마음 속으로 먼 거리의 거북섬을 바라보며, 자신이 이 해안에 평온하게 앉아 있음을 느껴보세요.',
+            '자신에게 물어보세요: 이 파도의 리듬이 당신의 마음과 닮았나요? 지금, 그것이 당신에게 무엇을 말하고 싶나요?',
+            '급하게 답을 찾을 필요도 없고, 억지로 아름다운 문장으로 정리할 필요도 없습니다.',
+            '단지 솔직하게, 지금의 진실한 자신을 보는 것만으로도 이미 매우 용감한 일입니다.',
+            '준비가 되면, 방금 떠오른 이미지, 감정, 또는 작은 말을 천천히 말하거나 적어보세요.',
+            '당신이 보는 것이 평온, 기복, 혼란, 또는 표현하기 어려운 감각이어도 모두 괜찮습니다.',
+            '저는 여기에서 조용히 당신과 함께하며, 이 해변의 대화를 진정한 당신 자신에게 남겨둡니다.'
+        ].join(' '),
+        voiceTimerEnd: '명상 시간이 끝났습니다. 자신에게 이 시간을 주셔서 감사합니다.'
     }
 };
 

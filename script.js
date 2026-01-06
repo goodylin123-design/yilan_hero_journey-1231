@@ -168,18 +168,42 @@ function initSpeechRecognition() {
     return recognition;
 }
 
-// AI 語音引導
-function speakAI(text) {
+// AI 語音引導（支援多語言）
+function speakAI(text, lang = null) {
     if (!SpeechSynthesis) {
         // 如果不支援語音合成，直接顯示文字
         updateAIMessage(text);
         return;
     }
     
+    // 取得當前語言
+    const currentLang = lang || (window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW');
+    
+    // 語言代碼對應（Speech Synthesis API 使用的格式）
+    const langMap = {
+        'zh-TW': 'zh-TW',
+        'zh-CN': 'zh-CN',
+        'en': 'en-US',
+        'ja': 'ja-JP',
+        'ko': 'ko-KR'
+    };
+    
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'zh-TW';
+    utterance.lang = langMap[currentLang] || 'zh-TW';
     utterance.rate = 0.9;
     utterance.pitch = 1.1;
+    
+    // 根據語言調整語速和音調
+    if (currentLang === 'en') {
+        utterance.rate = 0.95;
+        utterance.pitch = 1.0;
+    } else if (currentLang === 'ja') {
+        utterance.rate = 0.85;
+        utterance.pitch = 1.05;
+    } else if (currentLang === 'ko') {
+        utterance.rate = 0.9;
+        utterance.pitch = 1.0;
+    }
     
     utterance.onstart = () => {
         updateAIMessage(text);
@@ -203,7 +227,9 @@ elements.btnStartGuide?.addEventListener('click', () => {
     elements.btnStartGuide.style.display = 'none';
     elements.btnStopGuide.style.display = 'inline-block';
     
-    const guideText = [
+    // 根據當前語言取得對應的引導文字
+    const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
+    const guideText = window.I18n ? window.I18n.t('voiceGuideWave', currentLang) : [
         '先找一個讓身體可以放鬆的姿勢，輕輕地坐好。',
         '如果願意，可以慢慢閉上眼睛，讓視線從外在世界收回到自己心裡。',
         '聽一聽，海風正輕輕吹過，海浪一層一層推向岸邊。',
@@ -218,12 +244,14 @@ elements.btnStartGuide?.addEventListener('click', () => {
         '我會在這裡，安靜地陪你，把這段海邊的對話留給真正的你自己。'
     ].join(' ');
     
-    speakAI(guideText);
+    speakAI(guideText, currentLang);
     
     // 顯示使用者回應區域（給一點時間讓旅人先沉浸）
+    // 根據語言調整顯示時間（英文和日文可能需要更長時間）
+    const displayDelay = currentLang === 'en' || currentLang === 'ja' ? 12000 : 8000;
     setTimeout(() => {
         elements.userResponseArea.style.display = 'block';
-    }, 8000);
+    }, displayDelay);
 });
 
 // 停止引導
@@ -388,14 +416,30 @@ elements.btnStartTimer?.addEventListener('click', () => {
             elements.btnStartTimer.style.display = 'inline-block';
             elements.btnPauseTimer.style.display = 'none';
             
-            // 計時結束提示
+            // 計時結束提示（多語言支援）
             if (SpeechSynthesis) {
-                const utterance = new SpeechSynthesisUtterance('靜坐時間結束，感謝你給自己這段時間。');
-                utterance.lang = 'zh-TW';
+                const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
+                const timerEndText = window.I18n ? window.I18n.t('voiceTimerEnd', currentLang) : '靜坐時間結束，感謝你給自己這段時間。';
+                
+                const langMap = {
+                    'zh-TW': 'zh-TW',
+                    'zh-CN': 'zh-CN',
+                    'en': 'en-US',
+                    'ja': 'ja-JP',
+                    'ko': 'ko-KR'
+                };
+                
+                const utterance = new SpeechSynthesisUtterance(timerEndText);
+                utterance.lang = langMap[currentLang] || 'zh-TW';
+                utterance.rate = 0.9;
                 speechSynthesis.speak(utterance);
+                
+                alert(timerEndText);
+            } else {
+                const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
+                const timerEndText = window.I18n ? window.I18n.t('voiceTimerEnd', currentLang) : '靜坐時間結束，感謝你給自己這段時間。';
+                alert(timerEndText);
             }
-            
-            alert('靜坐時間結束，感謝你給自己這段時間。');
         }
     }, 1000);
     
