@@ -582,19 +582,21 @@ body {
     
     .header {
         padding-top: 50px; /* 上方留空間給語言選擇器 */
-        padding-left: 10px;
-        padding-right: 90px; /* 右側留空間給語言選擇器 */
+        padding-left: 20px;
+        padding-right: 20px;
         padding-bottom: 0;
         text-align: center !important;
         width: 100%;
         box-sizing: border-box;
+        margin: 0;
     }
     
     .title,
     .subtitle,
     .hero-guide-message {
         text-align: center !important;
-        margin: 0 auto !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
         width: 100%;
         max-width: 100%;
         padding: 0;
@@ -612,7 +614,9 @@ body {
     }
     
     .container {
-        padding: 40px 10px 60px;
+        padding: 40px 20px 60px;
+        max-width: 100%;
+        margin: 0;
     }
     
     .card {
@@ -1984,19 +1988,21 @@ body {
     /* 為 header 添加 padding-top，避免標題被語言選擇器遮擋 */
     .header {
         padding-top: 50px;
-        padding-left: 10px;
-        padding-right: 90px; /* 右側留空間給語言選擇器 */
+        padding-left: 20px;
+        padding-right: 20px;
         padding-bottom: 0;
         text-align: center !important;
         width: 100%;
         box-sizing: border-box;
+        margin: 0;
     }
     
     .title,
     .subtitle,
     .hero-guide-message {
         text-align: center !important;
-        margin: 0 auto !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
         width: 100%;
         max-width: 100%;
         padding: 0;
