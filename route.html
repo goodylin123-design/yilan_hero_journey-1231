@@ -223,15 +223,15 @@
                     <div class="route-info">
                         <div class="route-info-item">
                             <div class="route-info-label" data-i18n="routeTotalDistance">總距離</div>
-                            <div class="route-info-value" id="total-distance">約 45 公里</div>
+                            <div class="route-info-value" id="total-distance" data-i18n="routeDistanceValue">約 45 公里</div>
                         </div>
                         <div class="route-info-item">
                             <div class="route-info-label" data-i18n="routeEstimatedTime">預計時間</div>
-                            <div class="route-info-value" id="total-time">約 1.5 小時</div>
+                            <div class="route-info-value" id="total-time" data-i18n="routeTimeValue">約 1.5 小時</div>
                         </div>
                         <div class="route-info-item">
                             <div class="route-info-label" data-i18n="routeMissionStops">任務站點</div>
-                            <div class="route-info-value">3 個</div>
+                            <div class="route-info-value" data-i18n="routeStopsValue">3 個</div>
                         </div>
                     </div>
                 </section>
@@ -333,20 +333,20 @@
                 
                 <!-- 完整路線導航 -->
                 <section class="card">
-                    <h3>🗺️ 完整路線導航</h3>
-                    <p style="margin-bottom: 20px;">點擊下方按鈕開啟 Google Maps 完整路線規劃：</p>
+                    <h3 data-i18n="routeFullNavigation">🗺️ 完整路線導航</h3>
+                    <p style="margin-bottom: 20px;" data-i18n="routeFullNavigationDesc">點擊下方按鈕開啟 Google Maps 完整路線規劃：</p>
                     <div style="display: flex; gap: 15px; flex-wrap: wrap;">
                         <a href="https://www.google.com/maps/dir/24.875,121.85/24.8318,121.774/24.6,121.85" 
                            target="_blank" 
                            class="btn btn-primary"
                            style="text-decoration: none; display: inline-block;">
-                            <span class="btn-text">🧭 開啟完整路線（Google Maps）</span>
+                            <span class="btn-text" data-i18n="routeOpenFullRouteGoogle">🧭 開啟完整路線（Google Maps）</span>
                         </a>
                         <a href="https://maps.apple.com/?daddr=24.875,121.85&daddr=24.8318,121.774&daddr=24.6,121.85" 
                            target="_blank" 
                            class="btn btn-secondary"
                            style="text-decoration: none; display: inline-block;">
-                            <span class="btn-text">🍎 開啟完整路線（Apple Maps）</span>
+                            <span class="btn-text" data-i18n="routeOpenFullRouteApple">🍎 開啟完整路線（Apple Maps）</span>
                         </a>
                     </div>
                 </section>

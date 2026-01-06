@@ -581,12 +581,26 @@ body {
     }
     
     .header {
-        padding: 50px 5px 0; /* 上方留空間給語言選擇器 */
-        padding-right: 80px; /* 右側留空間給語言選擇器 */
+        padding: 50px 80px 0 5px; /* 上方留空間給語言選擇器，右側留空間給語言選擇器 */
+        text-align: center; /* 確保文字置中 */
+    }
+    
+    .title,
+    .subtitle,
+    .hero-guide-message {
+        text-align: center; /* 確保所有文字置中 */
+        margin-left: auto;
+        margin-right: auto;
     }
     
     .subtitle {
         font-size: 1rem;
+    }
+    
+    .hero-guide-message {
+        text-align: center;
+        margin: 15px auto 0;
+        max-width: 100%;
     }
     
     .container {
@@ -1962,7 +1976,18 @@ body {
     /* 為 header 添加 padding-top，避免標題被語言選擇器遮擋 */
     .header {
         padding-top: 50px;
+        padding-left: 5px;
         padding-right: 80px; /* 為語言選擇器留出空間 */
+        text-align: center !important; /* 確保文字置中 */
+    }
+    
+    .title,
+    .subtitle,
+    .hero-guide-message {
+        text-align: center !important; /* 確保所有文字置中 */
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 100%;
     }
     
     .header::before {

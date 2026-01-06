@@ -485,18 +485,21 @@ elements.btnRecordFeeling?.addEventListener('click', async () => {
             mediaRecorder.onstop = () => {
                 const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
                 whisperState.recordedAudio = audioBlob;
-                elements.recordingStatus.textContent = '✅ 錄音完成！可以保存至心靈筆記。';
+                const t = window.I18n ? window.I18n.getTranslation(window.I18n.getCurrentLanguage()) : {};
+                elements.recordingStatus.textContent = t.recordingComplete || '✅ 錄音完成！可以保存至心靈筆記。';
                 elements.recordingStatus.style.color = '#10B981';
             };
             
             mediaRecorder.start();
             whisperState.isRecording = true;
-            elements.btnRecordFeeling.textContent = '⏹️ 停止錄音';
-            elements.recordingStatus.textContent = '🔴 正在錄音...';
+            const t = window.I18n ? window.I18n.getTranslation(window.I18n.getCurrentLanguage()) : {};
+            elements.btnRecordFeeling.textContent = t.recordingStopped || '⏹️ 停止錄音';
+            elements.recordingStatus.textContent = t.recordingInProgress || '🔴 正在錄音...';
             elements.recordingStatus.style.color = '#EF4444';
         } catch (error) {
             console.error('無法取得麥克風權限:', error);
-            alert('無法取得麥克風權限，請檢查瀏覽器設定');
+            const t = window.I18n ? window.I18n.getTranslation(window.I18n.getCurrentLanguage()) : {};
+            alert(t.microphonePermissionDenied || '無法取得麥克風權限，請檢查瀏覽器設定');
         }
     } else {
         if (mediaRecorder && mediaRecorder.state !== 'inactive') {
@@ -504,17 +507,19 @@ elements.btnRecordFeeling?.addEventListener('click', async () => {
             mediaRecorder.stream.getTracks().forEach(track => track.stop());
         }
         whisperState.isRecording = false;
-        elements.btnRecordFeeling.textContent = '🎙️ 錄下感受';
+        const t = window.I18n ? window.I18n.getTranslation(window.I18n.getCurrentLanguage()) : {};
+        elements.btnRecordFeeling.textContent = t.recordingStart || '🎙️ 錄下感受';
     }
 });
 
 // 保存至心靈筆記
 elements.btnSaveNote?.addEventListener('click', () => {
+    const t = window.I18n ? window.I18n.getTranslation(window.I18n.getCurrentLanguage()) : {};
     const note = {
         id: Date.now(),
         date: new Date().toLocaleString('zh-TW'),
-        content: whisperState.currentResponse || '（無文字記錄）',
-        emotion: whisperState.currentEmotion || '平靜',
+        content: whisperState.currentResponse || (t.mindNotesNoText || '（無文字記錄）'),
+        emotion: whisperState.currentEmotion || (t.mindNotesDefaultEmotion || '平靜'),
         audio: whisperState.recordedAudio ? true : false,
         timestamp: Date.now(),
         mission: 'wave'
@@ -554,7 +559,7 @@ elements.btnSaveNote?.addEventListener('click', () => {
     // 使用更溫暖的提示
     const saveMessage = document.createElement('div');
     saveMessage.style.cssText = 'position: fixed; top: 20px; right: 20px; background: linear-gradient(135deg, #10B981, #059669); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); z-index: 10000; animation: slideInRight 0.3s ease;';
-    saveMessage.textContent = '✨ 已保存至心靈筆記！';
+    saveMessage.textContent = t.noteSaved || '✨ 已保存至心靈筆記！';
     document.body.appendChild(saveMessage);
     
     setTimeout(() => {
@@ -562,7 +567,7 @@ elements.btnSaveNote?.addEventListener('click', () => {
         setTimeout(() => saveMessage.remove(), 300);
     }, 2000);
     
-    elements.recordingStatus.textContent = '💾 已保存至心靈筆記';
+    elements.recordingStatus.textContent = t.noteSavedStatus || '💾 已保存至心靈筆記';
     elements.recordingStatus.style.color = '#10B981';
 });
 
@@ -570,14 +575,15 @@ elements.btnSaveNote?.addEventListener('click', () => {
 elements.btnViewNotes?.addEventListener('click', () => {
     const notes = JSON.parse(localStorage.getItem('whisperNotes') || '[]');
     
+    const t = window.I18n ? window.I18n.getTranslation(window.I18n.getCurrentLanguage()) : {};
     if (notes.length === 0) {
-        elements.notesList.innerHTML = '<p style="text-align: center; color: #64748B; padding: 20px;">親愛的旅人，你的心靈筆記本還是空的。<br>完成任務後，記得把感受保存下來，這些都是你成長路上的珍貴記錄。</p>';
+        elements.notesList.innerHTML = `<p style="text-align: center; color: #64748B; padding: 20px;">${t.mindNotesEmpty || '親愛的旅人，你的心靈筆記本還是空的。<br>完成任務後，記得把感受保存下來，這些都是你成長路上的珍貴記錄。'}</p>`;
     } else {
         elements.notesList.innerHTML = notes.map(note => `
             <div class="note-item">
                 <div class="note-date">${note.date}</div>
                 <div class="note-content">${note.content}</div>
-                <div class="note-emotion">情緒：${note.emotion} ${note.audio ? '🎙️' : ''}</div>
+                <div class="note-emotion">${t.mindNotesEmotion || '情緒：'}${note.emotion} ${note.audio ? '🎙️' : ''}</div>
             </div>
         `).join('');
     }

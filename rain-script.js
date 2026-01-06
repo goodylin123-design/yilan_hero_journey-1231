@@ -13,8 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // 保存反思
     btnSubmitReflection?.addEventListener('click', () => {
         const reflection = rainReflection.value.trim();
+        const t = window.I18n ? window.I18n.getTranslation(window.I18n.getCurrentLanguage()) : {};
         if (!reflection) {
-            alert('請先寫下你的反思');
+            alert(t.pleaseWriteReflection || '請先寫下你的反思');
             return;
         }
 
@@ -24,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
             id: Date.now(),
             date: new Date().toLocaleString('zh-TW'),
             content: reflection,
-            emotion: '思考',
+            emotion: t.mindNotesDefaultEmotion || '思考',
             mission: 'rain',
             timestamp: Date.now()
         };
@@ -60,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // 顯示成功訊息
         const successMsg = document.createElement('div');
         successMsg.style.cssText = 'position: fixed; top: 20px; right: 20px; background: linear-gradient(135deg, #10B981, #059669); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); z-index: 10000; animation: slideInRight 0.3s ease;';
-        successMsg.textContent = '✨ 反思已保存！';
+        successMsg.textContent = t.reflectionSaved || '✨ 反思已保存！';
         document.body.appendChild(successMsg);
         
         setTimeout(() => {
@@ -71,35 +72,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 呼吸練習
     btnStartBreathing?.addEventListener('click', () => {
+        const t = window.I18n ? window.I18n.getTranslation(window.I18n.getCurrentLanguage()) : {};
         if (breathingInterval) {
             // 停止
             clearInterval(breathingInterval);
             breathingInterval = null;
             breathingCircle.style.animation = 'none';
-            breathingText.textContent = '準備開始';
-            btnStartBreathing.textContent = '開始呼吸練習';
+            breathingText.textContent = t.breathingReady || '準備開始';
+            btnStartBreathing.textContent = t.breathingStart || '開始呼吸練習';
             breathingCount = 0;
             return;
         }
 
         // 開始
         breathingCount = 0;
-        btnStartBreathing.textContent = '停止練習';
+        btnStartBreathing.textContent = t.breathingStop || '停止練習';
         breathingCircle.style.animation = 'breathingCycle 12s ease-in-out infinite';
         
         breathingInterval = setInterval(() => {
             const cycle = breathingCount % 4;
             if (cycle === 0) {
-                breathingText.textContent = '吸氣...';
+                breathingText.textContent = t.breathingInhale || '吸氣...';
                 breathingPhase = 'inhale';
             } else if (cycle === 1) {
-                breathingText.textContent = '屏息...';
+                breathingText.textContent = t.breathingHold || '屏息...';
                 breathingPhase = 'hold';
             } else if (cycle === 2) {
-                breathingText.textContent = '呼氣...';
+                breathingText.textContent = t.breathingExhale || '呼氣...';
                 breathingPhase = 'exhale';
             } else {
-                breathingText.textContent = '暫停...';
+                breathingText.textContent = t.breathingPause || '暫停...';
                 breathingPhase = 'pause';
             }
             breathingCount++;

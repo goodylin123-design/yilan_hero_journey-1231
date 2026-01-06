@@ -82,15 +82,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btnViewNotes?.addEventListener('click', () => {
         const notes = JSON.parse(localStorage.getItem('whisperNotes') || '[]');
+        const t = window.I18n ? window.I18n.getTranslation(window.I18n.getCurrentLanguage()) : {};
         
         if (notes.length === 0) {
-            notesList.innerHTML = '<p style="text-align: center; color: #64748B; padding: 20px;">親愛的旅人，你的心靈筆記本還是空的。<br>完成任務後，記得把感受保存下來，這些都是你成長路上的珍貴記錄。</p>';
+            notesList.innerHTML = `<p style="text-align: center; color: #64748B; padding: 20px;">${t.mindNotesEmpty || '親愛的旅人，你的心靈筆記本還是空的。<br>完成任務後，記得把感受保存下來，這些都是你成長路上的珍貴記錄。'}</p>`;
         } else {
             notesList.innerHTML = notes.map(note => `
                 <div class="note-item">
                     <div class="note-date">${note.date}</div>
                     <div class="note-content">${note.content}</div>
-                    <div class="note-emotion">情緒：${note.emotion} ${note.audio ? '🎙️' : ''}</div>
+                    <div class="note-emotion">${t.mindNotesEmotion || '情緒：'}${note.emotion} ${note.audio ? '🎙️' : ''}</div>
                 </div>
             `).join('');
         }
