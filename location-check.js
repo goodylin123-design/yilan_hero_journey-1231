@@ -152,10 +152,14 @@ function showLocationCheckUI(taskKey) {
         text-align: center;
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
     `;
+    // 取得當前語言和翻譯
+    const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
+    const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
+    
     checkingCard.innerHTML = `
         <div style="font-size: 3rem; margin-bottom: 20px;">📍</div>
-        <h2 style="color: #0F172A; margin-bottom: 15px;">正在檢查位置...</h2>
-        <p style="color: #475569; margin-bottom: 20px;">正在確認您是否在 ${taskLocation.name} 附近</p>
+        <h2 style="color: #0F172A; margin-bottom: 15px;">${t.locationChecking || '正在檢查位置...'}</h2>
+        <p style="color: #475569; margin-bottom: 20px;">${(t.locationCheckingDesc || '正在確認您是否在 {location} 附近').replace(/{location}/g, taskLocation.name)}</p>
         <div class="loading-spinner" style="
             width: 40px;
             height: 40px;
@@ -190,6 +194,10 @@ function showLocationCheckUI(taskKey) {
 function showLocationResult(overlay, result, taskKey) {
     const taskLocation = TASK_LOCATIONS[taskKey];
     
+    // 取得當前語言和翻譯
+    const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
+    const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
+    
     overlay.innerHTML = '';
 
     const resultCard = document.createElement('div');
@@ -202,14 +210,14 @@ function showLocationResult(overlay, result, taskKey) {
         text-align: center;
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
     `;
-
+    
     if (result.isInRange) {
         // 在範圍內 - 允許進入
         resultCard.innerHTML = `
             <div style="font-size: 4rem; margin-bottom: 20px;">✅</div>
-            <h2 style="color: #10B981; margin-bottom: 15px;">位置驗證成功！</h2>
-            <p style="color: #475569; margin-bottom: 10px;">您距離 ${taskLocation.name} 約 ${result.distance} 公尺</p>
-            <p style="color: #64748B; font-size: 0.9rem; margin-bottom: 25px;">歡迎開始您的任務</p>
+            <h2 style="color: #10B981; margin-bottom: 15px;">${t.locationVerifySuccess || '位置驗證成功！'}</h2>
+            <p style="color: #475569; margin-bottom: 10px;">${(t.locationDistance || '您距離 {location} 約 {distance} 公尺').replace('{location}', taskLocation.name).replace('{distance}', Math.round(result.distance))}</p>
+            <p style="color: #64748B; font-size: 0.9rem; margin-bottom: 25px;">${t.locationWelcome || '歡迎開始您的任務'}</p>
             <button id="location-check-close" style="
                 padding: 12px 30px;
                 background: linear-gradient(135deg, #10B981, #059669);
@@ -220,7 +228,7 @@ function showLocationResult(overlay, result, taskKey) {
                 font-weight: 600;
                 cursor: pointer;
                 transition: transform 0.3s ease;
-            ">開始任務</button>
+            ">${t.btnStartTask || '開始任務'}</button>
         `;
 
         // 保存驗證狀態（5 分鐘內有效）
@@ -234,9 +242,9 @@ function showLocationResult(overlay, result, taskKey) {
         // 不在範圍內 - 顯示提示
         resultCard.innerHTML = `
             <div style="font-size: 4rem; margin-bottom: 20px;">📍</div>
-            <h2 style="color: #EF4444; margin-bottom: 15px;">位置驗證失敗</h2>
-            <p style="color: #475569; margin-bottom: 10px;">您距離 ${taskLocation.name} 約 ${result.distance} 公尺</p>
-            <p style="color: #64748B; font-size: 0.9rem; margin-bottom: 15px;">需要距離 ${taskLocation.name} 50 公尺內才能開啟任務</p>
+            <h2 style="color: #EF4444; margin-bottom: 15px;">${t.locationVerifyFailed || '位置驗證失敗'}</h2>
+            <p style="color: #475569; margin-bottom: 10px;">${(t.locationDistance || '您距離 {location} 約 {distance} 公尺').replace('{location}', taskLocation.name).replace('{distance}', Math.round(result.distance))}</p>
+            <p style="color: #64748B; font-size: 0.9rem; margin-bottom: 15px;">${(t.locationNeedWithin || '需要距離 {location} 50 公尺內才能開啟任務').replace(/{location}/g, taskLocation.name)}</p>
             <div style="
                 background: #FEF3C7;
                 border-left: 4px solid #F59E0B;
@@ -246,7 +254,7 @@ function showLocationResult(overlay, result, taskKey) {
                 text-align: left;
             ">
                 <p style="color: #92400E; margin: 0; font-size: 0.9rem;">
-                    <strong>提示：</strong>請前往 ${taskLocation.description} 附近，然後重新載入頁面。
+                    <strong>${t.locationTip || '提示：'}</strong>${(t.locationTipDesc || '請前往 {description} 附近，然後重新載入頁面。').replace(/{description}/g, taskLocation.description)}
                 </p>
             </div>
             <div style="margin-bottom: 15px;">
@@ -262,8 +270,8 @@ function showLocationResult(overlay, result, taskKey) {
                     width: 100%;
                     margin-bottom: 10px;
                     transition: transform 0.3s ease;
-                ">🧪 體驗測試模式</button>
-                <p style="color: #64748B; font-size: 0.85rem; margin: 0;">（跳過位置驗證，方便測試）</p>
+                ">${t.btnTestMode || '🧪 體驗測試模式'}</button>
+                <p style="color: #64748B; font-size: 0.85rem; margin: 0;">${t.testModeDesc || '（跳過位置驗證，方便測試）'}</p>
             </div>
             <div style="display: flex; gap: 10px; justify-content: center;">
                 <button id="location-check-retry" style="
@@ -277,7 +285,7 @@ function showLocationResult(overlay, result, taskKey) {
                     cursor: pointer;
                     transition: transform 0.3s ease;
                     flex: 1;
-                ">重新檢查</button>
+                ">${t.btnRetryCheck || '重新檢查'}</button>
                 <button id="location-check-back" style="
                     padding: 12px 30px;
                     background: #E5E7EB;
@@ -289,7 +297,7 @@ function showLocationResult(overlay, result, taskKey) {
                     cursor: pointer;
                     transition: transform 0.3s ease;
                     flex: 1;
-                ">返回首頁</button>
+                ">${t.btnBackHome || '返回首頁'}</button>
             </div>
         `;
     }
@@ -338,11 +346,15 @@ function showLocationResult(overlay, result, taskKey) {
             text-align: center;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
         `;
+        // 取得當前語言和翻譯
+        const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
+        const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
+        
         testCard.innerHTML = `
             <div style="font-size: 4rem; margin-bottom: 20px;">🧪</div>
-            <h2 style="color: #10B981; margin-bottom: 15px;">體驗測試模式已啟用</h2>
-            <p style="color: #475569; margin-bottom: 10px;">已跳過位置驗證</p>
-            <p style="color: #64748B; font-size: 0.9rem; margin-bottom: 25px;">您可以開始體驗任務內容</p>
+            <h2 style="color: #10B981; margin-bottom: 15px;">${t.testModeEnabled || '體驗測試模式已啟用'}</h2>
+            <p style="color: #475569; margin-bottom: 10px;">${t.testModeSkipped || '已跳過位置驗證'}</p>
+            <p style="color: #64748B; font-size: 0.9rem; margin-bottom: 25px;">${t.testModeCanStart || '您可以開始體驗任務內容'}</p>
             <div style="
                 background: #ECFDF5;
                 border-left: 4px solid #10B981;
@@ -352,7 +364,7 @@ function showLocationResult(overlay, result, taskKey) {
                 text-align: left;
             ">
                 <p style="color: #065F46; margin: 0; font-size: 0.9rem;">
-                    <strong>注意：</strong>此為測試模式，實際使用時請前往指定地點。
+                    <strong>${t.testModeNote || '注意：'}</strong>${t.testModeNoteDesc || '此為測試模式，實際使用時請前往指定地點。'}
                 </p>
             </div>
             <button id="location-check-close-test" style="
@@ -365,7 +377,7 @@ function showLocationResult(overlay, result, taskKey) {
                 font-weight: 600;
                 cursor: pointer;
                 transition: transform 0.3s ease;
-            ">開始任務</button>
+            ">${t.btnStartTask || '開始任務'}</button>
         `;
         overlay.appendChild(testCard);
         
@@ -397,9 +409,13 @@ async function initLocationCheck(taskKey) {
             text-align: center;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
         `;
+        // 取得當前語言和翻譯
+        const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
+        const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
+        
         errorCard.innerHTML = `
             <div style="font-size: 4rem; margin-bottom: 20px;">⚠️</div>
-            <h2 style="color: #EF4444; margin-bottom: 15px;">位置檢查失敗</h2>
+            <h2 style="color: #EF4444; margin-bottom: 15px;">${t.locationVerifyFailed || '位置檢查失敗'}</h2>
             <p style="color: #475569; margin-bottom: 20px;">${error.message}</p>
             <button id="location-check-retry-error" style="
                 padding: 12px 30px;
@@ -411,7 +427,7 @@ async function initLocationCheck(taskKey) {
                 font-weight: 600;
                 cursor: pointer;
                 margin-right: 10px;
-            ">重試</button>
+            ">${t.btnRetryCheck || '重試'}</button>
             <button id="location-check-back-error" style="
                 padding: 12px 30px;
                 background: #E5E7EB;
@@ -421,7 +437,7 @@ async function initLocationCheck(taskKey) {
                 font-size: 1rem;
                 font-weight: 600;
                 cursor: pointer;
-            ">返回首頁</button>
+            ">${t.btnBackHome || '返回首頁'}</button>
         `;
         overlay.appendChild(errorCard);
 
@@ -435,9 +451,11 @@ async function initLocationCheck(taskKey) {
         });
 
         // 在錯誤情況下也添加體驗測試按鈕
+        const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
+        const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
         const errorTestBtn = document.createElement('button');
         errorTestBtn.id = 'location-check-test-mode-error';
-        errorTestBtn.textContent = '🧪 體驗測試模式';
+        errorTestBtn.textContent = t.btnTestMode || '🧪 體驗測試模式';
         errorTestBtn.style.cssText = `
             padding: 12px 30px;
             background: linear-gradient(135deg, #10B981, #059669);
@@ -510,11 +528,15 @@ function blockTaskContent(taskKey) {
     `;
 
     const taskLocation = TASK_LOCATIONS[taskKey];
+    // 取得當前語言和翻譯
+    const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
+    const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
+    
     blockOverlay.innerHTML = `
         <div style="text-align: center; max-width: 400px;">
             <div style="font-size: 4rem; margin-bottom: 20px;">🔒</div>
-            <h2 style="color: #0F172A; margin-bottom: 15px;">需要位置驗證</h2>
-            <p style="color: #475569; margin-bottom: 20px;">此任務需要在 ${taskLocation.name} 附近才能開啟</p>
+            <h2 style="color: #0F172A; margin-bottom: 15px;">${t.locationNeedVerify || '需要位置驗證'}</h2>
+            <p style="color: #475569; margin-bottom: 20px;">${(t.locationTaskNeedNear || '此任務需要在 {location} 附近才能開啟').replace(/{location}/g, taskLocation.name)}</p>
             <div style="display: flex; flex-direction: column; gap: 10px;">
                 <button id="start-location-check" style="
                     padding: 12px 30px;
@@ -526,7 +548,7 @@ function blockTaskContent(taskKey) {
                     font-weight: 600;
                     cursor: pointer;
                     transition: transform 0.3s ease;
-                ">開始位置檢查</button>
+                ">${t.btnStartLocationCheck || '開始位置檢查'}</button>
                 <button id="start-test-mode" style="
                     padding: 12px 30px;
                     background: linear-gradient(135deg, #10B981, #059669);
@@ -537,8 +559,8 @@ function blockTaskContent(taskKey) {
                     font-weight: 600;
                     cursor: pointer;
                     transition: transform 0.3s ease;
-                ">🧪 體驗測試模式</button>
-                <p style="color: #64748B; font-size: 0.85rem; margin: 0;">（跳過位置驗證，方便測試）</p>
+                ">${t.btnTestMode || '🧪 體驗測試模式'}</button>
+                <p style="color: #64748B; font-size: 0.85rem; margin: 0;">${t.testModeDesc || '（跳過位置驗證，方便測試）'}</p>
             </div>
         </div>
     `;

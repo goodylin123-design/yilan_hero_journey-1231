@@ -64,6 +64,10 @@ document.addEventListener('DOMContentLoaded', () => {
             };
             updateTaskStatus();
         }
+        // 更新英雄引導訊息
+        if (window.HeroGuide && window.HeroGuide.renderHeroGreeting) {
+            window.HeroGuide.renderHeroGreeting();
+        }
     });
     
     // 初始化顯示
