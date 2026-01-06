@@ -219,18 +219,18 @@
             <div class="route-container">
                 <!-- 路線摘要 -->
                 <section class="route-summary">
-                    <h3>📊 路線資訊</h3>
+                    <h3 data-i18n="routeInfo">📊 路線資訊</h3>
                     <div class="route-info">
                         <div class="route-info-item">
-                            <div class="route-info-label">總距離</div>
+                            <div class="route-info-label" data-i18n="routeTotalDistance">總距離</div>
                             <div class="route-info-value" id="total-distance">約 45 公里</div>
                         </div>
                         <div class="route-info-item">
-                            <div class="route-info-label">預計時間</div>
+                            <div class="route-info-label" data-i18n="routeEstimatedTime">預計時間</div>
                             <div class="route-info-value" id="total-time">約 1.5 小時</div>
                         </div>
                         <div class="route-info-item">
-                            <div class="route-info-label">任務站點</div>
+                            <div class="route-info-label" data-i18n="routeMissionStops">任務站點</div>
                             <div class="route-info-value">3 個</div>
                         </div>
                     </div>
@@ -238,13 +238,13 @@
                 
                 <!-- 路線提示 -->
                 <section class="route-tips">
-                    <h4>💡 路線提示</h4>
+                    <h4 data-i18n="routeTips">💡 路線提示</h4>
                     <ul>
-                        <li>建議使用 Google Maps 或 Apple Maps 進行導航</li>
-                        <li>每個任務站點需要完成對應任務才能解鎖下一關</li>
-                        <li>建議攜帶充電寶，確保手機電量充足</li>
-                        <li>注意交通安全，建議使用大眾運輸或共乘</li>
-                        <li>到達每個站點後，系統會自動檢查 GPS 位置（50 公尺範圍內）</li>
+                        <li data-i18n="routeTip1">建議使用 Google Maps 或 Apple Maps 進行導航</li>
+                        <li data-i18n="routeTip2">每個任務站點需要完成對應任務才能解鎖下一關</li>
+                        <li data-i18n="routeTip3">建議攜帶充電寶，確保手機電量充足</li>
+                        <li data-i18n="routeTip4">注意交通安全，建議使用大眾運輸或共乘</li>
+                        <li data-i18n="routeTip5">到達每個站點後，系統會自動檢查 GPS 位置（50 公尺範圍內）</li>
                     </ul>
                 </section>
                 
@@ -253,11 +253,12 @@
                     <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #E0F2FE; color: #475569;">
                         <div style="text-align: center; padding: 20px;">
                             <div style="font-size: 3rem; margin-bottom: 15px;">🗺️</div>
-                            <h3 style="color: #0F172A; margin-bottom: 10px;">互動地圖</h3>
-                            <p style="color: #64748B; margin-bottom: 20px;">點擊下方按鈕開啟 Google Maps 查看完整路線</p>
+                            <h3 style="color: #0F172A; margin-bottom: 10px;" data-i18n="interactiveMap">互動地圖</h3>
+                            <p style="color: #64748B; margin-bottom: 20px;" data-i18n="openGoogleMaps">點擊下方按鈕開啟 Google Maps 查看完整路線</p>
                             <a href="https://www.google.com/maps/dir/24.875,121.85/24.8318,121.774/24.6,121.85" 
                                target="_blank" 
-                               style="display: inline-block; padding: 12px 25px; background: linear-gradient(135deg, #3B82F6, #2563EB); color: white; border-radius: 25px; text-decoration: none; font-weight: 600;">
+                               style="display: inline-block; padding: 12px 25px; background: linear-gradient(135deg, #3B82F6, #2563EB); color: white; border-radius: 25px; text-decoration: none; font-weight: 600;"
+                               data-i18n="btnOpenGoogleMaps">
                                 🧭 開啟 Google Maps
                             </a>
                         </div>
@@ -269,18 +270,19 @@
                     <!-- 第一段：蜜月灣 -->
                     <article class="route-step-card">
                         <div class="route-step-number">1</div>
-                        <div class="route-step-title">🌊 第一關：海風中的呢喃</div>
-                        <div class="route-step-location">📍 蜜月灣（頭城）</div>
-                        <div class="route-step-description">
+                        <div class="route-step-title" data-i18n="routeStep1Title">🌊 第一關：海風中的呢喃</div>
+                        <div class="route-step-location" data-i18n="routeStep1Location">📍 蜜月灣（頭城）</div>
+                        <div class="route-step-description" data-i18n="routeStep1Desc">
                             在頭城蜜月灣的海邊靜坐，遠眺龜山島，閉上眼睛，聽著海浪的聲音。讓 AI 引導你與內心對話。
                         </div>
                         <div class="route-step-actions">
                             <a href="https://www.google.com/maps/dir/?api=1&destination=24.875,121.85" 
                                target="_blank" 
-                               class="btn-route-action btn-navigate">
+                               class="btn-route-action btn-navigate"
+                               data-i18n="btnNavigate">
                                 🧭 導航前往
                             </a>
-                            <a href="wave.html" class="btn-route-action btn-start-task">
+                            <a href="wave.html" class="btn-route-action btn-start-task" data-i18n="btnStartTask">
                                 🚀 開始任務
                             </a>
                         </div>
@@ -289,18 +291,19 @@
                     <!-- 第二段：壯圍沙丘 -->
                     <article class="route-step-card">
                         <div class="route-step-number">2</div>
-                        <div class="route-step-title">🌧 第二關：蘭陽細雨陪伴</div>
-                        <div class="route-step-location">📍 壯圍沙丘生態園區</div>
-                        <div class="route-step-description">
+                        <div class="route-step-title" data-i18n="routeStep2Title">🌧 第二關：蘭陽細雨陪伴</div>
+                        <div class="route-step-location" data-i18n="routeStep2Location">📍 壯圍沙丘生態園區</div>
+                        <div class="route-step-description" data-i18n="routeStep2Desc">
                             在壯圍沙丘生態園區，感受東北季風與細雨，練習面對不確定，找到自己的步調。
                         </div>
                         <div class="route-step-actions">
                             <a href="https://www.google.com/maps/dir/?api=1&destination=24.8318,121.774" 
                                target="_blank" 
-                               class="btn-route-action btn-navigate">
+                               class="btn-route-action btn-navigate"
+                               data-i18n="btnNavigate">
                                 🧭 導航前往
                             </a>
-                            <a href="rain.html" class="btn-route-action btn-start-task" id="btn-rain-task">
+                            <a href="rain.html" class="btn-route-action btn-start-task" id="btn-rain-task" data-i18n="btnStartTask">
                                 🚀 開始任務
                             </a>
                         </div>
@@ -309,18 +312,19 @@
                     <!-- 第三段：情人灣 -->
                     <article class="route-step-card">
                         <div class="route-step-number">3</div>
-                        <div class="route-step-title">🌅 第三關：情人灣日出勇氣</div>
-                        <div class="route-step-location">📍 情人灣（蘇澳）</div>
-                        <div class="route-step-description">
+                        <div class="route-step-title" data-i18n="routeStep3Title">🌅 第三關：情人灣日出勇氣</div>
+                        <div class="route-step-location" data-i18n="routeStep3Location">📍 情人灣（蘇澳）</div>
+                        <div class="route-step-description" data-i18n="routeStep3Desc">
                             在情人灣迎接晨曦，整理旅程洞見，為自己頒發一枚勇氣章，並分享給同伴。
                         </div>
                         <div class="route-step-actions">
                             <a href="https://www.google.com/maps/dir/?api=1&destination=24.6,121.85" 
                                target="_blank" 
-                               class="btn-route-action btn-navigate">
+                               class="btn-route-action btn-navigate"
+                               data-i18n="btnNavigate">
                                 🧭 導航前往
                             </a>
-                            <a href="dawn.html" class="btn-route-action btn-start-task" id="btn-dawn-task">
+                            <a href="dawn.html" class="btn-route-action btn-start-task" id="btn-dawn-task" data-i18n="btnStartTask">
                                 🚀 開始任務
                             </a>
                         </div>
