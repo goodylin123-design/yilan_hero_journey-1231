@@ -1700,6 +1700,262 @@ body {
     }
 }
 
+/* ========== 語言選擇器樣式 ========== */
+.language-selector {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.lang-toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(239, 246, 255, 0.95));
+    border: 2px solid rgba(56, 189, 248, 0.3);
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #0F172A;
+}
+
+.lang-toggle-btn:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 1), rgba(239, 246, 255, 1));
+    border-color: rgba(56, 189, 248, 0.5);
+    box-shadow: 0 6px 16px rgba(56, 189, 248, 0.25);
+    transform: translateY(-1px);
+}
+
+.lang-icon {
+    font-size: 1.2rem;
+}
+
+.lang-current {
+    min-width: 80px;
+    text-align: left;
+}
+
+.lang-arrow {
+    font-size: 0.7rem;
+    transition: transform 0.3s ease;
+}
+
+.lang-toggle-btn:hover .lang-arrow {
+    transform: translateY(2px);
+}
+
+.lang-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.2);
+    overflow: hidden;
+    min-width: 160px;
+    border: 1px solid rgba(226, 232, 240, 0.9);
+}
+
+.lang-option {
+    display: block;
+    width: 100%;
+    padding: 12px 20px;
+    text-align: left;
+    background: white;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.95rem;
+    color: #0F172A;
+    font-weight: 500;
+}
+
+.lang-option:hover {
+    background: linear-gradient(135deg, rgba(239, 246, 255, 0.9), rgba(219, 234, 254, 0.9));
+    color: #2563EB;
+}
+
+.lang-option:active {
+    background: rgba(219, 234, 254, 0.7);
+}
+
+/* ========== 親子風格增強 ========== */
+/* 更溫暖的配色 */
+.header {
+    position: relative;
+}
+
+.header::before {
+    content: '👨‍👩‍👧‍👦';
+    position: absolute;
+    top: -10px;
+    right: 20px;
+    font-size: 2rem;
+    opacity: 0.3;
+    animation: float 3s ease-in-out infinite;
+}
+
+/* 更友善的按鈕樣式 */
+.btn-primary {
+    background: linear-gradient(135deg,
+        #F59E0B 0%,      /* 溫暖金色 */
+        #F97316 45%,     /* 溫暖橘色 */
+        #EA580C 100%     /* 深橘 */
+    );
+    border: 2px solid rgba(254, 249, 195, 0.9);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg,
+        #FBBF24 0%,
+        #F59E0B 45%,
+        #EA580C 100%
+    );
+    transform: translateY(-4px) scale(1.02);
+    box-shadow:
+        0 10px 30px rgba(245, 158, 11, 0.6),
+        0 6px 18px rgba(15, 23, 42, 0.4);
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg,
+        #10B981 0%,      /* 溫暖綠色 */
+        #059669 45%,     /* 深綠 */
+        #047857 100%     /* 更深綠 */
+    );
+    border: 2px solid rgba(187, 247, 208, 0.9);
+}
+
+.btn-secondary:hover {
+    background: linear-gradient(135deg,
+        #34D399 0%,
+        #10B981 45%,
+        #047857 100%
+    );
+    transform: translateY(-4px) scale(1.02);
+    box-shadow:
+        0 10px 30px rgba(16, 185, 129, 0.6),
+        0 6px 18px rgba(15, 23, 42, 0.4);
+}
+
+/* 更友善的卡片樣式 */
+.card {
+    background: linear-gradient(145deg,
+        rgba(255, 255, 255, 0.98),
+        rgba(255, 251, 235, 0.95)  /* 溫暖米色 */
+    );
+    border: 2px solid rgba(254, 243, 199, 0.6);
+    box-shadow: 
+        0 8px 32px rgba(245, 158, 11, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+/* 更友善的任務按鈕 */
+.mission-btn {
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.95),
+        rgba(254, 243, 199, 0.9)
+    );
+    border: 2px solid rgba(245, 158, 11, 0.3);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15);
+}
+
+.mission-btn:hover {
+    background: linear-gradient(135deg, #FBBF24, #F59E0B);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+    transform: translateY(-2px) scale(1.02);
+}
+
+/* 更友善的統計卡片 */
+.traveler-stat-card {
+    background: linear-gradient(145deg,
+        rgba(255, 255, 255, 0.98),
+        rgba(254, 243, 199, 0.9)
+    );
+    border: 2px solid rgba(245, 158, 11, 0.2);
+    box-shadow:
+        0 6px 18px rgba(245, 158, 11, 0.12),
+        0 0 0 1px rgba(254, 249, 195, 0.9);
+    transition: all 0.3s ease;
+}
+
+.traveler-stat-card:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow:
+        0 10px 28px rgba(245, 158, 11, 0.2),
+        0 0 0 1px rgba(245, 158, 11, 0.4);
+    border-color: rgba(245, 158, 11, 0.4);
+}
+
+.traveler-stat-card .stat-number {
+    color: #F59E0B;
+    font-size: 2rem;
+}
+
+/* 更友善的功能卡片 */
+.feature-card {
+    background: linear-gradient(145deg,
+        rgba(255, 255, 255, 0.98),
+        rgba(254, 243, 199, 0.9)
+    );
+    border: 2px solid rgba(245, 158, 11, 0.2);
+    box-shadow:
+        0 8px 20px rgba(245, 158, 11, 0.12),
+        0 0 0 1px rgba(254, 249, 195, 0.9);
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    background: linear-gradient(145deg,
+        rgba(255, 255, 255, 1),
+        rgba(254, 243, 199, 1)
+    );
+    box-shadow:
+        0 14px 28px rgba(245, 158, 11, 0.25),
+        0 0 0 1px rgba(245, 158, 11, 0.4);
+    border-color: rgba(245, 158, 11, 0.4);
+}
+
+.feature-icon {
+    font-size: 3.5rem;
+    filter: drop-shadow(0 4px 8px rgba(245, 158, 11, 0.3));
+    animation: float 3s ease-in-out infinite;
+}
+
+/* 親子友好的響應式設計 */
+@media (max-width: 768px) {
+    .language-selector {
+        top: 10px;
+        right: 10px;
+    }
+    
+    .lang-toggle-btn {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+    }
+    
+    .lang-current {
+        min-width: 60px;
+        font-size: 0.85rem;
+    }
+    
+    .header::before {
+        display: none; /* 手機上隱藏裝飾圖示 */
+    }
+    
+    .traveler-stat-card .stat-number {
+        font-size: 1.5rem;
+    }
+}
+
 /* 旅人儀表板 */
 .traveler-dashboard {
     margin-top: 10px;

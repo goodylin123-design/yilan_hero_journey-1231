@@ -23,47 +23,63 @@
     </div>
     
     <div class="container">
+        <!-- 語言選擇器 -->
+        <div class="language-selector" id="language-selector">
+            <button type="button" class="lang-toggle-btn" id="lang-toggle-btn" aria-label="選擇語言">
+                <span class="lang-icon">🌐</span>
+                <span class="lang-current" id="lang-current">繁體中文</span>
+                <span class="lang-arrow">▼</span>
+            </button>
+            <div class="lang-dropdown" id="lang-dropdown" style="display: none;">
+                <button type="button" class="lang-option" data-lang="zh-TW">繁體中文</button>
+                <button type="button" class="lang-option" data-lang="zh-CN">简体中文</button>
+                <button type="button" class="lang-option" data-lang="en">English</button>
+                <button type="button" class="lang-option" data-lang="ja">日本語</button>
+                <button type="button" class="lang-option" data-lang="ko">한국어</button>
+            </div>
+        </div>
+        
         <header class="header">
-            <h1 class="title">🌊 擺渡蘭陽英雄之旅</h1>
-            <p class="subtitle">蘭陽海岸・內在成長型三關英雄旅程</p>
+            <h1 class="title" data-i18n="title">🌊 擺渡蘭陽英雄之旅</h1>
+            <p class="subtitle" data-i18n="subtitle">蘭陽海岸・內在成長型三關英雄旅程</p>
             <p class="hero-guide-message" id="hero-guide-message"></p>
         </header>
         
         <main id="main-content" class="content">
             <section class="card" aria-labelledby="hero-title">
-                <h2 id="hero-title">內在成長型三關英雄旅程（宜蘭海岸）</h2>
-                <p>沿著蜜月灣到情人灣的海線，讓心跳與海風同步，一關一關長出新的自己。</p>
+                <h2 id="hero-title" data-i18n="heroTitle">內在成長型三關英雄旅程（宜蘭海岸）</h2>
+                <p data-i18n="heroDescription">沿著蜜月灣到情人灣的海線，讓心跳與海風同步，一關一關長出新的自己。</p>
                 
                 <ol class="journey-steps">
-                    <li><strong>第一關｜啟程：蜜月灣海灘</strong> — 找到你的「出航理由」，寫下此刻的勇氣宣言。</li>
-                    <li><strong>第二關｜跨越：蘭陽細雨與海風</strong> — 直面內心的疑慮，在風雨中練習穩住呼吸與腳步。</li>
-                    <li><strong>第三關｜回歸：情人灣日出港</strong> — 把旅程的洞見收束，為自己頒發一枚勇氣章，並分享給同伴。</li>
+                    <li><strong data-i18n="mission1Title">第一關｜啟程：蜜月灣海灘</strong> — <span data-i18n="mission1Desc">找到你的「出航理由」，寫下此刻的勇氣宣言。</span></li>
+                    <li><strong data-i18n="mission2Title">第二關｜跨越：蘭陽細雨與海風</strong> — <span data-i18n="mission2Desc">直面內心的疑慮，在風雨中練習穩住呼吸與腳步。</span></li>
+                    <li><strong data-i18n="mission3Title">第三關｜回歸：情人灣日出港</strong> — <span data-i18n="mission3Desc">把旅程的洞見收束，為自己頒發一枚勇氣章，並分享給同伴。</span></li>
                 </ol>
 
                 <!-- 英雄任務選擇 -->
                 <section class="hero-missions" aria-label="英雄任務選擇">
-                    <h3 class="hero-missions-title">選擇今天的英雄任務</h3>
-                    <p class="hero-missions-subtitle">依照當下的狀態，挑一個任務，開始你的內在成長旅程。</p>
+                    <h3 class="hero-missions-title" data-i18n="chooseMission">選擇今天的英雄任務</h3>
+                    <p class="hero-missions-subtitle" data-i18n="chooseMissionSub">依照當下的狀態，挑一個任務，開始你的內在成長旅程。</p>
 
                     <div class="hero-missions-buttons" id="mission-buttons">
                         <a href="wave.html" class="mission-btn-link" data-task="wave">
                             <button type="button" class="mission-btn" data-mission="wave">
-                                🌊 海風中的呢喃任務
-                                <span class="mission-location">📍 蜜月灣</span>
+                                <span data-i18n="missionWave">🌊 海風中的呢喃任務</span>
+                                <span class="mission-location" data-i18n="missionWaveLoc">📍 蜜月灣</span>
                                 <span class="mission-status" id="status-wave"></span>
                             </button>
                         </a>
                         <a href="rain.html" class="mission-btn-link" data-task="rain">
                             <button type="button" class="mission-btn" data-mission="rain">
-                                🌧 蘭陽細雨陪伴任務
-                                <span class="mission-location">📍 壯圍沙丘生態園區</span>
+                                <span data-i18n="missionRain">🌧 蘭陽細雨陪伴任務</span>
+                                <span class="mission-location" data-i18n="missionRainLoc">📍 壯圍沙丘生態園區</span>
                                 <span class="mission-status" id="status-rain"></span>
                             </button>
                         </a>
                         <a href="dawn.html" class="mission-btn-link" data-task="dawn">
                             <button type="button" class="mission-btn" data-mission="dawn">
-                                🌅 情人灣日出勇氣任務
-                                <span class="mission-location">📍 情人灣</span>
+                                <span data-i18n="missionDawn">🌅 情人灣日出勇氣任務</span>
+                                <span class="mission-location" data-i18n="missionDawnLoc">📍 情人灣</span>
                                 <span class="mission-status" id="status-dawn"></span>
                             </button>
                         </a>
@@ -74,12 +90,12 @@
                         <div class="progress-bar-container">
                             <div class="progress-bar" id="progress-bar"></div>
                         </div>
-                        <p class="progress-text" id="progress-text">進度：0%</p>
+                        <p class="progress-text" id="progress-text"><span data-i18n="progress">進度</span>：0%</p>
                     </div>
 
                     <div class="qr-scan-section">
                         <button type="button" class="btn-qr-scan" id="btn-scan-qr">
-                            <span>📷 掃描 QR 碼進入任務</span>
+                            <span data-i18n="btnScanQR">📷 掃描 QR 碼進入任務</span>
                         </button>
                         <div id="qr-reader" style="display: none; margin-top: 20px;"></div>
                     </div>
@@ -88,40 +104,40 @@
                 <div class="button-group">
                     <a href="wave.html" class="btn-link">
                         <button type="button" class="btn btn-primary">
-                            <span class="btn-text">🚢 開始第一關</span>
+                            <span class="btn-text" data-i18n="btnStartMission1">🚢 開始第一關</span>
                             <span class="btn-shine"></span>
                         </button>
                     </a>
                     
                     <a href="route.html" class="btn-link">
                         <button type="button" class="btn btn-secondary">
-                            <span class="btn-text">🗺️ 查看路線</span>
+                            <span class="btn-text" data-i18n="btnViewRoute">🗺️ 查看路線</span>
                             <span class="btn-shine"></span>
                         </button>
                     </a>
                     
                     <a href="music-player.html" class="btn-link">
                         <button type="button" class="btn btn-adventure">
-                            <span class="btn-text">🎵 英雄音樂</span>
+                            <span class="btn-text" data-i18n="btnHeroMusic">🎵 英雄音樂</span>
                             <span class="btn-shine"></span>
                         </button>
                     </a>
                     
                     <button type="button" class="btn btn-adventure" id="btn-view-notes" style="margin-top: 10px;">
-                        <span class="btn-text">📖 心靈筆記</span>
+                        <span class="btn-text" data-i18n="btnMindNotes">📖 心靈筆記</span>
                         <span class="btn-shine"></span>
                     </button>
                     
                     <a href="travel-info.html" class="btn-link" style="margin-top: 10px;">
                         <button type="button" class="btn btn-secondary">
-                            <span class="btn-text">📋 旅行資訊</span>
+                            <span class="btn-text" data-i18n="btnTravelInfo">📋 旅行資訊</span>
                             <span class="btn-shine"></span>
                         </button>
                     </a>
                     
                     <a href="points-redeem.html" class="btn-link" style="margin-top: 10px;">
                         <button type="button" class="btn btn-adventure">
-                            <span class="btn-text">💚 點數兌換</span>
+                            <span class="btn-text" data-i18n="btnPointsRedeem">💚 點數兌換</span>
                             <span class="btn-shine"></span>
                         </button>
                     </a>
@@ -130,28 +146,28 @@
             
             <!-- 旅人儀表板（測試版） -->
             <section class="card traveler-dashboard" aria-label="旅人儀表板">
-                <h2>旅人儀表板（測試版）</h2>
-                <p>這是為了設計與展示而準備的統計區塊，會根據你在三關中的行為，慢慢長出屬於你的海岸旅程數據。</p>
+                <h2 data-i18n="dashboardTitle">旅人儀表板（測試版）</h2>
+                <p data-i18n="dashboardDesc">這是為了設計與展示而準備的統計區塊，會根據你在三關中的行為，慢慢長出屬於你的海岸旅程數據。</p>
                 <div class="traveler-stats-grid" id="traveler-stats">
                     <div class="traveler-stat-card">
-                        <h3>任務完成次數</h3>
+                        <h3 data-i18n="statMissionCount">任務完成次數</h3>
                         <p class="stat-number" id="stat-mission-count">–</p>
-                        <p class="stat-note">你已完成的所有關卡總數</p>
+                        <p class="stat-note" data-i18n="statMissionCountNote">你已完成的所有關卡總數</p>
                     </div>
                     <div class="traveler-stat-card">
-                        <h3>心靈筆記數</h3>
+                        <h3 data-i18n="statNotesCount">心靈筆記數</h3>
                         <p class="stat-number" id="stat-notes-count">–</p>
-                        <p class="stat-note">寫下的所有內在感受與洞見</p>
+                        <p class="stat-note" data-i18n="statNotesCountNote">寫下的所有內在感受與洞見</p>
                     </div>
                     <div class="traveler-stat-card">
-                        <h3>累積步行里程</h3>
+                        <h3 data-i18n="statDistance">累積步行里程</h3>
                         <p class="stat-number" id="stat-distance-km">– km</p>
-                        <p class="stat-note">實地走過的海岸路程（估算）</p>
+                        <p class="stat-note" data-i18n="statDistanceNote">實地走過的海岸路程（估算）</p>
                     </div>
                     <div class="traveler-stat-card">
-                        <h3>環保點數</h3>
+                        <h3 data-i18n="statPoints">環保點數</h3>
                         <p class="stat-number" id="stat-env-points">– 點</p>
-                        <p class="stat-note">未來可兌換或折抵的潛在積分</p>
+                        <p class="stat-note" data-i18n="statPointsNote">未來可兌換或折抵的潛在積分</p>
                     </div>
                 </div>
             </section>
@@ -159,21 +175,21 @@
             <section class="features" aria-label="冒險特色">
                 <article class="feature-card">
                     <div class="feature-icon">🌊</div>
-                    <h3>啟程・蜜月灣</h3>
-                    <p>在金色沙丘與海面交界，寫下啟航宣言，預備好第一步。</p>
-                    <a href="wave.html" class="feature-link">進入任務 →</a>
+                    <h3 data-i18n="feature1Title">啟程・蜜月灣</h3>
+                    <p data-i18n="feature1Desc">在金色沙丘與海面交界，寫下啟航宣言，預備好第一步。</p>
+                    <a href="wave.html" class="feature-link" data-i18n="featureLink">進入任務 →</a>
                 </article>
                 <article class="feature-card">
                     <div class="feature-icon">🏝️</div>
-                    <h3>跨越・蘭陽風雨</h3>
-                    <p>感受東北季風與細雨，練習面對不確定，找到自己的步調。</p>
-                    <a href="rain.html" class="feature-link">進入任務 →</a>
+                    <h3 data-i18n="feature2Title">跨越・蘭陽風雨</h3>
+                    <p data-i18n="feature2Desc">感受東北季風與細雨，練習面對不確定，找到自己的步調。</p>
+                    <a href="rain.html" class="feature-link" data-i18n="featureLink">進入任務 →</a>
                 </article>
                 <article class="feature-card">
                     <div class="feature-icon">⛵</div>
-                    <h3>回歸・情人灣日出港</h3>
-                    <p>迎接晨曦，整理旅程洞見，為自己頒發勇氣徽章並分享故事。</p>
-                    <a href="dawn.html" class="feature-link">進入任務 →</a>
+                    <h3 data-i18n="feature3Title">回歸・情人灣日出港</h3>
+                    <p data-i18n="feature3Desc">迎接晨曦，整理旅程洞見，為自己頒發勇氣徽章並分享故事。</p>
+                    <a href="dawn.html" class="feature-link" data-i18n="featureLink">進入任務 →</a>
                 </article>
             </section>
             
@@ -217,12 +233,14 @@
     
     <!-- QR 碼掃描庫 -->
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <script src="i18n.js"></script>
     <script src="task-progress.js"></script>
     <script src="hero-guide.js"></script>
     <script src="esg-stats.js"></script>
     <script src="traveler-store.js"></script>
     <script src="script.js"></script>
     <script src="index-script.js"></script>
+    <script src="index-i18n.js"></script>
     
     <script>
         // 更新主頁面的任務進度顯示
