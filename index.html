@@ -238,7 +238,11 @@
                     progressBar.style.width = percentage + '%';
                 }
                 if (progressText) {
-                    progressText.textContent = `進度：${percentage}% (${progress.completed.length}/3)`;
+                    const t = window.I18n ? window.I18n.getTranslation(window.I18n.getCurrentLanguage()) : {};
+                    const progressFormat = t.progressFormat || '進度：{percentage}% ({completed}/3)';
+                    progressText.textContent = progressFormat
+                        .replace('{percentage}', percentage)
+                        .replace('{completed}', progress.completed.length);
                 }
                 
                 // 更新每個任務按鈕的狀態

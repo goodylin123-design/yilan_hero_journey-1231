@@ -1,65 +1,68 @@
 // 環保點數兌換系統
 // 管理點數餘額、可兌換項目、兌換紀錄
 
-// 可兌換項目清單
-const REDEEM_ITEMS = [
-    {
-        id: 'discount-50',
-        name: '合作店家消費折抵 50 元',
-        description: '可在指定合作店家使用，折抵消費金額 50 元',
-        points: 500,
-        type: 'discount',
-        icon: '💰'
-    },
-    {
-        id: 'discount-100',
-        name: '合作店家消費折抵 100 元',
-        description: '可在指定合作店家使用，折抵消費金額 100 元',
-        points: 1000,
-        type: 'discount',
-        icon: '💵'
-    },
-    {
-        id: 'discount-200',
-        name: '合作店家消費折抵 200 元',
-        description: '可在指定合作店家使用，折抵消費金額 200 元',
-        points: 2000,
-        type: 'discount',
-        icon: '💴'
-    },
-    {
-        id: 'meal-voucher',
-        name: '在地餐廳餐券',
-        description: '可在頭城、壯圍、蘇澳指定餐廳使用',
-        points: 800,
-        type: 'voucher',
-        icon: '🍽️'
-    },
-    {
-        id: 'museum-ticket',
-        name: '蘭陽博物館門票',
-        description: '免費參觀蘭陽博物館（原價 100 元）',
-        points: 1000,
-        type: 'ticket',
-        icon: '🎫'
-    },
-    {
-        id: 'surf-rental',
-        name: '衝浪板租借優惠券',
-        description: '蜜月灣衝浪板租借 8 折優惠（原價 500-800 元）',
-        points: 600,
-        type: 'voucher',
-        icon: '🏄'
-    },
-    {
-        id: 'accommodation-discount',
-        name: '住宿折價券',
-        description: '指定民宿/旅館住宿 9 折優惠',
-        points: 1500,
-        type: 'voucher',
-        icon: '🏨'
-    }
-];
+// 可兌換項目清單（使用 i18n 翻譯）
+function getRedeemItems() {
+    const t = window.I18n ? window.I18n.getTranslation(window.I18n.getCurrentLanguage()) : {};
+    return [
+        {
+            id: 'discount-50',
+            name: t.redeemItemDiscount50 || '合作店家消費折抵 50 元',
+            description: t.redeemItemDiscount50Desc || '可在指定合作店家使用，折抵消費金額 50 元',
+            points: 500,
+            type: 'discount',
+            icon: '💰'
+        },
+        {
+            id: 'discount-100',
+            name: t.redeemItemDiscount100 || '合作店家消費折抵 100 元',
+            description: t.redeemItemDiscount100Desc || '可在指定合作店家使用，折抵消費金額 100 元',
+            points: 1000,
+            type: 'discount',
+            icon: '💵'
+        },
+        {
+            id: 'discount-200',
+            name: t.redeemItemDiscount200 || '合作店家消費折抵 200 元',
+            description: t.redeemItemDiscount200Desc || '可在指定合作店家使用，折抵消費金額 200 元',
+            points: 2000,
+            type: 'discount',
+            icon: '💴'
+        },
+        {
+            id: 'meal-voucher',
+            name: t.redeemItemMealVoucher || '在地餐廳餐券',
+            description: t.redeemItemMealVoucherDesc || '可在頭城、壯圍、蘇澳指定餐廳使用',
+            points: 800,
+            type: 'voucher',
+            icon: '🍽️'
+        },
+        {
+            id: 'museum-ticket',
+            name: t.redeemItemMuseumTicket || '蘭陽博物館門票',
+            description: t.redeemItemMuseumTicketDesc || '免費參觀蘭陽博物館（原價 100 元）',
+            points: 1000,
+            type: 'ticket',
+            icon: '🎫'
+        },
+        {
+            id: 'surf-rental',
+            name: t.redeemItemSurfRental || '衝浪板租借優惠券',
+            description: t.redeemItemSurfRentalDesc || '蜜月灣衝浪板租借 8 折優惠（原價 500-800 元）',
+            points: 600,
+            type: 'voucher',
+            icon: '🏄'
+        },
+        {
+            id: 'accommodation-discount',
+            name: t.redeemItemAccommodation || '住宿折價券',
+            description: t.redeemItemAccommodationDesc || '指定民宿/旅館住宿 9 折優惠',
+            points: 1500,
+            type: 'voucher',
+            icon: '🏨'
+        }
+    ];
+}
 
 let currentRedeemItem = null;
 
@@ -104,6 +107,8 @@ function renderRedeemItems() {
     if (!grid) return;
     
     const balance = loadPointsBalance();
+    const REDEEM_ITEMS = getRedeemItems();
+    const t = window.I18n ? window.I18n.getTranslation(window.I18n.getCurrentLanguage()) : {};
     
     grid.innerHTML = REDEEM_ITEMS.map(item => {
         const canRedeem = balance >= item.points;
@@ -114,11 +119,11 @@ function renderRedeemItems() {
                     <h3>${item.name}</h3>
                     <p>${item.description}</p>
                     <div class="redeem-item-points">
-                        <span class="points-required">${item.points.toLocaleString()} 點</span>
-                        ${!canRedeem ? '<span class="insufficient-points">點數不足</span>' : ''}
+                        <span class="points-required">${item.points.toLocaleString()} ${t.pointsUnit || '點'}</span>
+                        ${!canRedeem ? `<span class="insufficient-points">${t.insufficientPoints || '點數不足'}</span>` : ''}
                     </div>
                 </div>
-                ${canRedeem ? '<button type="button" class="btn-redeem">兌換</button>' : '<button type="button" class="btn-redeem disabled" disabled>點數不足</button>'}
+                ${canRedeem ? `<button type="button" class="btn-redeem">${t.btnRedeem || '兌換'}</button>` : `<button type="button" class="btn-redeem disabled" disabled>${t.insufficientPoints || '點數不足'}</button>`}
             </div>
         `;
     }).join('');
@@ -144,6 +149,7 @@ function showRedeemConfirm(item) {
     if (!modal || !content) return;
     
     currentRedeemItem = item;
+    const t = window.I18n ? window.I18n.getTranslation(window.I18n.getCurrentLanguage()) : {};
     
     content.innerHTML = `
         <div class="redeem-confirm-info">
@@ -151,9 +157,9 @@ function showRedeemConfirm(item) {
             <h3>${item.name}</h3>
             <p>${item.description}</p>
             <div class="confirm-points">
-                <p>所需點數：<strong>${item.points.toLocaleString()} 點</strong></p>
-                <p>目前餘額：<strong>${balance.toLocaleString()} 點</strong></p>
-                <p>兌換後餘額：<strong>${(balance - item.points).toLocaleString()} 點</strong></p>
+                <p>${t.pointsRequiredLabel || '所需點數：'}<strong>${item.points.toLocaleString()} ${t.pointsUnit || '點'}</strong></p>
+                <p>${t.currentBalance || '目前餘額：'}<strong>${balance.toLocaleString()} ${t.pointsUnit || '點'}</strong></p>
+                <p>${t.balanceAfterRedeem || '兌換後餘額：'}<strong>${(balance - item.points).toLocaleString()} ${t.pointsUnit || '點'}</strong></p>
             </div>
         </div>
     `;
@@ -164,9 +170,10 @@ function showRedeemConfirm(item) {
 // 執行兌換
 function executeRedeem(item) {
     const balance = loadPointsBalance();
+    const t = window.I18n ? window.I18n.getTranslation(window.I18n.getCurrentLanguage()) : {};
     
     if (balance < item.points) {
-        alert('點數不足，無法兌換');
+        alert(t.redeemFailed || '點數不足，無法兌換');
         return false;
     }
     
@@ -207,7 +214,7 @@ function executeRedeem(item) {
     // 顯示成功訊息
     const successMsg = document.createElement('div');
     successMsg.style.cssText = 'position: fixed; top: 20px; right: 20px; background: linear-gradient(135deg, #10B981, #059669); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); z-index: 10000; animation: slideInRight 0.3s ease;';
-    successMsg.textContent = `✨ 兌換成功！${item.name}`;
+    successMsg.textContent = `✨ ${t.redeemSuccess || '兌換成功'}！${item.name}`;
     document.body.appendChild(successMsg);
     
     setTimeout(() => {
@@ -235,9 +242,11 @@ function renderRedeemHistory() {
     if (!historyList) return;
     
     const history = loadRedeemHistory();
+    const REDEEM_ITEMS = getRedeemItems();
+    const t = window.I18n ? window.I18n.getTranslation(window.I18n.getCurrentLanguage()) : {};
     
     if (history.length === 0) {
-        historyList.innerHTML = '<p class="empty-message">尚無兌換紀錄</p>';
+        historyList.innerHTML = `<p class="empty-message">${t.noRedeemHistory || '尚無兌換紀錄'}</p>`;
         return;
     }
     
@@ -252,9 +261,9 @@ function renderRedeemHistory() {
                 <div class="redeem-history-item">
                     <div class="history-icon">${icon}</div>
                     <div class="history-content">
-                        <h4>${record.itemName || '兌換項目'}</h4>
-                        <p>日期：${date}</p>
-                        <p>使用點數：${record.points.toLocaleString()} 點</p>
+                        <h4>${record.itemName || (t.redeemItemName || '兌換項目')}</h4>
+                        <p>${t.redeemDate || '日期：'}${date}</p>
+                        <p>${t.redeemPointsUsed || '使用點數：'}${record.points.toLocaleString()} ${t.pointsUnit || '點'}</p>
                     </div>
                 </div>
             `;
@@ -293,6 +302,15 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('click', (e) => {
         if (e.target === modal) {
             closeModal();
+        }
+    });
+    
+    // 監聽語言切換事件，重新渲染兌換項目
+    window.addEventListener('languageChanged', () => {
+        renderRedeemItems();
+        renderRedeemHistory();
+        if (currentRedeemItem) {
+            showRedeemConfirm(currentRedeemItem);
         }
     });
 });

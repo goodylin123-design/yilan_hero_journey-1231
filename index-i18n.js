@@ -63,6 +63,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             };
             updateTaskStatus();
+            
+            // 更新進度文字
+            const updateProgressText = () => {
+                const progress = window.TaskProgress.getTaskProgress();
+                const percentage = window.TaskProgress.getProgressPercentage();
+                const progressText = document.getElementById('progress-text');
+                if (progressText && window.I18n) {
+                    const t = window.I18n.getTranslation(window.I18n.getCurrentLanguage());
+                    const progressFormat = t.progressFormat || '進度：{percentage}% ({completed}/3)';
+                    progressText.textContent = progressFormat
+                        .replace('{percentage}', percentage)
+                        .replace('{completed}', progress.completed.length);
+                }
+            };
+            updateProgressText();
         }
         // 更新英雄引導訊息
         if (window.HeroGuide && window.HeroGuide.renderHeroGreeting) {

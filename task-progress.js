@@ -123,16 +123,19 @@ function showTaskLockStatus(taskKey) {
     const isUnlocked = isTaskUnlocked(taskKey);
     const isCompleted = isTaskCompleted(taskKey);
     
+    // 使用 i18n 翻譯狀態訊息
+    const t = window.I18n ? window.I18n.getTranslation(window.I18n.getCurrentLanguage()) : {};
+    
     if (isCompleted) {
         return {
             status: 'completed',
-            message: '✅ 已完成',
+            message: t.statusCompleted || '✅ 已完成',
             canEnter: true
         };
     } else if (isUnlocked) {
         return {
             status: 'unlocked',
-            message: '🔓 可進行',
+            message: t.statusUnlocked || '🔓 可進行',
             canEnter: true
         };
     } else {
@@ -142,7 +145,7 @@ function showTaskLockStatus(taskKey) {
         
         return {
             status: 'locked',
-            message: '🔒 尚未解鎖',
+            message: t.statusLocked || '🔒 尚未解鎖',
             canEnter: false,
             requiredTask: previousTask ? TASK_NAMES[previousTask] : null
         };
