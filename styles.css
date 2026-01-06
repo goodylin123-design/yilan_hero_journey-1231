@@ -581,7 +581,8 @@ body {
     }
     
     .header {
-        padding: 0 5px;
+        padding: 50px 5px 0; /* 上方留空間給語言選擇器 */
+        padding-right: 80px; /* 右側留空間給語言選擇器 */
     }
     
     .subtitle {
@@ -1935,16 +1936,33 @@ body {
     .language-selector {
         top: 10px;
         right: 10px;
+        z-index: 1001; /* 確保在標題上方 */
     }
     
     .lang-toggle-btn {
-        padding: 8px 12px;
-        font-size: 0.85rem;
+        padding: 6px 10px;
+        font-size: 0.8rem;
+        gap: 4px;
+    }
+    
+    .lang-icon {
+        font-size: 1rem;
     }
     
     .lang-current {
-        min-width: 60px;
-        font-size: 0.85rem;
+        min-width: 50px;
+        font-size: 0.75rem;
+        white-space: nowrap;
+    }
+    
+    .lang-arrow {
+        font-size: 0.6rem;
+    }
+    
+    /* 為 header 添加 padding-top，避免標題被語言選擇器遮擋 */
+    .header {
+        padding-top: 50px;
+        padding-right: 80px; /* 為語言選擇器留出空間 */
     }
     
     .header::before {
