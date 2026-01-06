@@ -472,13 +472,19 @@ elements.btnSaveNote?.addEventListener('click', () => {
         content: whisperState.currentResponse || '（無文字記錄）',
         emotion: whisperState.currentEmotion || '平靜',
         audio: whisperState.recordedAudio ? true : false,
-        timestamp: Date.now()
+        timestamp: Date.now(),
+        mission: 'wave'
     };
     
     // 從 localStorage 讀取現有筆記
     const notes = JSON.parse(localStorage.getItem('whisperNotes') || '[]');
     notes.unshift(note); // 新增到最前面
     localStorage.setItem('whisperNotes', JSON.stringify(notes));
+
+    // 同步寫入 TravelerStore 的心靈筆記資料結構
+    if (window.TravelerStore) {
+        window.TravelerStore.recordMindNote(note);
+    }
     
     // 標記第一關任務為完成（如果是在 wave.html 頁面）
     if (window.location.pathname.includes('wave.html') && window.TaskProgress) {
@@ -490,6 +496,12 @@ elements.btnSaveNote?.addEventListener('click', () => {
                 window.EsgStats.recordMissionCompletion('wave', {
                     notesAdded: 1,
                     askRating: true
+                });
+            }
+            // 更新 TravelerStore 的任務完成資料
+            if (window.TravelerStore) {
+                window.TravelerStore.recordMissionCompleted('wave', {
+                    notesAdded: 1
                 });
             }
         }

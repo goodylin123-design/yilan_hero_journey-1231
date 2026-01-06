@@ -26,6 +26,11 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         notes.unshift(note);
         localStorage.setItem('whisperNotes', JSON.stringify(notes));
+
+        // 同步寫入 TravelerStore 的心靈筆記資料結構
+        if (window.TravelerStore) {
+            window.TravelerStore.recordMindNote(note);
+        }
         
         // 標記第三關任務為完成
         if (window.TaskProgress) {
@@ -37,6 +42,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     window.EsgStats.recordMissionCompletion('dawn', {
                         notesAdded: 1,
                         askRating: true
+                    });
+                }
+                // 更新 TravelerStore 的任務完成資料
+                if (window.TravelerStore) {
+                    window.TravelerStore.recordMissionCompleted('dawn', {
+                        notesAdded: 1
                     });
                 }
             }
