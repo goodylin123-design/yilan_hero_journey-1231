@@ -107,5 +107,25 @@ document.addEventListener('DOMContentLoaded', () => {
             notesModal.style.display = 'none';
         }
     });
+
+    // 旅人儀表板數據顯示
+    const statMissionCount = document.getElementById('stat-mission-count');
+    const statNotesCount = document.getElementById('stat-notes-count');
+    const statDistanceKm = document.getElementById('stat-distance-km');
+    const statEnvPoints = document.getElementById('stat-env-points');
+
+    if (statMissionCount && statNotesCount && statDistanceKm && statEnvPoints && window.TravelerStore && window.EsgStats) {
+        const traveler = window.TravelerStore.load();
+        const esg = window.EsgStats.load();
+
+        const behavior = traveler.esgMetrics?.behaviorSummary || {};
+        const distance = esg.distance || { totalKm: 0 };
+        const points = esg.points || { total: 0 };
+
+        statMissionCount.textContent = behavior.totalMissionCompletions ?? 0;
+        statNotesCount.textContent = behavior.totalMindNotes ?? 0;
+        statDistanceKm.textContent = `${(distance.totalKm || 0).toFixed(1)} km`;
+        statEnvPoints.textContent = `${points.total || 0} 點`;
+    }
 });
 
