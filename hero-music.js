@@ -157,82 +157,94 @@ function mergePreset(base, stage) {
     merged.bassPattern = base.bassPattern;
     return merged;
 }
-// 英雄主題音樂生成器
-// 宜蘭民謠風格、海岸感、慢步調、療癒系、適合冥想與行走
-
-// 共用音量預設
-const DEFAULT_VOLUMES = {
-    wave: 0.08,
-    melody: 0.32,
-    bass: 0.22,
-    harmony1: 0.16,
-    harmony2: 0.12
-};
-
-// 三段情緒預設：進場 / 行動 / 完成
+// 三段情緒預設：
+// intro   = 第一關：更溫柔一點的啟程版
+// action  = 第二關：慢很多、接近冥想的細雨版
+// complete= 完成任務後：第三關勇氣版（日出感）
 const PRESET_MAP = {
     intro: {
-        name: '進場',
-        tempoScale: 1.05,
+        name: '第一關・溫柔啟程',
+        // 稍微放慢節奏，整體更柔和
+        tempoScale: 1.25,
         useVibrato: false,
-        harmonyInterval: 1.25, // 大三度
+        harmonyInterval: 1.25, // 溫柔的大三度
         volumes: {
             ...DEFAULT_VOLUMES,
-            wave: 0.07,
-            melody: 0.26,
-            bass: 0.18,
-            harmony1: 0.12,
-            harmony2: 0.08
+            wave: 0.10,     // 海浪稍微明顯一點，讓人有被海抱著的感覺
+            melody: 0.24,   // 主旋律再輕一點
+            bass: 0.16,
+            harmony1: 0.11,
+            harmony2: 0.07
         },
+        // 緩慢、帶一點上升感，但不急
         melodyPattern: [
-            { note: 0, duration: 1.8, octave: 0 },
-            { note: 2, duration: 1.4, octave: 0 },
-            { note: 4, duration: 1.2, octave: 0 },
-            { note: 1, duration: 1.6, octave: 1 },
-            { note: 0, duration: 1.2, octave: 1 },
-            { note: 3, duration: 1.6, octave: 0 },
-            { note: 2, duration: 1.2, octave: 1 },
-            { note: 4, duration: 1.2, octave: 0 },
-            { note: 1, duration: 1.2, octave: 1 },
-            { note: 0, duration: 2.0, octave: 0 },
+            { note: 0, duration: 2.0, octave: 0 }, // C
+            { note: 2, duration: 1.8, octave: 0 }, // E
+            { note: 4, duration: 1.6, octave: 0 }, // A
+            { note: 1, duration: 1.8, octave: 1 }, // D 高
+            { note: 0, duration: 1.6, octave: 1 }, // C 高
+            { note: 3, duration: 1.8, octave: 0 }, // G
+            { note: 2, duration: 1.6, octave: 1 }, // E 高
+            { note: 4, duration: 1.6, octave: 0 }, // A
+            { note: 1, duration: 1.6, octave: 1 }, // D 高
+            { note: 0, duration: 2.4, octave: 0 }, // 收在低 C
         ],
         bassPattern: [
-            { note: 0, duration: 1.6 },
-            { note: 1, duration: 1.2 },
-            { note: 0, duration: 1.2 },
-            { note: 2, duration: 1.6 },
-            { note: 1, duration: 1.2 },
-            { note: 0, duration: 1.2 },
-            { note: 0, duration: 1.8 },
+            { note: 0, duration: 2.0 }, // C
+            { note: 1, duration: 1.8 }, // G
+            { note: 0, duration: 1.6 }, // C
+            { note: 2, duration: 2.0 }, // A
+            { note: 1, duration: 1.6 }, // G
+            { note: 0, duration: 2.2 }, // C
         ]
     },
     action: {
-        name: '行動',
-        tempoScale: 0.9, // 稍快（基礎 pattern 已偏快，tempoScale<1 代表更快）
-        useVibrato: false,
-        harmonyInterval: 1.25,
+        name: '第二關・細雨冥想',
+        // 「慢很多，接近冥想」：大幅放慢節奏
+        tempoScale: 1.8,
+        useVibrato: true,           // 加一點點顫音，讓長音更空靈
+        harmonyInterval: 1.25,      // 三度和聲，保持溫暖
         volumes: {
             ...DEFAULT_VOLUMES,
-            wave: 0.08,
-            melody: 0.34,
-            bass: 0.24,
-            harmony1: 0.16,
-            harmony2: 0.12
-        }
+            wave: 0.11,             // 環境感稍高
+            melody: 0.22,           // 旋律退後一點，避免干擾呼吸
+            bass: 0.17,
+            harmony1: 0.13,
+            harmony2: 0.09
+        },
+        // 更長的音與停頓，營造接近冥想的流動感
+        melodyPattern: [
+            { note: 0, duration: 2.4, octave: 0 },
+            { note: 2, duration: 2.0, octave: 0 },
+            { note: 3, duration: 2.2, octave: 0 },
+            { note: 4, duration: 2.4, octave: 1 },
+            { note: 2, duration: 2.0, octave: 1 },
+            { note: 0, duration: 2.6, octave: 0 }
+        ],
+        bassPattern: [
+            { note: 0, duration: 2.4 },
+            { note: 1, duration: 2.0 },
+            { note: 0, duration: 2.0 },
+            { note: 2, duration: 2.4 },
+            { note: 1, duration: 2.0 },
+            { note: 0, duration: 2.6 }
+        ]
     },
     complete: {
-        name: '完成',
-        tempoScale: 1.15, // 放慢，收束
-        useVibrato: true,
-        harmonyInterval: 1.5, // 五度，提升昂揚感
+        name: '第三關・日出勇氣版',
+        // 稍微加快一些，讓完成時有「精神被拉起來」的感覺
+        tempoScale: 0.85,
+        useVibrato: false,          // 勇氣感更乾淨俐落
+        harmonyInterval: 1.5,       // 五度，拉出光感
         volumes: {
             ...DEFAULT_VOLUMES,
-            wave: 0.06,
-            melody: 0.30,
-            bass: 0.18,
-            harmony1: 0.14,
-            harmony2: 0.10
+            wave: 0.07,
+            melody: 0.36,           // 主旋律更明亮
+            bass: 0.24,
+            harmony1: 0.18,
+            harmony2: 0.13
         },
+        // 比較有「往上走」的旋律線條
         melodyPattern: [
             { note: 0, duration: 2.0, octave: 0 },
             { note: 2, duration: 1.6, octave: 0 },
@@ -243,12 +255,12 @@ const PRESET_MAP = {
             { note: 0, duration: 2.4, octave: 0 },
         ],
         bassPattern: [
-            { note: 0, duration: 1.8 },
-            { note: 1, duration: 1.4 },
-            { note: 0, duration: 1.4 },
-            { note: 2, duration: 1.8 },
-            { note: 1, duration: 1.4 },
-            { note: 0, duration: 2.2 },
+            { note: 0, duration: 1.8 }, // C
+            { note: 1, duration: 1.6 }, // G
+            { note: 0, duration: 1.6 }, // C
+            { note: 2, duration: 1.8 }, // A
+            { note: 1, duration: 1.6 }, // G
+            { note: 0, duration: 2.2 }, // C
         ]
     }
 };
