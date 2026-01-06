@@ -1,5 +1,257 @@
+// 預設音量組合
+const DEFAULT_VOLUMES = {
+    wave: 0.08,     // 海浪底噪
+    melody: 0.32,   // 主旋律
+    bass: 0.24,     // 低音
+    harmony1: 0.15, // 高八度和聲
+    harmony2: 0.10  // 另一層和聲
+};
+
+// 三關基礎情緒預設（每關一種基調）
+const BASE_PRESET_MAP = {
+    wave: {
+        name: '啟程 / 海風',
+        tempoScale: 1.0,
+        useVibrato: false,
+        harmonyInterval: 1.25, // 大三度
+        volumes: { ...DEFAULT_VOLUMES },
+        // 輕快啟程感
+        melodyPattern: [
+            { note: 0, duration: 1.4, octave: 0 },
+            { note: 2, duration: 1.0, octave: 0 },
+            { note: 4, duration: 1.0, octave: 0 },
+            { note: 1, duration: 1.4, octave: 1 },
+            { note: 0, duration: 1.0, octave: 1 },
+            { note: 3, duration: 1.4, octave: 0 },
+            { note: 2, duration: 1.0, octave: 1 },
+            { note: 4, duration: 1.0, octave: 0 },
+            { note: 1, duration: 1.0, octave: 1 },
+            { note: 0, duration: 1.8, octave: 1 },
+        ],
+        bassPattern: [
+            { note: 0, duration: 1.2 }, { note: 1, duration: 1.0 },
+            { note: 0, duration: 1.0 }, { note: 2, duration: 1.2 },
+            { note: 1, duration: 1.0 }, { note: 0, duration: 1.0 },
+            { note: 1, duration: 1.2 }, { note: 0, duration: 1.2 }
+        ]
+    },
+    rain: {
+        name: '沉澱 / 細雨',
+        tempoScale: 0.85,
+        useVibrato: true,
+        harmonyInterval: 1.5, // 五度，較寬鬆
+        volumes: {
+            ...DEFAULT_VOLUMES,
+            melody: 0.26,
+            bass: 0.20,
+            wave: 0.10,
+            harmony1: 0.12,
+            harmony2: 0.08
+        },
+        // 緩慢下行，偏內省
+        melodyPattern: [
+            { note: 3, duration: 2.0, octave: 0 },
+            { note: 2, duration: 1.6, octave: 0 },
+            { note: 1, duration: 1.8, octave: 0 },
+            { note: 0, duration: 2.2, octave: 0 },
+            { note: 2, duration: 1.6, octave: 1 },
+            { note: 3, duration: 1.8, octave: 0 },
+            { note: 1, duration: 1.8, octave: 0 },
+            { note: 0, duration: 2.5, octave: 0 },
+        ],
+        bassPattern: [
+            { note: 0, duration: 2.0 }, { note: 1, duration: 1.6 },
+            { note: 0, duration: 1.6 }, { note: 2, duration: 2.0 },
+            { note: 1, duration: 1.6 }, { note: 0, duration: 1.6 },
+            { note: 1, duration: 2.0 }, { note: 0, duration: 2.2 }
+        ]
+    },
+    dawn: {
+        name: '昂揚 / 曙光',
+        tempoScale: 1.1,
+        useVibrato: false,
+        harmonyInterval: 1.26, // 近似大三度，保持明亮
+        volumes: {
+            ...DEFAULT_VOLUMES,
+            melody: 0.34,
+            bass: 0.25,
+            wave: 0.09,
+            harmony1: 0.16,
+            harmony2: 0.11
+        },
+        // 上行與跳躍，帶勇氣感
+        melodyPattern: [
+            { note: 0, duration: 1.0, octave: 0 },
+            { note: 2, duration: 0.9, octave: 0 },
+            { note: 4, duration: 0.9, octave: 0 },
+            { note: 1, duration: 1.1, octave: 1 },
+            { note: 3, duration: 1.0, octave: 1 },
+            { note: 4, duration: 1.0, octave: 1 },
+            { note: 2, duration: 1.1, octave: 1 },
+            { note: 0, duration: 1.2, octave: 1 },
+            { note: 3, duration: 0.9, octave: 1 },
+            { note: 4, duration: 0.9, octave: 1 },
+            { note: 2, duration: 1.0, octave: 0 },
+            { note: 0, duration: 1.8, octave: 0 },
+        ],
+        bassPattern: [
+            { note: 0, duration: 1.1 }, { note: 1, duration: 0.9 },
+            { note: 0, duration: 0.9 }, { note: 2, duration: 1.1 },
+            { note: 1, duration: 0.9 }, { note: 0, duration: 0.9 },
+            { note: 1, duration: 1.1 }, { note: 0, duration: 1.1 }
+        ]
+    }
+};
+
+// 三階段（進場 / 行動 / 完成）音樂微調
+const STAGE_PRESET_MAP = {
+    intro: {
+        name: '進場',
+        tempoScale: 0.92,
+        volumes: {
+            melody: 0.26,
+            bass: 0.18,
+            wave: 0.10,
+            harmony1: 0.11,
+            harmony2: 0.08
+        }
+    },
+    action: {
+        name: '行動',
+        tempoScale: 1.0,
+        volumes: {
+            melody: 0.34,
+            bass: 0.25,
+            wave: 0.10,
+            harmony1: 0.16,
+            harmony2: 0.11
+        }
+    },
+    complete: {
+        name: '完成',
+        tempoScale: 0.98,
+        useVibrato: true,
+        harmonyInterval: 1.5,
+        volumes: {
+            melody: 0.30,
+            bass: 0.20,
+            wave: 0.09,
+            harmony1: 0.13,
+            harmony2: 0.10
+        }
+    }
+};
+
+// 合併基礎預設與階段微調
+function mergePreset(base, stage) {
+    const merged = { ...base };
+    merged.tempoScale = (base.tempoScale || 1) * (stage?.tempoScale || 1);
+    merged.useVibrato = stage?.useVibrato ?? base.useVibrato ?? false;
+    merged.harmonyInterval = stage?.harmonyInterval || base.harmonyInterval || 1.25;
+    merged.volumes = {
+        ...DEFAULT_VOLUMES,
+        ...(base.volumes || {}),
+        ...(stage?.volumes || {})
+    };
+    merged.melodyPattern = base.melodyPattern;
+    merged.bassPattern = base.bassPattern;
+    return merged;
+}
 // 英雄主題音樂生成器
 // 宜蘭民謠風格、海岸感、慢步調、療癒系、適合冥想與行走
+
+// 共用音量預設
+const DEFAULT_VOLUMES = {
+    wave: 0.08,
+    melody: 0.32,
+    bass: 0.22,
+    harmony1: 0.16,
+    harmony2: 0.12
+};
+
+// 三段情緒預設：進場 / 行動 / 完成
+const PRESET_MAP = {
+    intro: {
+        name: '進場',
+        tempoScale: 1.05,
+        useVibrato: false,
+        harmonyInterval: 1.25, // 大三度
+        volumes: {
+            ...DEFAULT_VOLUMES,
+            wave: 0.07,
+            melody: 0.26,
+            bass: 0.18,
+            harmony1: 0.12,
+            harmony2: 0.08
+        },
+        melodyPattern: [
+            { note: 0, duration: 1.8, octave: 0 },
+            { note: 2, duration: 1.4, octave: 0 },
+            { note: 4, duration: 1.2, octave: 0 },
+            { note: 1, duration: 1.6, octave: 1 },
+            { note: 0, duration: 1.2, octave: 1 },
+            { note: 3, duration: 1.6, octave: 0 },
+            { note: 2, duration: 1.2, octave: 1 },
+            { note: 4, duration: 1.2, octave: 0 },
+            { note: 1, duration: 1.2, octave: 1 },
+            { note: 0, duration: 2.0, octave: 0 },
+        ],
+        bassPattern: [
+            { note: 0, duration: 1.6 },
+            { note: 1, duration: 1.2 },
+            { note: 0, duration: 1.2 },
+            { note: 2, duration: 1.6 },
+            { note: 1, duration: 1.2 },
+            { note: 0, duration: 1.2 },
+            { note: 0, duration: 1.8 },
+        ]
+    },
+    action: {
+        name: '行動',
+        tempoScale: 0.9, // 稍快（基礎 pattern 已偏快，tempoScale<1 代表更快）
+        useVibrato: false,
+        harmonyInterval: 1.25,
+        volumes: {
+            ...DEFAULT_VOLUMES,
+            wave: 0.08,
+            melody: 0.34,
+            bass: 0.24,
+            harmony1: 0.16,
+            harmony2: 0.12
+        }
+    },
+    complete: {
+        name: '完成',
+        tempoScale: 1.15, // 放慢，收束
+        useVibrato: true,
+        harmonyInterval: 1.5, // 五度，提升昂揚感
+        volumes: {
+            ...DEFAULT_VOLUMES,
+            wave: 0.06,
+            melody: 0.30,
+            bass: 0.18,
+            harmony1: 0.14,
+            harmony2: 0.10
+        },
+        melodyPattern: [
+            { note: 0, duration: 2.0, octave: 0 },
+            { note: 2, duration: 1.6, octave: 0 },
+            { note: 4, duration: 1.6, octave: 0 },
+            { note: 3, duration: 1.6, octave: 1 },
+            { note: 1, duration: 1.8, octave: 1 },
+            { note: 2, duration: 1.6, octave: 1 },
+            { note: 0, duration: 2.4, octave: 0 },
+        ],
+        bassPattern: [
+            { note: 0, duration: 1.8 },
+            { note: 1, duration: 1.4 },
+            { note: 0, duration: 1.4 },
+            { note: 2, duration: 1.8 },
+            { note: 1, duration: 1.4 },
+            { note: 0, duration: 2.2 },
+        ]
+    }
+};
 
 class HeroMusicGenerator {
     constructor() {
@@ -7,6 +259,22 @@ class HeroMusicGenerator {
         this.isPlaying = false;
         this.currentOscillators = [];
         this.currentGainNodes = [];
+        this.presetKey = 'intro'; // default: 進場
+        this.preset = null;
+    }
+
+    // 設定音樂情緒預設（wave / rain / dawn）
+    setPreset(presetKey) {
+        const preset = PRESET_MAP[presetKey];
+        if (!preset) return false;
+        this.presetKey = presetKey;
+        this.preset = preset;
+        return true;
+    }
+
+    // 別名：依「進場/行動/完成」切換
+    setStage(stageKey) {
+        return this.setPreset(stageKey);
     }
 
     // 初始化 Audio Context
@@ -21,7 +289,7 @@ class HeroMusicGenerator {
     }
 
     // 生成海浪聲（白噪音 + 低頻濾波）
-    createWaveSound(duration = 10) {
+    createWaveSound(duration = 10, volume = 0.1) {
         const bufferSize = this.audioContext.sampleRate * duration;
         const buffer = this.audioContext.createBuffer(1, bufferSize, this.audioContext.sampleRate);
         const data = buffer.getChannelData(0);
@@ -42,7 +310,7 @@ class HeroMusicGenerator {
 
         // 音量包絡（緩慢起伏）
         const gainNode = this.audioContext.createGain();
-        gainNode.gain.setValueAtTime(0.1, this.audioContext.currentTime);
+        gainNode.gain.setValueAtTime(volume, this.audioContext.currentTime);
 
         source.connect(filter);
         filter.connect(gainNode);
@@ -51,8 +319,8 @@ class HeroMusicGenerator {
         return { source, gainNode };
     }
 
-    // 生成主旋律（五聲音階，宜蘭民謠風格 - 參考「天清宜蘭」曲風）
-    createMelody() {
+    // 生成主旋律（依情緒預設調整節奏/模式）
+    createMelody(preset) {
         // 五聲音階：C, D, E, G, A (對應 261.63, 293.66, 329.63, 392.00, 440.00 Hz)
         // 擴展到兩個八度，增加旋律豐富度
         const pentatonicScale = [
@@ -61,38 +329,33 @@ class HeroMusicGenerator {
         ];
         const melody = [];
 
-        // 輕快海洋風格：活潑、輕盈、有節奏感
-        const melodyPattern = [
-            // 開場：輕快上升
-            { note: 0, duration: 1.5, octave: 0 }, // C (低)
-            { note: 2, duration: 1, octave: 0 }, // E
-            { note: 4, duration: 1, octave: 0 }, // A
-            { note: 1, duration: 1.5, octave: 1 }, // D (高)
-            
-            // 中段：活潑跳躍
-            { note: 0, duration: 1, octave: 1 }, // C (高)
-            { note: 3, duration: 1.5, octave: 0 }, // G
-            { note: 2, duration: 1, octave: 1 }, // E (高)
-            { note: 4, duration: 1, octave: 0 }, // A
-            { note: 1, duration: 1, octave: 1 }, // D (高)
-            
-            // 高潮：輕快高音
-            { note: 3, duration: 1, octave: 1 }, // G (高)
-            { note: 2, duration: 1, octave: 1 }, // E (高)
-            { note: 0, duration: 1.5, octave: 1 }, // C (高)
-            { note: 4, duration: 1, octave: 1 }, // A (高)
-            
-            // 結尾：輕快回落
-            { note: 3, duration: 1, octave: 1 }, // G (高)
-            { note: 2, duration: 1, octave: 0 }, // E
-            { note: 0, duration: 2, octave: 0 }, // C (結束)
-        ];
+        const tempoScale = preset?.tempoScale || 1;
+        const melodyPattern = (preset?.melodyPattern && preset.melodyPattern.length > 0)
+            ? preset.melodyPattern
+            : [
+                { note: 0, duration: 1.5, octave: 0 },
+                { note: 2, duration: 1, octave: 0 },
+                { note: 4, duration: 1, octave: 0 },
+                { note: 1, duration: 1.5, octave: 1 },
+                { note: 0, duration: 1, octave: 1 },
+                { note: 3, duration: 1.5, octave: 0 },
+                { note: 2, duration: 1, octave: 1 },
+                { note: 4, duration: 1, octave: 0 },
+                { note: 1, duration: 1, octave: 1 },
+                { note: 3, duration: 1, octave: 1 },
+                { note: 2, duration: 1, octave: 1 },
+                { note: 0, duration: 1.5, octave: 1 },
+                { note: 4, duration: 1, octave: 1 },
+                { note: 3, duration: 1, octave: 1 },
+                { note: 2, duration: 1, octave: 0 },
+                { note: 0, duration: 2, octave: 0 },
+            ];
 
         melodyPattern.forEach(({ note, duration, octave }) => {
             const baseIndex = octave * 5; // 0 或 5
             melody.push({
                 frequency: pentatonicScale[baseIndex + note],
-                duration: duration,
+                duration: duration * tempoScale,
                 startTime: melody.length > 0 
                     ? melody[melody.length - 1].startTime + melody[melody.length - 1].duration 
                     : 0
@@ -102,34 +365,36 @@ class HeroMusicGenerator {
         return melody;
     }
 
-    // 生成低音伴奏（輕快的節奏，海洋感）
-    createBassLine() {
+    // 生成低音伴奏（依情緒預設調整）
+    createBassLine(preset) {
         // 使用 C、G、A 的低八度作為基礎
         const bassNotes = [130.81, 196.00, 220.00]; // C2, G2, A2
         const bassLine = [];
 
-        // 輕快的節奏模式，營造海洋活力感
-        const bassPattern = [
-            { note: 0, duration: 1.5 }, // C
-            { note: 1, duration: 1 }, // G
-            { note: 0, duration: 1 }, // C
-            { note: 2, duration: 1.5 }, // A
-            { note: 1, duration: 1 }, // G
-            { note: 0, duration: 1 }, // C
-            { note: 1, duration: 1.5 }, // G
-            { note: 0, duration: 1.5 }, // C
-            { note: 1, duration: 1 }, // G
-            { note: 0, duration: 1.5 }, // C
-        ];
+        const tempoScale = preset?.tempoScale || 1;
+        const bassPattern = (preset?.bassPattern && preset.bassPattern.length > 0)
+            ? preset.bassPattern
+            : [
+                { note: 0, duration: 1.5 },
+                { note: 1, duration: 1 },
+                { note: 0, duration: 1 },
+                { note: 2, duration: 1.5 },
+                { note: 1, duration: 1 },
+                { note: 0, duration: 1 },
+                { note: 1, duration: 1.5 },
+                { note: 0, duration: 1.5 },
+                { note: 1, duration: 1 },
+                { note: 0, duration: 1.5 },
+            ];
 
         let currentTime = 0;
         bassPattern.forEach(({ note, duration }) => {
             bassLine.push({
                 frequency: bassNotes[note],
-                duration: duration,
+                duration: duration * tempoScale,
                 startTime: currentTime
             });
-            currentTime += duration;
+            currentTime += duration * tempoScale;
         });
 
         return bassLine;
@@ -180,8 +445,13 @@ class HeroMusicGenerator {
     async play() {
         if (this.isPlaying) {
             this.stop();
-            return;
         }
+
+        // 應用預設
+        const preset = this.preset || PRESET_MAP[this.presetKey] || PRESET_MAP.intro;
+        const volumes = preset.volumes || DEFAULT_VOLUMES;
+        const harmonyInterval = preset.harmonyInterval || 1.25;
+        const useVibrato = preset.useVibrato || false;
 
         if (!this.audioContext) {
             const initialized = await this.init();
@@ -200,36 +470,34 @@ class HeroMusicGenerator {
         const startTime = this.audioContext.currentTime;
 
         // 播放海浪背景音（循環）
-        const waveSound = this.createWaveSound(10);
+        const waveSound = this.createWaveSound(10, volumes.wave);
         waveSound.source.loop = true;
         waveSound.source.start(startTime);
 
-        // 播放主旋律（輕快海洋風格：活潑、有節奏感）
-        const melody = this.createMelody();
+        // 播放主旋律
+        const melody = this.createMelody(preset);
         melody.forEach(({ frequency, duration, startTime: noteStart }, index) => {
-            // 輕快的音符，不使用顫音
-            this.playNote(frequency, startTime + noteStart, duration, 0.3, 'sine', false);
+            this.playNote(frequency, startTime + noteStart, duration, volumes.melody, 'sine', useVibrato);
         });
 
         // 播放低音伴奏（同步開始，營造節奏感）
-        const bassLine = this.createBassLine();
+        const bassLine = this.createBassLine(preset);
         bassLine.forEach(({ frequency, duration, startTime: noteStart }) => {
-            this.playNote(frequency, startTime + noteStart, duration, 0.2, 'triangle', false);
+            this.playNote(frequency, startTime + noteStart, duration, volumes.bass, 'triangle', false);
         });
 
-        // 添加輕快的和聲層次
-        // 第一層：高八度和聲（輕快點綴）
+        // 第一層：高八度和聲
         melody.forEach(({ frequency, duration, startTime: noteStart }, index) => {
             if (index % 2 === 0 && duration >= 1) {
-                this.playNote(frequency * 2, startTime + noteStart + 0.1, duration - 0.1, 0.15, 'sine', false);
+                this.playNote(frequency * 2, startTime + noteStart + 0.1, duration - 0.1, volumes.harmony1, 'sine', false);
             }
         });
 
-        // 第二層：三度和聲（增加輕快感）
+        // 第二層：和聲（間隔依預設）
         melody.forEach(({ frequency, duration, startTime: noteStart }, index) => {
             if (index % 3 === 0 && duration >= 1) {
-                const thirdFreq = frequency * 1.25; // 大三度音程
-                this.playNote(thirdFreq, startTime + noteStart + 0.05, duration - 0.1, 0.1, 'sine', false);
+                const intervalFreq = frequency * harmonyInterval;
+                this.playNote(intervalFreq, startTime + noteStart + 0.05, duration - 0.1, volumes.harmony2, 'sine', false);
             }
         });
 
@@ -255,24 +523,23 @@ class HeroMusicGenerator {
             // 重新播放旋律和伴奏（海浪聲繼續）
             const newStartTime = this.audioContext.currentTime;
             melody.forEach(({ frequency, duration, startTime: noteStart }, index) => {
-                const useVibrato = duration >= 3;
-                this.playNote(frequency, newStartTime + noteStart, duration, 0.28, 'sine', useVibrato);
+                this.playNote(frequency, newStartTime + noteStart, duration, volumes.melody, 'sine', useVibrato);
             });
 
             bassLine.forEach(({ frequency, duration, startTime: noteStart }) => {
-                this.playNote(frequency, newStartTime + noteStart + 0.5, duration, 0.18, 'triangle', false);
+                this.playNote(frequency, newStartTime + noteStart + 0.2, duration, volumes.bass, 'triangle', false);
             });
 
             melody.forEach(({ frequency, duration, startTime: noteStart }, index) => {
-                if (index % 2 === 0 && duration >= 2) {
-                    this.playNote(frequency * 2, newStartTime + noteStart + 0.3, duration - 0.3, 0.12, 'sine', false);
+                if (index % 2 === 0 && duration >= 1) {
+                    this.playNote(frequency * 2, newStartTime + noteStart + 0.2, duration - 0.2, volumes.harmony1, 'sine', false);
                 }
             });
 
             melody.forEach(({ frequency, duration, startTime: noteStart }, index) => {
-                if (index % 3 === 0 && duration >= 2.5) {
-                    const fifthFreq = frequency * 1.5;
-                    this.playNote(fifthFreq, newStartTime + noteStart + 0.2, duration - 0.4, 0.08, 'sine', false);
+                if (index % 3 === 0 && duration >= 1) {
+                    const intervalFreq = frequency * harmonyInterval;
+                    this.playNote(intervalFreq, newStartTime + noteStart + 0.15, duration - 0.25, volumes.harmony2, 'sine', false);
                 }
             });
 
