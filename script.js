@@ -229,20 +229,7 @@ elements.btnStartGuide?.addEventListener('click', () => {
     
     // 根據當前語言取得對應的引導文字
     const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
-    const guideText = window.I18n ? window.I18n.t('voiceGuideWave', currentLang) : [
-        '先找一個讓身體可以放鬆的姿勢，輕輕地坐好。',
-        '如果願意，可以慢慢閉上眼睛，讓視線從外在世界收回到自己心裡。',
-        '聽一聽，海風正輕輕吹過，海浪一層一層推向岸邊。',
-        '把注意力放在呼吸上——吸氣的時候，想像自己被海風溫柔地擁抱；',
-        '吐氣的時候，讓今天累積的緊繃和疲憊，順著呼吸交給海浪帶走。',
-        '現在，在心裡望向遠方的龜山島，感受自己正安穩地坐在這片海岸上。',
-        '問問自己：這些海浪的律動，像你的內心嗎？此刻，它想對你說些什麼？',
-        '你不需要急著找到答案，也不用勉強整理成很好聽的句子。',
-        '只要誠實地，看見現在真實的自己，就已經很勇敢了。',
-        '當你準備好，可以慢慢把剛剛浮現的畫面、情緒，或是一小句話，說出來或寫下來。',
-        '無論你看見的是平靜、起伏、迷惘，還是說不太上來的感覺，都沒有關係。',
-        '我會在這裡，安靜地陪你，把這段海邊的對話留給真正的你自己。'
-    ].join(' ');
+    const guideText = window.I18n ? window.I18n.t('voiceGuideWave', currentLang) : '閉上眼睛，靜靜地聽著海浪聲。請問這些海浪聲讓你想起什麼？它像你的內心嗎？';
     
     speakAI(guideText, currentLang);
     
