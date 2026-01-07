@@ -25,7 +25,7 @@ window.MISSIONS = [
     order: 3,
     key: 'mission3',
     title: '沙丘上的腳印',
-    locationName: '三貂水',
+    locationName: '三敆水',
     lat: 24.702000,
     lng: 121.836300
   },
