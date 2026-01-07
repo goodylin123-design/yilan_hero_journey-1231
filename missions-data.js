@@ -35,8 +35,8 @@ window.MISSIONS = [
     key: 'mission4',
     title: '大地的擁抱',
     locationName: '壯圍沙丘生態園區',
-    lat: 24.7442,
-    lng: 121.8227
+    lat: 24.7372,
+    lng: 121.8201
   },
   {
     id: 'star-wish',
@@ -53,8 +53,8 @@ window.MISSIONS = [
     key: 'mission6',
     title: '風中的聲音',
     locationName: '五十二甲溼地',
-    lat: 24.6859,
-    lng: 121.7902
+    lat: 24.6632,
+    lng: 121.8178
   },
   {
     id: 'autumn-leaf',
@@ -70,9 +70,9 @@ window.MISSIONS = [
     order: 8,
     key: 'mission8',
     title: '河流中的倒影',
-    locationName: '利澤簡橋',
-    lat: 24.6388,
-    lng: 121.7885
+    locationName: '利澤沙丘海岸',
+    lat: 24.6678,
+    lng: 121.8385
   },
   {
     id: 'sea-rhythm',
