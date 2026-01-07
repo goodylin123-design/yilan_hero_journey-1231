@@ -51,8 +51,8 @@
                 <p data-i18n="heroDescription">沿著蜜月灣到情人灣的海線，讓心跳與海風同步，一關一關長出新的自己。</p>
                 
                 <ol class="journey-steps">
-                    <li><strong data-i18n="mission1Title">第一關｜啟程：蜜月灣海灘</strong> — <span data-i18n="mission1Desc">在海風中聆聽內心的呢喃，寫下此刻的真實感受。</span></li>
-                    <li><strong data-i18n="mission2Title">第二關｜山風掃帚（礁溪櫻花陵園）</strong> — <span data-i18n="mission2Desc">在山風與櫻花間，整理過去的壓力與掛念。</span></li>
+                    <li><strong data-i18n="mission1Title">第一關｜啟程：蜜月灣海灘</strong> — <span data-i18n="mission1Desc">找到你的「出航理由」，寫下此刻的勇氣宣言。</span></li>
+                    <li><strong data-i18n="mission2Title">第二關｜跨越：蘭陽細雨與海風</strong> — <span data-i18n="mission2Desc">直面內心的疑慮，在風雨中練習穩住呼吸與腳步。</span></li>
                     <li><strong data-i18n="mission3Title">第三關｜沙丘上的腳印（三敆水）</strong> — <span data-i18n="mission3Desc">走在沙丘上，回望自己走過的每一步。</span></li>
                     <li><strong data-i18n="mission4Title">第四關｜大地的擁抱（壯圍沙丘生態園區）</strong> — <span data-i18n="mission4Desc">雙腳踩在沙上，感受大地給你的支持與安穩。</span></li>
                     <li><strong data-i18n="mission5Title">第五關｜星空下的祈願（榕樹公園）</strong> — <span data-i18n="mission5Desc">仰望星空，寫下給未來自己的祈願。</span></li>
@@ -136,48 +136,6 @@
                         <a href="mission10.html" class="mission-btn-link" data-task="mission10">
                             <button type="button" class="mission-btn" data-mission="mission10">
                                 <span data-i18n="mission10">🌅 自然中的告別儀式任務</span>
-                                <span class="mission-location" data-i18n="mission10Loc">📍 內埤情人灣</span>
-                                <span class="mission-status" id="status-mission10"></span>
-                            </button>
-                        </a>
-                        <a href="mission5.html" class="mission-btn-link" data-task="mission5">
-                            <button type="button" class="mission-btn" data-mission="mission5">
-                                <span data-i18n="mission5Short">⭐ 星空下的祈願</span>
-                                <span class="mission-location" data-i18n="mission5Loc">📍 榕樹公園</span>
-                                <span class="mission-status" id="status-mission5"></span>
-                            </button>
-                        </a>
-                        <a href="mission6.html" class="mission-btn-link" data-task="mission6">
-                            <button type="button" class="mission-btn" data-mission="mission6">
-                                <span data-i18n="mission6Short">🍃 風中的聲音</span>
-                                <span class="mission-location" data-i18n="mission6Loc">📍 五十二甲溼地</span>
-                                <span class="mission-status" id="status-mission6"></span>
-                            </button>
-                        </a>
-                        <a href="mission7.html" class="mission-btn-link" data-task="mission7">
-                            <button type="button" class="mission-btn" data-mission="mission7">
-                                <span data-i18n="mission7Short">🍁 拾起一片落葉</span>
-                                <span class="mission-location" data-i18n="mission7Loc">📍 傳藝中心</span>
-                                <span class="mission-status" id="status-mission7"></span>
-                            </button>
-                        </a>
-                        <a href="mission8.html" class="mission-btn-link" data-task="mission8">
-                            <button type="button" class="mission-btn" data-mission="mission8">
-                                <span data-i18n="mission8Short">💧 河流中的倒影</span>
-                                <span class="mission-location" data-i18n="mission8Loc">📍 利澤簡</span>
-                                <span class="mission-status" id="status-mission8"></span>
-                            </button>
-                        </a>
-                        <a href="mission9.html" class="mission-btn-link" data-task="mission9">
-                            <button type="button" class="mission-btn" data-mission="mission9">
-                                <span data-i18n="mission9Short">🌊 拍打海浪的節奏</span>
-                                <span class="mission-location" data-i18n="mission9Loc">📍 無尾港</span>
-                                <span class="mission-status" id="status-mission9"></span>
-                            </button>
-                        </a>
-                        <a href="mission10.html" class="mission-btn-link" data-task="mission10">
-                            <button type="button" class="mission-btn" data-mission="mission10">
-                                <span data-i18n="mission10Short">🕊 自然中的告別儀式</span>
                                 <span class="mission-location" data-i18n="mission10Loc">📍 內埤情人灣</span>
                                 <span class="mission-status" id="status-mission10"></span>
                             </button>
@@ -329,14 +287,15 @@
                 }
                 if (progressText) {
                     const t = window.I18n ? window.I18n.getTranslation(window.I18n.getCurrentLanguage()) : {};
-                    const progressFormat = t.progressFormat || '進度：{percentage}% ({completed}/3)';
+                    const progressFormat = t.progressFormat || '進度：{percentage}% ({completed}/10)';
                     progressText.textContent = progressFormat
                         .replace('{percentage}', percentage)
                         .replace('{completed}', progress.completed.length);
                 }
                 
-                // 更新每個任務按鈕的狀態
-                ['wave', 'rain', 'dawn'].forEach(taskKey => {
+                // 更新每個任務按鈕的狀態（所有 10 關）
+                const allTasks = ['wave', 'rain', 'dawn', 'mission4', 'mission5', 'mission6', 'mission7', 'mission8', 'mission9', 'mission10'];
+                allTasks.forEach(taskKey => {
                     const status = TaskProgress.showTaskLockStatus(taskKey);
                     const statusEl = document.getElementById(`status-${taskKey}`);
                     const btnLink = document.querySelector(`[data-task="${taskKey}"]`);
@@ -361,7 +320,16 @@
                             btnLink.style.pointerEvents = 'auto';
                             btn.style.opacity = '1';
                             btn.style.cursor = 'pointer';
-                            btnLink.href = `${taskKey}.html`;
+                            // 根據任務鍵值設定正確的 HTML 文件
+                            if (taskKey === 'wave') {
+                                btnLink.href = 'wave.html';
+                            } else if (taskKey === 'rain') {
+                                btnLink.href = 'rain.html';
+                            } else if (taskKey === 'dawn') {
+                                btnLink.href = 'dawn.html';
+                            } else {
+                                btnLink.href = `${taskKey}.html`;
+                            }
                         }
                     }
                 });

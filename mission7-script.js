@@ -37,17 +37,23 @@ document.addEventListener('DOMContentLoaded', () => {
                         askRating: true
                     });
                 }
+                if (window.TravelerStore) {
+                    window.TravelerStore.recordMissionCompleted('mission7', {
+                        notesAdded: 1
+                    });
+                }
             }
         }
 
         const successMsg = document.createElement('div');
-        successMsg.className = 'success-message';
+        successMsg.style.cssText = 'position: fixed; top: 20px; right: 20px; background: linear-gradient(135deg, #10B981, #059669); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); z-index: 10000; animation: slideInRight 0.3s ease;';
         successMsg.textContent = t.reflectionSaved || '✨ 反思已保存！';
-        successMsg.style.cssText = 'padding: 15px; background: rgba(76, 175, 80, 0.2); border-radius: 8px; margin-top: 15px; text-align: center;';
-        btnSubmitReflection.parentElement.appendChild(successMsg);
-        setTimeout(() => successMsg.remove(), 3000);
-
-        mission7Reflection.value = '';
+        document.body.appendChild(successMsg);
+        
+        setTimeout(() => {
+            successMsg.style.animation = 'slideOutRight 0.3s ease';
+            setTimeout(() => successMsg.remove(), 300);
+        }, 2000);
     });
 });
 
