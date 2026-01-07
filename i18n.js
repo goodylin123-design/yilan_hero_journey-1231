@@ -12,8 +12,8 @@ const SUPPORTED_LANGUAGES = {
 const TRANSLATIONS = {
     'zh-TW': {
         title: '🌊 擺渡蘭陽英雄之旅',
-        subtitle: '蘭陽海岸・內在成長型三關英雄旅程',
-        heroTitle: '內在成長型三關英雄旅程（宜蘭海岸）',
+        subtitle: '蘭陽海岸・內在成長型十關英雄旅程',
+        heroTitle: '內在成長型十關英雄旅程（宜蘭海岸）',
         heroDescription: '沿著蜜月灣到情人灣的海線，讓心跳與海風同步，一關一關長出新的自己。',
         mission1Title: '第一關｜啟程：蜜月灣海灘',
         mission1Desc: '找到你的「出航理由」，寫下此刻的勇氣宣言。',
@@ -37,7 +37,7 @@ const TRANSLATIONS = {
         btnPointsRedeem: '💚 點數兌換',
         btnScanQR: '📷 掃描 QR 碼進入任務',
         dashboardTitle: '旅人儀表板（測試版）',
-        dashboardDesc: '這是為了設計與展示而準備的統計區塊，會根據你在三關中的行為，慢慢長出屬於你的海岸旅程數據。',
+        dashboardDesc: '這是為了設計與展示而準備的統計區塊，會根據你在十關中的行為，慢慢長出屬於你的海岸旅程數據。',
         statMissionCount: '任務完成次數',
         statMissionCountNote: '你已完成的所有關卡總數',
         statNotesCount: '心靈筆記數',
@@ -157,7 +157,7 @@ const TRANSLATIONS = {
         dawnPageIntro: '選擇這個任務的你，心裡其實已經有一小塊地方準備好迎接新的開始。就像日出前的那片暗藍，只要再多撐一會兒，天邊那條光一定會為你亮起。',
         dawnAIMessage: '你內心的那份準備，就是最珍貴的種子。相信它，也相信你自己。這趟旅程，你會發現比想像中更多的可能性。',
         journeyInsights: '📝 整理你的旅程洞見',
-        insightsDesc: '回顧這三關的旅程，寫下你的收穫：',
+        insightsDesc: '回顧這十關的旅程，寫下你的收穫：',
         insightsPlaceholder: '在這趟旅程中，你發現了什麼？學到了什麼？想要帶著什麼繼續前行？',
         btnSaveInsights: '💾 保存洞見',
         courageBadge: '⚓ 勇氣徽章',
@@ -170,7 +170,7 @@ const TRANSLATIONS = {
         // route.html 頁面
         routeTitle: '🗺️ 英雄旅程路線',
         routeSubtitle: '擺渡蘭陽・實體互動路線',
-        routeHeader: '三關英雄旅程實體路線',
+        routeHeader: '十關英雄旅程實體路線',
         routeDesc: '從蜜月灣到沙丘再到情人灣，這是一條完整的內在成長路線。',
         routeStep1: '第一段：蜜月灣 → 壯圍沙丘',
         routeStep2: '第二段：壯圍沙丘 → 情人灣',

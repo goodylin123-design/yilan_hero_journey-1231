@@ -90,7 +90,7 @@ function recomputeBehaviorSummary(state) {
         countRatings > 0 ? +(sumRatings / countRatings).toFixed(2) : null;
 }
 
-// 記錄：任務完成（由三關完成時呼叫）
+// 記錄：任務完成（由十關任務頁呼叫）
 // options:
 // - notesAdded: 本次新增的心靈筆記數量
 // - selfRating: 如有，旅人給這次任務的 1–5 分自評
@@ -162,7 +162,7 @@ function recordMissionCompleted(taskKey, options = {}) {
     saveTraveler(state);
 }
 
-// 記錄：新增心靈筆記（由三關 / 主頁查看筆記功能呼叫）
+// 記錄：新增心靈筆記（由任務頁 / 主頁查看筆記功能呼叫）
 function recordMindNote(note) {
     const state = loadTraveler();
 

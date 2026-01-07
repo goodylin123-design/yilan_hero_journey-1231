@@ -1,5 +1,4 @@
-// 三關任務解鎖系統
-// 任務必須依照順序完成才能進入下一關
+// 十關任務系統（目前不鎖關，可自由選擇）
 
 const TASK_ORDER = ['wave', 'rain', 'dawn'];
 const TASK_NAMES = {
@@ -260,7 +259,7 @@ function showTaskCompleteNotification(taskKey) {
         notification.innerHTML = `
             <div style="font-size: 2rem; margin-bottom: 10px;">🏅</div>
             <h3 style="margin: 0 0 10px 0; font-size: 1.2rem;">恭喜完成所有任務！</h3>
-            <p style="margin: 0; opacity: 0.95;">你已經完成了全部三關英雄旅程</p>
+            <p style="margin: 0; opacity: 0.95;">你已經完成了全部十關英雄旅程</p>
         `;
     }
     

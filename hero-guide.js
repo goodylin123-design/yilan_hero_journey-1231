@@ -32,7 +32,7 @@ function getHeroGreeting(progress) {
         return window.I18n ? window.I18n.t('heroGreeting2', lang) : '你已經在蜜月灣靜坐過，也走過蘭陽的細雨。比起剛出發的自己，現在的你更懂得怎麼和情緒一起走路了。下一站，我們一起去情人灣，看一場屬於你的日出。';
     }
 
-    // 三關都完成
+    // 十關都完成（暫時仍以全部完成為判斷）
     if (completed.length >= 3 && completed.includes('wave') && completed.includes('rain') && completed.includes('dawn')) {
         return window.I18n ? window.I18n.t('heroGreeting3', lang) : '三段海岸你都走過了：蜜月灣的呢喃、蘭陽的風雨、情人灣的日出。以後每次再來到這條線，只要閉上眼，你都能想起自己曾經走過的那份勇氣。我還會在這裡，等你下一次想出發的時候。';
     }

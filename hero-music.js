@@ -7,7 +7,7 @@ const DEFAULT_VOLUMES = {
     harmony2: 0.10  // 另一層和聲
 };
 
-// 三關基礎情緒預設（每關一種基調）
+// 十關基礎情緒預設（每關一種基調）
 const BASE_PRESET_MAP = {
     wave: {
         name: '啟程 / 海風',
