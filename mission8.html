@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="河流中的倒影 - 利澤簡任務">
+    <title>🌊 河流中的倒影任務</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="ocean-background" aria-hidden="true">
+        <div class="wave wave1"></div>
+        <div class="wave wave2"></div>
+        <div class="wave wave3"></div>
+    </div>
+    
+    <div class="coastline" aria-hidden="true">
+        <div class="dune dune-front"></div>
+        <div class="dune dune-mid"></div>
+        <div class="dune dune-back"></div>
+        <div class="coastline-highlight"></div>
+    </div>
+    
+    <div class="container">
+        <div class="language-selector" id="language-selector">
+            <button type="button" class="lang-toggle-btn" id="lang-toggle-btn" aria-label="選擇語言">
+                <span class="lang-icon">🌐</span>
+                <span class="lang-current" id="lang-current">繁體中文</span>
+                <span class="lang-arrow">▼</span>
+            </button>
+            <div class="lang-dropdown" id="lang-dropdown" style="display: none;">
+                <button type="button" class="lang-option" data-lang="zh-TW">繁體中文</button>
+                <button type="button" class="lang-option" data-lang="zh-CN">简体中文</button>
+                <button type="button" class="lang-option" data-lang="en">English</button>
+                <button type="button" class="lang-option" data-lang="ja">日本語</button>
+                <button type="button" class="lang-option" data-lang="ko">한국어</button>
+            </div>
+        </div>
+        
+        <header class="header">
+            <a href="index.html" class="back-link" data-i18n="backToHome">← 返回首頁</a>
+            <h1 class="title" data-i18n="mission8Title">🌊 河流中的倒影任務</h1>
+            <p class="subtitle" data-i18n="mission8Subtitle">📍 利澤簡・第八關</p>
+        </header>
+        
+        <main id="main-content" class="content">
+            <section class="card" aria-labelledby="mission8-title">
+                <h2 id="mission8-title" data-i18n="mission8PageTitle">第八關｜河流中的倒影（利澤簡）</h2>
+                <p class="mission-intro" data-i18n="mission8PageIntro">在利澤簡的河邊，旅行者會被 AI 引導觀察自己的倒影，並思考：這是現在的自己，還是過去的自己？旅行者可以拍下自己的倒影，並記錄感受。</p>
+                
+                <div class="mission-content">
+                    <div class="ai-guide-area">
+                        <div class="ai-avatar">🌊</div>
+                        <div class="ai-message">
+                            <p data-i18n="mission8AIMessage">請站在河邊，看著水中的倒影。那是現在的你，還是過去的你？是什麼讓你感受到當下的真實？倒影中的你，既真實又虛幻，重要的是把握住當下的自己。</p>
+                        </div>
+                    </div>
+
+                    <div class="reflection-area">
+                        <h3 data-i18n="reflectionPractice">💭 反思練習</h3>
+                        <textarea 
+                            id="mission8-reflection" 
+                            data-i18n-placeholder="reflectionPlaceholder"
+                            placeholder="請分享：那是現在的你，還是過去的你？是什麼讓你感受到當下的真實？"
+                            rows="6"
+                        ></textarea>
+                        <button type="button" class="btn-submit" id="btn-submit-reflection">
+                            <span data-i18n="btnSaveReflection">💾 保存反思</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="qr-section card">
+                <h3 data-i18n="scanQRNext">📷 掃描 QR 碼進入下一個任務</h3>
+                <p data-i18n="scanQRNextDesc">完成此任務後，掃描下一個任務的 QR 碼繼續旅程</p>
+                <button type="button" class="btn-qr-scan" id="btn-scan-qr">
+                    <span data-i18n="btnScanQR">📷 掃描 QR 碼</span>
+                </button>
+                <div id="qr-reader" style="display: none; margin-top: 20px;"></div>
+            </section>
+        </main>
+    </div>
+    
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <script src="i18n.js"></script>
+    <script src="task-progress.js"></script>
+    <script src="location-check.js"></script>
+    <script src="esg-stats.js"></script>
+    <script src="traveler-store.js"></script>
+    <script src="task-script.js"></script>
+    <script src="mission8-script.js"></script>
+    <script src="index-i18n.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const taskKey = 'mission8';
+            if (TaskProgress && TaskProgress.blockUnlockedTask(taskKey)) return;
+            if (!isLocationVerified(taskKey)) {
+                blockTaskContent(taskKey);
+            } else {
+                console.log('位置驗證通過，任務已解鎖');
+            }
+        });
+    </script>
+</body>
+</html>
+

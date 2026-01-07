@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="風中的聲音 - 五十二甲溼地任務">
+    <title>🌾 風中的聲音任務</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="ocean-background" aria-hidden="true">
+        <div class="wave wave1"></div>
+        <div class="wave wave2"></div>
+        <div class="wave wave3"></div>
+    </div>
+    
+    <div class="coastline" aria-hidden="true">
+        <div class="dune dune-front"></div>
+        <div class="dune dune-mid"></div>
+        <div class="dune dune-back"></div>
+        <div class="coastline-highlight"></div>
+    </div>
+    
+    <div class="container">
+        <div class="language-selector" id="language-selector">
+            <button type="button" class="lang-toggle-btn" id="lang-toggle-btn" aria-label="選擇語言">
+                <span class="lang-icon">🌐</span>
+                <span class="lang-current" id="lang-current">繁體中文</span>
+                <span class="lang-arrow">▼</span>
+            </button>
+            <div class="lang-dropdown" id="lang-dropdown" style="display: none;">
+                <button type="button" class="lang-option" data-lang="zh-TW">繁體中文</button>
+                <button type="button" class="lang-option" data-lang="zh-CN">简体中文</button>
+                <button type="button" class="lang-option" data-lang="en">English</button>
+                <button type="button" class="lang-option" data-lang="ja">日本語</button>
+                <button type="button" class="lang-option" data-lang="ko">한국어</button>
+            </div>
+        </div>
+        
+        <header class="header">
+            <a href="index.html" class="back-link" data-i18n="backToHome">← 返回首頁</a>
+            <h1 class="title" data-i18n="mission6Title">🌾 風中的聲音任務</h1>
+            <p class="subtitle" data-i18n="mission6Subtitle">📍 五十二甲溼地・第六關</p>
+        </header>
+        
+        <main id="main-content" class="content">
+            <section class="card" aria-labelledby="mission6-title">
+                <h2 id="mission6-title" data-i18n="mission6PageTitle">第六關｜風中的聲音（五十二甲溼地）</h2>
+                <p class="mission-intro" data-i18n="mission6PageIntro">在五十二甲溼地，旅行者可以騎著單車沿著小徑，享受稻田的香氣。AI 會引導你：你是否聽到風中的聲音？這聲音如何讓你聯想到你自己的生命？旅行者可以用文字或語音記錄反思。</p>
+                
+                <div class="mission-content">
+                    <div class="ai-guide-area">
+                        <div class="ai-avatar">🌾</div>
+                        <div class="ai-message">
+                            <p data-i18n="mission6AIMessage">請閉上眼睛，聽風穿過稻田的聲音。你聽到了什麼？這聲音帶給你什麼生命的聯想？風帶來變化，也帶來希望。相信生命的節奏會引領你前進。</p>
+                        </div>
+                    </div>
+
+                    <div class="reflection-area">
+                        <h3 data-i18n="reflectionPractice">💭 反思練習</h3>
+                        <textarea 
+                            id="mission6-reflection" 
+                            data-i18n-placeholder="reflectionPlaceholder"
+                            placeholder="請分享：你聽到了什麼？這聲音帶給你什麼生命的聯想？"
+                            rows="6"
+                        ></textarea>
+                        <button type="button" class="btn-submit" id="btn-submit-reflection">
+                            <span data-i18n="btnSaveReflection">💾 保存反思</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="qr-section card">
+                <h3 data-i18n="scanQRNext">📷 掃描 QR 碼進入下一個任務</h3>
+                <p data-i18n="scanQRNextDesc">完成此任務後，掃描下一個任務的 QR 碼繼續旅程</p>
+                <button type="button" class="btn-qr-scan" id="btn-scan-qr">
+                    <span data-i18n="btnScanQR">📷 掃描 QR 碼</span>
+                </button>
+                <div id="qr-reader" style="display: none; margin-top: 20px;"></div>
+            </section>
+        </main>
+    </div>
+    
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+    <script src="i18n.js"></script>
+    <script src="task-progress.js"></script>
+    <script src="location-check.js"></script>
+    <script src="esg-stats.js"></script>
+    <script src="traveler-store.js"></script>
+    <script src="task-script.js"></script>
+    <script src="mission6-script.js"></script>
+    <script src="index-i18n.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const taskKey = 'mission6';
+            if (TaskProgress && TaskProgress.blockUnlockedTask(taskKey)) return;
+            if (!isLocationVerified(taskKey)) {
+                blockTaskContent(taskKey);
+            } else {
+                console.log('位置驗證通過，任務已解鎖');
+            }
+        });
+    </script>
+</body>
+</html>
+
