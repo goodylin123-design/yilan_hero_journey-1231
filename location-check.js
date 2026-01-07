@@ -5,27 +5,77 @@
 // 定義三個任務的 GPS 座標（宜蘭海岸實際座標）
 // 注意：請根據實際活動地點調整以下座標
 
+// 從 missions-data.js 獲取任務位置資訊，如果不存在則使用預設值
 const TASK_LOCATIONS = {
     wave: {
         name: '蜜月灣',
-        lat: 24.8750,  // 蜜月灣緯度（約 24.875°N）
-        lng: 121.8500, // 蜜月灣經度（約 121.85°E）
-        radius: 50,     // 觸發半徑（公尺）
+        lat: 24.9387,
+        lng: 121.8891,
+        radius: 50,
         description: '📍 蜜月灣・眺望龜山島'
     },
     rain: {
-        name: '壯圍沙丘生態園區',
-        lat: 24.8318,  // 壯圍沙丘生態園區緯度（24.8318°N）
-        lng: 121.7740, // 壯圍沙丘生態園區經度（121.774°E）
+        name: '礁溪櫻花陵園',
+        lat: 24.8356,
+        lng: 121.7609,
         radius: 50,
-        description: '📍 壯圍沙丘生態園區・細雨陪伴'
+        description: '📍 礁溪櫻花陵園・山風掃帚'
     },
     dawn: {
-        name: '情人灣',
-        lat: 24.6000,  // 情人灣緯度（約 24.6°N，蘇澳附近）
-        lng: 121.8500, // 情人灣經度（約 121.85°E）
+        name: '三敆水',
+        lat: 24.7020,
+        lng: 121.8363,
         radius: 50,
-        description: '📍 情人灣・日出港'
+        description: '📍 三敆水・沙丘上的腳印'
+    },
+    mission4: {
+        name: '壯圍沙丘生態園區',
+        lat: 24.7442,
+        lng: 121.8227,
+        radius: 50,
+        description: '📍 壯圍沙丘生態園區・大地的擁抱'
+    },
+    mission5: {
+        name: '東港榕樹公園',
+        lat: 24.7671,
+        lng: 121.8125,
+        radius: 50,
+        description: '📍 東港榕樹公園・星空下的祈願'
+    },
+    mission6: {
+        name: '五十二甲溼地',
+        lat: 24.6859,
+        lng: 121.7902,
+        radius: 50,
+        description: '📍 五十二甲溼地・風中的聲音'
+    },
+    mission7: {
+        name: '傳藝中心',
+        lat: 24.6866,
+        lng: 121.8241,
+        radius: 50,
+        description: '📍 傳藝中心・拾起一片落葉'
+    },
+    mission8: {
+        name: '利澤簡橋',
+        lat: 24.6388,
+        lng: 121.78853,
+        radius: 50,
+        description: '📍 利澤簡橋・河流中的倒影'
+    },
+    mission9: {
+        name: '無尾港',
+        lat: 24.6573,
+        lng: 121.8357,
+        radius: 50,
+        description: '📍 無尾港・拍打海浪的節奏'
+    },
+    mission10: {
+        name: '內埤情人灣',
+        lat: 24.5826,
+        lng: 121.8660,
+        radius: 50,
+        description: '📍 內埤情人灣・自然中的告別儀式'
     }
 };
 
