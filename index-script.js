@@ -56,12 +56,29 @@ document.addEventListener('DOMContentLoaded', () => {
         // 解析 QR 碼內容並導航
         try {
             // QR 碼格式：任務頁面 URL 或任務代碼
-            if (decodedText.includes('wave.html') || decodedText === 'wave' || decodedText === 'WAVE') {
-                window.location.href = 'wave.html';
-            } else if (decodedText.includes('rain.html') || decodedText === 'rain' || decodedText === 'RAIN') {
-                window.location.href = 'rain.html';
-            } else if (decodedText.includes('dawn.html') || decodedText === 'dawn' || decodedText === 'DAWN') {
-                window.location.href = 'dawn.html';
+            const taskRoutes = {
+                'wave': 'wave.html',
+                'rain': 'rain.html',
+                'dawn': 'dawn.html',
+                'mission4': 'mission4.html',
+                'mission5': 'mission5.html',
+                'mission6': 'mission6.html',
+                'mission7': 'mission7.html',
+                'mission8': 'mission8.html',
+                'mission9': 'mission9.html',
+                'mission10': 'mission10.html'
+            };
+
+            let foundRoute = null;
+            for (const [key, route] of Object.entries(taskRoutes)) {
+                if (decodedText.includes(route) || decodedText.toLowerCase() === key.toLowerCase() || decodedText === key.toUpperCase()) {
+                    foundRoute = route;
+                    break;
+                }
+            }
+
+            if (foundRoute) {
+                window.location.href = foundRoute;
             } else if (decodedText.startsWith('http')) {
                 // 如果是完整 URL，直接跳轉
                 window.location.href = decodedText;

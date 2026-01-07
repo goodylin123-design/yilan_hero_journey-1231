@@ -72,8 +72,8 @@ const TASK_LOCATIONS = {
     },
     mission10: {
         name: '內埤情人灣',
-        lat: 24.5826,
-        lng: 121.8660,
+        lat: 24.5774,
+        lng: 121.8708,
         radius: 50,
         description: '📍 內埤情人灣・自然中的告別儀式'
     }

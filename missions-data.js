@@ -89,8 +89,8 @@ window.MISSIONS = [
     key: 'mission10',
     title: '自然中的告別儀式',
     locationName: '內埤情人灣',
-    lat: 24.5826,
-    lng: 121.8660
+    lat: 24.5774,
+    lng: 121.8708
   }
 ];
 
