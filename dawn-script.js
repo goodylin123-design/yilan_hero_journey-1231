@@ -1,10 +1,36 @@
-// 情人灣日出任務頁面專用腳本
+// 第三關：沙丘上的腳印任務頁面專用腳本
 document.addEventListener('DOMContentLoaded', () => {
+    // 初始化 AI 對話系統
+    if (window.AIDialogue) {
+        window.AIDialogue.init('dawn', {
+            voiceGuideKey: 'voiceGuideDawn',
+            defaultGuideText: '請慢慢沿著沙丘往前走，感受腳掌踩在沙上的重量與紋理。每走一步，低頭看看自己留下的腳印，問問自己：這些腳印代表了你哪些過去？'
+        });
+    }
+    
     const btnSaveInsights = document.getElementById('btn-save-insights');
     const dawnInsights = document.getElementById('dawn-insights');
     const btnClaimBadge = document.getElementById('btn-claim-badge');
     const badgeDisplay = document.getElementById('badge-display');
     const btnShareStory = document.getElementById('btn-share-story');
+    const journeySummary = document.getElementById('journey-summary');
+    
+    // 當AI反饋顯示後，顯示旅程洞見區域
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                const feedbackArea = document.getElementById('ai-feedback-area');
+                if (feedbackArea && feedbackArea.style.display !== 'none' && journeySummary) {
+                    journeySummary.style.display = 'block';
+                }
+            }
+        });
+    });
+    
+    const feedbackArea = document.getElementById('ai-feedback-area');
+    if (feedbackArea) {
+        observer.observe(feedbackArea, { attributes: true, attributeFilter: ['style'] });
+    }
 
     // 保存洞見
     btnSaveInsights?.addEventListener('click', () => {

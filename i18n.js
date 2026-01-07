@@ -157,7 +157,12 @@ const TRANSLATIONS = {
         rainSubtitle: '📍 礁溪櫻花陵園・第二關',
         rainPageTitle: '第二關｜山風拂面（礁溪櫻花陵園）',
         rainPageIntro: '行走在礁溪櫻花陵園的坡道間，旅行者會感受到山風輕掃臉頰、拂過樹梢。AI 會引導你思考：這股風來自何方？在你的人生中，有什麼力量推動著你前行？生命的意義是什麼？',
-        rainAIMessage: '感受山風輕輕拂過臉頰。你覺得這股風來自何方？在你的人生中，有什麼力量推動著你前行？',
+        rainAIMessage: '準備好了嗎？點擊「開始引導」來開始這段內在旅程。',
+        voiceGuideRain: '感受山風輕輕拂過臉頰。你覺得這股風來自何方？在你的人生中，有什麼力量推動著你前行？',
+        rainUserResponse: '請分享：這股風讓你想起什麼？在你的人生中，有什麼力量推動著你前行？',
+        rainAIFeedbackCalm: '親愛的旅人，你找到了內心的平靜。山風告訴我們，力量來自於內心的穩定。就像山風會來也會去，你的內心也會找到平衡。',
+        rainAIFeedbackWorried: '親愛的旅人，我聽見了你的憂慮。就像山風會來也會去，你的憂慮也會過去。試著像觀察山風一樣觀察你的情緒，不抗拒也不執著。',
+        rainAIFeedbackThinking: '親愛的旅人，思考是很好的開始。讓山風陪伴你，答案會自然浮現。你正在為自己尋找方向，這本身就是成長的證明。',
         reflectionPractice: '💭 反思練習',
         reflectionPlaceholder: '請分享：當你面對不確定時，內心有什麼感受？細雨和海風教會了你什麼？',
         btnSaveReflection: '💾 保存反思',
@@ -168,6 +173,12 @@ const TRANSLATIONS = {
         // 第三關：沙丘上的腳印（三敆水）
         dawnTitle: '🌅 沙丘上的腳印',
         dawnSubtitle: '📍 三敆水・第三關',
+        dawnAIMessage: '準備好了嗎？點擊「開始引導」來開始這段內在旅程。',
+        voiceGuideDawn: '請慢慢沿著沙丘往前走，感受腳掌踩在沙上的重量與紋理。每走一步，低頭看看自己留下的腳印，問問自己：這些腳印代表了你哪些過去？有哪些故事，是你一直帶在心裡，卻還沒有好好說完？',
+        dawnUserResponse: '請分享：這些腳印代表了你哪些過去？有哪些故事，是你一直帶在心裡，卻還沒有好好說完？',
+        dawnAIFeedbackCalm: '親愛的旅人，你找到了內心的平靜。就像沙丘上的腳印會被風沙慢慢抹平，你的過去也會在時間中慢慢沉澱。重要的是，你已經學會了與過去和解。',
+        dawnAIFeedbackWorried: '親愛的旅人，我聽見了你的憂慮。就像腳印會消失，但意義會留下，你的過去雖然會過去，但從中學到的智慧會陪伴你繼續前行。',
+        dawnAIFeedbackThinking: '親愛的旅人，思考是很好的開始。讓沙丘和風沙陪伴你，慢慢整理那些還沒有說完的故事。你正在為自己尋找方向，這本身就是成長的證明。',
         dawnPageTitle: '第三關｜沙丘上的腳印（三敆水）',
         dawnPageIntro: 'AI 會引導你來到三敆水一帶的沙丘上緩慢行走，觀看自己在沙面上留下的一串串腳印。這些腳印代表著你走過的過去經歷，也象徵著「腳印最終會被風沙抹去」，而我們的過去是否也能被重新理解與安放？旅行者可以拍下自己的腳印，並將感受記錄給 AI。',
         dawnAIMessage: '請慢慢沿著沙丘往前走，感受腳掌踩在沙上的重量與紋理。每走一步，低頭看看自己留下的腳印，問問自己：這些腳印代表了你哪些過去？有哪些故事，是你一直帶在心裡，卻還沒有好好說完？當你停下腳步時，可以在心裡對著這些腳印說一句話——也許是道別、也許是感謝。當風慢慢把腳印抹平時，想像那些沒有說完的情緒，也被溫柔地放下。雖然腳印會消失，但意義會留下。',
@@ -592,7 +603,12 @@ const TRANSLATIONS = {
         statusUnlocked: '🔓 可进行',
         statusLocked: '🔒 尚未解锁',
         // 語音引導文字（簡體中文使用繁體中文版本）
-        voiceGuideWave: '闭上眼睛，静静地听着海浪声。请问这些海浪声让你想起什么？它像你的内心吗？',
+        voiceGuideWave: '閉上眼睛，靜靜地聽著海浪聲。請問這些海浪聲讓你想起什麼？它像你的內心嗎？',
+        voiceGuideRain: '感受山風輕輕拂過臉頰。你覺得這股風來自何方？在你的人生中，有什麼力量推動著你前行？',
+        rainUserResponse: '請分享：這股風讓你想起什麼？在你的人生中，有什麼力量推動著你前行？',
+        rainAIFeedbackCalm: '親愛的旅人，你找到了內心的平靜。山風告訴我們，力量來自於內心的穩定。就像山風會來也會去，你的內心也會找到平衡。',
+        rainAIFeedbackWorried: '親愛的旅人，我聽見了你的憂慮。就像山風會來也會去，你的憂慮也會過去。試著像觀察山風一樣觀察你的情緒，不抗拒也不執著。',
+        rainAIFeedbackThinking: '親愛的旅人，思考是很好的開始。讓山風陪伴你，答案會自然浮現。你正在為自己尋找方向，這本身就是成長的證明。',
         voiceTimerEnd: '静坐时间结束，感谢你给自己这段时间。',
         // wave.html 頁面
         waveTitle: '🌊 海风中的呢喃',
@@ -1118,6 +1134,11 @@ const TRANSLATIONS = {
         statusLocked: '🔒 Locked',
         // 語音引導文字（英文）
         voiceGuideWave: 'Close your eyes and quietly listen to the sound of the waves. What do these waves remind you of? Does it mirror your inner self?',
+        voiceGuideRain: 'Feel the mountain breeze gently brush your cheeks. Where do you think this breeze comes from? What forces in your life push you forward?',
+        rainUserResponse: 'Please share: What does this breeze remind you of? What forces in your life push you forward?',
+        rainAIFeedbackCalm: 'Dear traveler, you have found inner peace. The mountain breeze tells us that strength comes from inner stability. Just as the breeze comes and goes, your heart will find balance.',
+        rainAIFeedbackWorried: 'Dear traveler, I hear your worries. Just as the mountain breeze comes and goes, your worries will pass. Try to observe your emotions like observing the breeze, without resistance or attachment.',
+        rainAIFeedbackThinking: 'Dear traveler, thinking is a good start. Let the mountain breeze accompany you, and answers will naturally emerge. You are searching for direction, which itself is proof of growth.',
         voiceTimerEnd: 'Meditation time has ended. Thank you for giving yourself this time.',
         // wave.html page
         waveTitle: '🌊 Whispers in the Sea Breeze',
@@ -1639,6 +1660,11 @@ const TRANSLATIONS = {
         statusLocked: '🔒 ロック',
         // 語音引導文字（日文）
         voiceGuideWave: '目を閉じて、静かに波の音を聞いてください。これらの波の音は何を思い出させますか？それはあなたの内面のようです？',
+        voiceGuideRain: '山風が頬を優しく撫でるのを感じてください。この風はどこから来ると思いますか？あなたの人生で、何があなたを前進させる力となっていますか？',
+        rainUserResponse: '共有してください：この風は何を思い出させますか？あなたの人生で、何があなたを前進させる力となっていますか？',
+        rainAIFeedbackCalm: '親愛なる旅人、あなたは内面の平静を見つけました。山風は私たちに、力は内面の安定から来ることを教えてくれます。山風が来て去るように、あなたの心もバランスを見つけるでしょう。',
+        rainAIFeedbackWorried: '親愛なる旅人、あなたの心配を聞きました。山風が来て去るように、あなたの心配も過ぎ去るでしょう。山風を観察するように、あなたの感情を観察してみてください。抵抗も執着もせずに。',
+        rainAIFeedbackThinking: '親愛なる旅人、思考は良い始まりです。山風に伴われて、答えは自然に浮かび上がるでしょう。あなたは自分の方向を探しており、それ自体が成長の証です。',
         voiceTimerEnd: '瞑想時間が終わりました。自分にこの時間を与えてくれてありがとうございます。',
         // wave.html ページ
         waveTitle: '🌊 海風の中のささやき',
@@ -2123,6 +2149,11 @@ const TRANSLATIONS = {
         statusLocked: '🔒 잠금',
         // 語音引導文字（韓文）
         voiceGuideWave: '눈을 감고 조용히 파도의 소리를 들어보세요. 이 파도 소리가 무엇을 떠올리게 하나요? 그것이 당신의 내면과 닮았나요?',
+        voiceGuideRain: '산바람이 뺨을 가볍게 스치는 것을 느껴보세요. 이 바람은 어디서 오는 것 같나요? 당신의 인생에서 무엇이 당신을 앞으로 나아가게 하는 힘인가요?',
+        rainUserResponse: '공유해주세요: 이 바람이 무엇을 떠올리게 하나요? 당신의 인생에서 무엇이 당신을 앞으로 나아가게 하는 힘인가요?',
+        rainAIFeedbackCalm: '친애하는 여행자여, 당신은 내면의 평온을 찾았습니다. 산바람은 우리에게 힘이 내면의 안정에서 온다고 말해줍니다. 산바람이 오고 가는 것처럼, 당신의 마음도 균형을 찾을 것입니다.',
+        rainAIFeedbackWorried: '친애하는 여행자여, 당신의 걱정을 들었습니다. 산바람이 오고 가는 것처럼, 당신의 걱정도 지나갈 것입니다. 산바람을 관찰하는 것처럼 당신의 감정을 관찰해보세요. 저항하지도 집착하지도 말고.',
+        rainAIFeedbackThinking: '친애하는 여행자여, 생각하는 것은 좋은 시작입니다. 산바람과 함께하면, 답은 자연스럽게 나타날 것입니다. 당신은 자신의 방향을 찾고 있으며, 이것 자체가 성장의 증거입니다.',
         voiceTimerEnd: '명상 시간이 끝났습니다. 자신에게 이 시간을 주셔서 감사합니다.',
         // wave.html 페이지
         waveTitle: '🌊 바닷바람 속 속삭임',

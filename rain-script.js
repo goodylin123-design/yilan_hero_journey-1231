@@ -1,74 +1,21 @@
-// 蘭陽細雨任務頁面專用腳本
+// 第二關：山風拂面任務頁面專用腳本
 document.addEventListener('DOMContentLoaded', () => {
-    const btnSubmitReflection = document.getElementById('btn-submit-reflection');
-    const rainReflection = document.getElementById('rain-reflection');
+    // 初始化 AI 對話系統
+    if (window.AIDialogue) {
+        window.AIDialogue.init('rain', {
+            voiceGuideKey: 'voiceGuideRain',
+            defaultGuideText: '感受山風輕輕拂過臉頰。你覺得這股風來自何方？在你的人生中，有什麼力量推動著你前行？'
+        });
+    }
+    
+    // 呼吸練習功能
     const btnStartBreathing = document.getElementById('btn-start-breathing');
     const breathingCircle = document.getElementById('breathing-circle');
     const breathingText = document.getElementById('breathing-text');
+    const breathingExercise = document.getElementById('breathing-exercise');
 
     let breathingInterval = null;
-    let breathingPhase = 'inhale'; // inhale, hold, exhale, pause
     let breathingCount = 0;
-
-    // 保存反思
-    btnSubmitReflection?.addEventListener('click', () => {
-        const reflection = rainReflection.value.trim();
-        const t = window.I18n ? window.I18n.getTranslation(window.I18n.getCurrentLanguage()) : {};
-        if (!reflection) {
-            alert(t.pleaseWriteReflection || '請先寫下你的反思');
-            return;
-        }
-
-        // 保存到 localStorage
-        const notes = JSON.parse(localStorage.getItem('whisperNotes') || '[]');
-        const note = {
-            id: Date.now(),
-            date: new Date().toLocaleString('zh-TW'),
-            content: reflection,
-            emotion: t.mindNotesDefaultEmotion || '思考',
-            mission: 'rain',
-            timestamp: Date.now()
-        };
-        notes.unshift(note);
-        localStorage.setItem('whisperNotes', JSON.stringify(notes));
-
-        // 同步寫入 TravelerStore 的心靈筆記資料結構
-        if (window.TravelerStore) {
-            window.TravelerStore.recordMindNote(note);
-        }
-        
-        // 標記第二關任務為完成
-        if (window.TaskProgress) {
-            const completed = window.TaskProgress.completeTask('rain');
-            if (completed) {
-                window.TaskProgress.showTaskCompleteNotification('rain');
-                // 更新 ESG 統計：完成次數 + 筆記數 + 自評分數 + 實地路程與環保點數
-                if (window.EsgStats) {
-                    window.EsgStats.recordMissionCompletion('rain', {
-                        notesAdded: 1,
-                        askRating: true
-                    });
-                }
-                // 更新 TravelerStore 的任務完成資料
-                if (window.TravelerStore) {
-                    window.TravelerStore.recordMissionCompleted('rain', {
-                        notesAdded: 1
-                    });
-                }
-            }
-        }
-
-        // 顯示成功訊息
-        const successMsg = document.createElement('div');
-        successMsg.style.cssText = 'position: fixed; top: 20px; right: 20px; background: linear-gradient(135deg, #10B981, #059669); color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3); z-index: 10000; animation: slideInRight 0.3s ease;';
-        successMsg.textContent = t.reflectionSaved || '✨ 反思已保存！';
-        document.body.appendChild(successMsg);
-        
-        setTimeout(() => {
-            successMsg.style.animation = 'slideOutRight 0.3s ease';
-            setTimeout(() => successMsg.remove(), 300);
-        }, 2000);
-    });
 
     // 呼吸練習
     btnStartBreathing?.addEventListener('click', () => {
@@ -77,35 +24,50 @@ document.addEventListener('DOMContentLoaded', () => {
             // 停止
             clearInterval(breathingInterval);
             breathingInterval = null;
-            breathingCircle.style.animation = 'none';
-            breathingText.textContent = t.breathingReady || '準備開始';
-            btnStartBreathing.textContent = t.breathingStart || '開始呼吸練習';
+            if (breathingCircle) breathingCircle.style.animation = 'none';
+            if (breathingText) breathingText.textContent = t.breathingReady || '準備開始';
+            btnStartBreathing.innerHTML = `<span>${t.breathingStart || '開始呼吸練習'}</span>`;
             breathingCount = 0;
             return;
         }
 
         // 開始
         breathingCount = 0;
-        btnStartBreathing.textContent = t.breathingStop || '停止練習';
-        breathingCircle.style.animation = 'breathingCycle 12s ease-in-out infinite';
+        btnStartBreathing.innerHTML = `<span>${t.breathingStop || '停止練習'}</span>`;
+        if (breathingCircle) breathingCircle.style.animation = 'breathingCycle 12s ease-in-out infinite';
         
         breathingInterval = setInterval(() => {
             const cycle = breathingCount % 4;
-            if (cycle === 0) {
-                breathingText.textContent = t.breathingInhale || '吸氣...';
-                breathingPhase = 'inhale';
-            } else if (cycle === 1) {
-                breathingText.textContent = t.breathingHold || '屏息...';
-                breathingPhase = 'hold';
-            } else if (cycle === 2) {
-                breathingText.textContent = t.breathingExhale || '呼氣...';
-                breathingPhase = 'exhale';
-            } else {
-                breathingText.textContent = t.breathingPause || '暫停...';
-                breathingPhase = 'pause';
+            if (breathingText) {
+                if (cycle === 0) {
+                    breathingText.textContent = t.breathingInhale || '吸氣...';
+                } else if (cycle === 1) {
+                    breathingText.textContent = t.breathingHold || '屏息...';
+                } else if (cycle === 2) {
+                    breathingText.textContent = t.breathingExhale || '呼氣...';
+                } else {
+                    breathingText.textContent = t.breathingPause || '暫停...';
+                }
             }
             breathingCount++;
         }, 3000);
     });
+    
+    // 當AI反饋顯示後，顯示呼吸練習
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                const feedbackArea = document.getElementById('ai-feedback-area');
+                if (feedbackArea && feedbackArea.style.display !== 'none' && breathingExercise) {
+                    breathingExercise.style.display = 'block';
+                }
+            }
+        });
+    });
+    
+    const feedbackArea = document.getElementById('ai-feedback-area');
+    if (feedbackArea) {
+        observer.observe(feedbackArea, { attributes: true, attributeFilter: ['style'] });
+    }
 });
 

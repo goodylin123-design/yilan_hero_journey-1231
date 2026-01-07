@@ -50,28 +50,106 @@
                 <p class="mission-intro" data-i18n="dawnPageIntro">走在三敆水一帶的沙丘上，慢慢看見自己留下的一串串腳印。這一關，我們把過去的故事放進腳印裡，讓風沙陪你一起整理。</p>
                 
                 <div class="mission-content">
-                    <div class="ai-guide-area">
-                        <div class="ai-avatar">🌅</div>
-                        <div class="ai-message">
-                            <p data-i18n="dawnAIMessage">你內心的那份準備，就是最珍貴的種子。相信它，也相信你自己。這趟旅程，你會發現比想像中更多的可能性。</p>
+                    <div class="whisper-container">
+                        <!-- AI 引導區域 -->
+                        <div class="ai-guide-area">
+                            <div class="ai-avatar">🌅</div>
+                            <div class="ai-message" id="ai-message">
+                                <p data-i18n="dawnAIMessage">準備好了嗎？點擊「開始引導」來開始這段內在旅程。</p>
+                            </div>
+                        </div>
+                        
+                        <!-- 控制按鈕區 -->
+                        <div class="whisper-controls">
+                            <button type="button" class="btn-whisper btn-start" id="btn-start-guide">
+                                <span data-i18n="btnStartGuide">🎤 開始引導</span>
+                            </button>
+                            <button type="button" class="btn-whisper btn-stop" id="btn-stop-guide" style="display: none;">
+                                <span data-i18n="btnStopGuide">⏸️ 暫停</span>
+                            </button>
+                        </div>
+                        
+                        <!-- 使用者回應區域 -->
+                        <div class="user-response-area" id="user-response-area" style="display: none;">
+                            <h3 data-i18n="yourFeelings">你的感受</h3>
+                            <div class="input-methods">
+                                <button type="button" class="btn-input-method active" id="btn-voice-input" data-method="voice">
+                                    <span data-i18n="voiceInput">🎤 語音輸入</span>
+                                </button>
+                                <button type="button" class="btn-input-method" id="btn-text-input" data-method="text">
+                                    <span data-i18n="textInput">✍️ 文字輸入</span>
+                                </button>
+                            </div>
+                            
+                            <!-- 語音輸入介面 -->
+                            <div class="voice-input-panel" id="voice-input-panel">
+                                <div class="recording-indicator" id="recording-indicator" style="display: none;">
+                                    <span class="recording-dot"></span>
+                                    <span data-i18n="listening">正在聆聽...</span>
+                                </div>
+                                <button type="button" class="btn-record" id="btn-record">
+                                    <span data-i18n="btnStartSpeaking">🎙️ 開始說話</span>
+                                </button>
+                                <div class="transcript-display" id="transcript-display"></div>
+                            </div>
+                            
+                            <!-- 文字輸入介面 -->
+                            <div class="text-input-panel" id="text-input-panel" style="display: none;">
+                                <textarea 
+                                    id="text-response" 
+                                    data-i18n-placeholder="textResponsePlaceholder"
+                                    placeholder="請分享你的感受...這些腳印代表了你哪些過去？有哪些故事，是你一直帶在心裡，卻還沒有好好說完？"
+                                    rows="4"
+                                ></textarea>
+                            </div>
+                            
+                            <button type="button" class="btn-submit" id="btn-submit-response" style="display: none;">
+                                <span data-i18n="btnSubmitResponse">💭 送出感受</span>
+                            </button>
+                        </div>
+                        
+                        <!-- AI 反饋區域 -->
+                        <div class="ai-feedback-area" id="ai-feedback-area" style="display: none;">
+                            <div class="feedback-content" id="feedback-content"></div>
+                        </div>
+                        
+                        <!-- 旅程洞見區域 -->
+                        <div class="journey-summary" id="journey-summary" style="display: none;">
+                            <h3 data-i18n="journeyInsights">📝 整理你的旅程洞見</h3>
+                            <p data-i18n="insightsDesc">回顧這十關的旅程，寫下你的收穫：</p>
+                            <textarea 
+                                id="dawn-insights" 
+                                data-i18n-placeholder="insightsPlaceholder"
+                                placeholder="在這趟旅程中，你發現了什麼？學到了什麼？想要帶著什麼繼續前行？"
+                                rows="8"
+                            ></textarea>
+                            <button type="button" class="btn-submit" id="btn-save-insights">
+                                <span data-i18n="btnSaveInsights">💾 保存洞見</span>
+                            </button>
+                        </div>
+                        
+                        <!-- 錄音與保存區域 -->
+                        <div class="recording-save-area" id="recording-save-area" style="display: none;">
+                            <h3 data-i18n="recordFeelings">📝 記錄你的感受</h3>
+                            <div class="recording-controls">
+                                <button type="button" class="btn-record-feeling" id="btn-record-feeling">
+                                    <span data-i18n="btnRecordFeeling">🎙️ 錄下感受</span>
+                                </button>
+                                <div class="recording-status" id="recording-status"></div>
+                            </div>
+                            <div class="save-controls">
+                                <button type="button" class="btn-save" id="btn-save-note">
+                                    <span data-i18n="btnSaveNote">💾 保存至心靈筆記</span>
+                                </button>
+                                <button type="button" class="btn-view-notes" id="btn-view-notes">
+                                    <span data-i18n="btnViewNotes">📖 查看心靈筆記</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="journey-summary">
-                        <h3 data-i18n="journeyInsights">📝 整理你的旅程洞見</h3>
-                        <p data-i18n="insightsDesc">回顧這十關的旅程，寫下你的收穫：</p>
-                        <textarea 
-                            id="dawn-insights" 
-                            data-i18n-placeholder="insightsPlaceholder"
-                            placeholder="在這趟旅程中，你發現了什麼？學到了什麼？想要帶著什麼繼續前行？"
-                            rows="8"
-                        ></textarea>
-                        <button type="button" class="btn-submit" id="btn-save-insights">
-                            <span data-i18n="btnSaveInsights">💾 保存洞見</span>
-                        </button>
-                    </div>
-
-                    <div class="courage-badge">
+                    
+                    <!-- 勇氣徽章和分享區域（保留原有功能） -->
+                    <div class="courage-badge" style="margin-top: 30px;">
                         <h3 data-i18n="courageBadge">⚓ 勇氣徽章</h3>
                         <div class="badge-display" id="badge-display">
                             <div class="badge-icon">🏅</div>
@@ -82,7 +160,7 @@
                         </button>
                     </div>
 
-                    <div class="share-section">
+                    <div class="share-section" style="margin-top: 30px;">
                         <h3 data-i18n="shareStory">💬 分享你的故事</h3>
                         <p data-i18n="shareDesc">想要分享這趟旅程給朋友嗎？</p>
                         <button type="button" class="btn-save" id="btn-share-story">
@@ -102,6 +180,15 @@
                 <div id="qr-reader" style="display: none; margin-top: 20px;"></div>
             </section>
         </main>
+    </div>
+    
+    <!-- 心靈筆記模態視窗 -->
+    <div class="modal" id="notes-modal" style="display: none;">
+        <div class="modal-content">
+            <span class="modal-close" id="modal-close">&times;</span>
+            <h2 data-i18n="mindNotes">📖 心靈筆記</h2>
+            <div class="notes-list" id="notes-list"></div>
+        </div>
     </div>
     
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
