@@ -8,8 +8,8 @@ window.MISSIONS = [
     key: 'mission1',
     title: '海風中的呢喃',
     locationName: '蜜月灣',
-    lat: 24.9387,
-    lng: 121.8891
+    lat: 24.9336,
+    lng: 121.8858
   },
   {
     id: 'mountain-breeze',
@@ -17,8 +17,8 @@ window.MISSIONS = [
     key: 'mission2',
     title: '山風掃帚',
     locationName: '礁溪櫻花陵園',
-    lat: 24.8356,
-    lng: 121.7609
+    lat: 24.8230,
+    lng: 121.7025
   },
   {
     id: 'dune-footprints',
@@ -44,8 +44,8 @@ window.MISSIONS = [
     key: 'mission5',
     title: '星空下的祈願',
     locationName: '東港榕樹公園',
-    lat: 24.7671,
-    lng: 121.8125
+    lat: 24.7172,
+    lng: 121.8270
   },
   {
     id: 'wind-voices',
@@ -72,16 +72,16 @@ window.MISSIONS = [
     title: '河流中的倒影',
     locationName: '利澤簡橋',
     lat: 24.6388,
-    lng: 121.78853
+    lng: 121.7885
   },
   {
     id: 'sea-rhythm',
     order: 9,
     key: 'mission9',
     title: '拍打海浪的節奏',
-    locationName: '無尾港',
-    lat: 24.6573,
-    lng: 121.8357
+    locationName: '無尾港水鳥保護區',
+    lat: 24.6141,
+    lng: 121.8539
   },
   {
     id: 'farewell-ritual',
