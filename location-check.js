@@ -354,85 +354,131 @@ function showLocationResult(overlay, result, taskKey) {
 
     overlay.appendChild(resultCard);
 
-    // 綁定按鈕事件
-    const closeBtn = document.getElementById('location-check-close');
-    const retryBtn = document.getElementById('location-check-retry');
-    const backBtn = document.getElementById('location-check-back');
-    const testModeBtn = document.getElementById('location-check-test-mode');
+    // 使用 setTimeout 確保 DOM 已更新後再綁定事件
+    setTimeout(() => {
+        // 綁定按鈕事件
+        const closeBtn = document.getElementById('location-check-close');
+        const retryBtn = document.getElementById('location-check-retry');
+        const backBtn = document.getElementById('location-check-back');
+        const testModeBtn = document.getElementById('location-check-test-mode');
 
-    closeBtn?.addEventListener('click', () => {
-        overlay.remove();
-    });
-
-    retryBtn?.addEventListener('click', () => {
-        overlay.remove();
-        initLocationCheck(taskKey);
-    });
-
-    backBtn?.addEventListener('click', () => {
-        window.location.href = 'index.html';
-    });
-
-    // 體驗測試模式：跳過位置驗證
-    testModeBtn?.addEventListener('click', () => {
-        // 使用統一的測試模式啟用函數
-        enableTestMode(taskKey);
-        
-        // 顯示測試模式確認
-        overlay.innerHTML = '';
-        const testCard = document.createElement('div');
-        testCard.style.cssText = `
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 400px;
-            width: 100%;
-            text-align: center;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-        `;
-        // 取得當前語言和翻譯
-        const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
-        const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
-        
-        testCard.innerHTML = `
-            <div style="font-size: 4rem; margin-bottom: 20px;">🧪</div>
-            <h2 style="color: #10B981; margin-bottom: 15px;">${t.testModeEnabled || '體驗測試模式已啟用'}</h2>
-            <p style="color: #475569; margin-bottom: 10px;">${t.testModeSkipped || '已跳過位置驗證'}</p>
-            <p style="color: #64748B; font-size: 0.9rem; margin-bottom: 25px;">${t.testModeCanStart || '您可以開始體驗任務內容'}</p>
-            <div style="
-                background: #ECFDF5;
-                border-left: 4px solid #10B981;
-                padding: 15px;
-                border-radius: 10px;
-                margin-bottom: 20px;
-                text-align: left;
-            ">
-                <p style="color: #065F46; margin: 0; font-size: 0.9rem;">
-                    <strong>${t.testModeNote || '注意：'}</strong>${t.testModeNoteDesc || '此為測試模式，實際使用時請前往指定地點。'}
-                </p>
-            </div>
-            <button id="location-check-close-test" style="
-                padding: 12px 30px;
-                background: linear-gradient(135deg, #10B981, #059669);
-                color: white;
-                border: none;
-                border-radius: 25px;
-                font-size: 1rem;
-                font-weight: 600;
-                cursor: pointer;
-                transition: transform 0.3s ease;
-            ">${t.btnStartTask || '開始任務'}</button>
-        `;
-        overlay.appendChild(testCard);
-        
-        document.getElementById('location-check-close-test')?.addEventListener('click', () => {
-            // 確保測試模式已啟用（以防萬一）
-            enableTestMode(taskKey);
+        closeBtn?.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('[位置驗證] 點擊關閉按鈕');
             overlay.remove();
-            // 觸發頁面重新載入以顯示任務內容
-            window.location.reload();
         });
-    });
+
+        retryBtn?.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('[位置驗證] 點擊重新檢查按鈕');
+            overlay.remove();
+            initLocationCheck(taskKey);
+        });
+
+        backBtn?.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('[位置驗證] 點擊返回首頁按鈕');
+            window.location.href = 'index.html';
+        });
+
+        // 體驗測試模式：跳過位置驗證
+        testModeBtn?.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('[位置驗證] 點擊測試模式按鈕');
+            try {
+                // 使用統一的測試模式啟用函數
+                const enableTest = window.enableTestMode || enableTestMode;
+                if (typeof enableTest === 'function') {
+                    enableTest(taskKey);
+                } else {
+                    console.error('[位置驗證] enableTestMode 函數不存在，手動設置');
+                    // 手動設置測試模式
+                    sessionStorage.setItem(`test_mode_${taskKey}`, 'true');
+                    const verificationData = {
+                        taskKey,
+                        timestamp: Date.now(),
+                        expiresAt: Date.now() + 5 * 60 * 1000,
+                        isTestMode: true
+                    };
+                    sessionStorage.setItem(`location_verified_${taskKey}`, JSON.stringify(verificationData));
+                }
+                
+                // 顯示測試模式確認
+                overlay.innerHTML = '';
+                const testCard = document.createElement('div');
+                testCard.style.cssText = `
+                    background: white;
+                    border-radius: 20px;
+                    padding: 30px;
+                    max-width: 400px;
+                    width: 100%;
+                    text-align: center;
+                    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+                `;
+                // 取得當前語言和翻譯
+                const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
+                const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
+                
+                testCard.innerHTML = `
+                    <div style="font-size: 4rem; margin-bottom: 20px;">🧪</div>
+                    <h2 style="color: #10B981; margin-bottom: 15px;">${t.testModeEnabled || '體驗測試模式已啟用'}</h2>
+                    <p style="color: #475569; margin-bottom: 10px;">${t.testModeSkipped || '已跳過位置驗證'}</p>
+                    <p style="color: #64748B; font-size: 0.9rem; margin-bottom: 25px;">${t.testModeCanStart || '您可以開始體驗任務內容'}</p>
+                    <div style="
+                        background: #ECFDF5;
+                        border-left: 4px solid #10B981;
+                        padding: 15px;
+                        border-radius: 10px;
+                        margin-bottom: 20px;
+                        text-align: left;
+                    ">
+                        <p style="color: #065F46; margin: 0; font-size: 0.9rem;">
+                            <strong>${t.testModeNote || '注意：'}</strong>${t.testModeNoteDesc || '此為測試模式，實際使用時請前往指定地點。'}
+                        </p>
+                    </div>
+                    <button id="location-check-close-test" style="
+                        padding: 12px 30px;
+                        background: linear-gradient(135deg, #10B981, #059669);
+                        color: white;
+                        border: none;
+                        border-radius: 25px;
+                        font-size: 1rem;
+                        font-weight: 600;
+                        cursor: pointer;
+                        transition: transform 0.3s ease;
+                    ">${t.btnStartTask || '開始任務'}</button>
+                `;
+                overlay.appendChild(testCard);
+                
+                // 使用 setTimeout 確保新按鈕已添加到 DOM
+                setTimeout(() => {
+                    const closeTestBtn = document.getElementById('location-check-close-test');
+                    if (closeTestBtn) {
+                        closeTestBtn.addEventListener('click', function(e2) {
+                            e2.preventDefault();
+                            e2.stopPropagation();
+                            console.log('[位置驗證] 點擊開始任務按鈕（測試模式）');
+                            // 確保測試模式已啟用（以防萬一）
+                            const enableTest2 = window.enableTestMode || enableTestMode;
+                            if (typeof enableTest2 === 'function') {
+                                enableTest2(taskKey);
+                            }
+                            overlay.remove();
+                            // 觸發頁面重新載入以顯示任務內容
+                            window.location.reload();
+                        });
+                    }
+                }, 100);
+            } catch (err) {
+                console.error('[位置驗證] 啟用測試模式失敗:', err);
+                alert('啟用測試模式失敗，請重試');
+            }
+        });
+    }, 100);
 }
 
 // 初始化位置檢查

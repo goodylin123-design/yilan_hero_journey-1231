@@ -146,14 +146,31 @@ const AIDialogue = {
     
     // 開始引導
     startGuide: function() {
+        console.log('[AI對話] 開始引導，missionKey:', this.missionKey);
         this.state.isGuiding = true;
         if (this.elements.btnStartGuide) this.elements.btnStartGuide.style.display = 'none';
         if (this.elements.btnStopGuide) this.elements.btnStopGuide.style.display = 'inline-block';
         
         const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
         const guideKey = this.config.voiceGuideKey || `voiceGuide${this.missionKey.charAt(0).toUpperCase() + this.missionKey.slice(1)}`;
-        const guideText = window.I18n ? window.I18n.t(guideKey, currentLang) : this.config.defaultGuideText || '準備好了嗎？';
+        let guideText = '';
         
+        if (window.I18n) {
+            guideText = window.I18n.t(guideKey, currentLang);
+            console.log('[AI對話] 從 i18n 獲取引導文字，key:', guideKey, 'text:', guideText.substring(0, 50));
+        }
+        
+        if (!guideText || guideText === guideKey) {
+            guideText = this.config.defaultGuideText || '準備好了嗎？';
+            console.log('[AI對話] 使用預設引導文字:', guideText);
+        }
+        
+        // 立即顯示文字（即使語音可能延遲）
+        if (this.elements.aiMessage) {
+            this.elements.aiMessage.innerHTML = `<p>${guideText}</p>`;
+        }
+        
+        // 播放語音（在用戶點擊後，應該可以播放）
         this.speakAI(guideText, currentLang);
         
         const displayDelay = currentLang === 'en' || currentLang === 'ja' ? 12000 : 8000;
@@ -185,31 +202,67 @@ const AIDialogue = {
     
     // AI 語音播放
     speakAI: function(text, lang) {
-        if (!window.speechSynthesis) return;
-        
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = lang === 'zh-TW' || lang === 'zh-CN' ? 'zh-TW' : lang;
-        utterance.rate = 0.9;
-        utterance.pitch = 1.0;
-        
-        if (lang === 'en') {
-            utterance.rate = 0.85;
-            utterance.pitch = 0.95;
-        } else if (lang === 'ja') {
-            utterance.rate = 0.85;
-            utterance.pitch = 1.05;
-        } else if (lang === 'ko') {
-            utterance.rate = 0.9;
-            utterance.pitch = 1.0;
-        }
-        
-        utterance.onstart = () => {
+        if (!window.speechSynthesis) {
+            console.warn('[AI對話] 瀏覽器不支援語音合成');
+            // 如果沒有語音合成，至少顯示文字
             if (this.elements.aiMessage) {
                 this.elements.aiMessage.innerHTML = `<p>${text}</p>`;
             }
-        };
+            return;
+        }
         
-        window.speechSynthesis.speak(utterance);
+        // 停止任何正在播放的語音
+        window.speechSynthesis.cancel();
+        
+        // 等待一小段時間確保停止完成
+        setTimeout(() => {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = lang === 'zh-TW' || lang === 'zh-CN' ? 'zh-TW' : lang;
+            utterance.rate = 0.9;
+            utterance.pitch = 1.0;
+            utterance.volume = 1.0;
+            
+            if (lang === 'en') {
+                utterance.rate = 0.85;
+                utterance.pitch = 0.95;
+            } else if (lang === 'ja') {
+                utterance.rate = 0.85;
+                utterance.pitch = 1.05;
+            } else if (lang === 'ko') {
+                utterance.rate = 0.9;
+                utterance.pitch = 1.0;
+            }
+            
+            utterance.onstart = () => {
+                console.log('[AI對話] 開始播放語音:', text.substring(0, 50));
+                if (this.elements.aiMessage) {
+                    this.elements.aiMessage.innerHTML = `<p>${text}</p>`;
+                }
+            };
+            
+            utterance.onerror = (event) => {
+                console.error('[AI對話] 語音播放錯誤:', event.error);
+                // 即使語音播放失敗，也顯示文字
+                if (this.elements.aiMessage) {
+                    this.elements.aiMessage.innerHTML = `<p>${text}</p>`;
+                }
+            };
+            
+            utterance.onend = () => {
+                console.log('[AI對話] 語音播放完成');
+            };
+            
+            try {
+                window.speechSynthesis.speak(utterance);
+                console.log('[AI對話] 已調用 speechSynthesis.speak');
+            } catch (error) {
+                console.error('[AI對話] 調用 speechSynthesis.speak 失敗:', error);
+                // 如果語音播放失敗，至少顯示文字
+                if (this.elements.aiMessage) {
+                    this.elements.aiMessage.innerHTML = `<p>${text}</p>`;
+                }
+            }
+        }, 100);
     },
     
     // 切換輸入方式
