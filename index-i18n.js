@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const progressText = document.getElementById('progress-text');
                 if (progressText && window.I18n) {
                     const t = window.I18n.getTranslation(window.I18n.getCurrentLanguage());
-                    const progressFormat = t.progressFormat || '進度：{percentage}% ({completed}/10)';
+                    const progressFormat = t.progressFormat || 'Progress: {percentage}% ({completed}/10)';
                     progressText.textContent = progressFormat
                         .replace('{percentage}', percentage)
                         .replace('{completed}', progress.completed.length);

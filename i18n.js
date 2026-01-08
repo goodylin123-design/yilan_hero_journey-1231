@@ -12,6 +12,10 @@ const SUPPORTED_LANGUAGES = {
 const TRANSLATIONS = {
     'zh-TW': {
         title: '🌊 擺渡蘭陽英雄之旅',
+        pageTitle: '🧪 擺渡蘭陽英雄之旅 [測試模式]',
+        metaDescription: '踏上宜蘭海岸冒險之旅，探索無盡海洋、神秘島嶼與刺激的航海探險。',
+        selectLanguage: '選擇語言',
+        taskLockedMessage: '需要先完成 {task} 才能進入此任務',
         subtitle: '蘭陽海岸・內在成長型十關英雄旅程',
         heroTitle: '內在成長型十關英雄旅程（宜蘭海岸）',
         heroDescription: '沿著蜜月灣到情人灣的海線，讓心跳與海風同步，一關一關長出新的自己。',
@@ -606,6 +610,10 @@ const TRANSLATIONS = {
     },
     'zh-CN': {
         title: '🌊 摆渡兰阳英雄之旅',
+        pageTitle: '🧪 摆渡兰阳英雄之旅 [测试模式]',
+        metaDescription: '踏上宜兰海岸冒险之旅，探索无尽海洋、神秘岛屿与刺激的航海探险。',
+        selectLanguage: '选择语言',
+        taskLockedMessage: '需要先完成 {task} 才能进入此任务',
         subtitle: '兰阳海岸・内在成长型三关英雄旅程',
         heroTitle: '内在成长型三关英雄旅程（宜兰海岸）',
         heroDescription: '沿着蜜月湾到情人湾的海线，让心跳与海风同步，一关一关长出新的自己。',
@@ -1186,6 +1194,10 @@ const TRANSLATIONS = {
     },
     'en': {
         title: '🌊 Lanyang Hero Journey',
+        pageTitle: '🧪 Lanyang Hero Journey [Test Mode]',
+        metaDescription: 'Embark on an adventure along the Yilan coast, exploring endless oceans, mysterious islands, and exciting maritime expeditions.',
+        selectLanguage: 'Select Language',
+        taskLockedMessage: 'You need to complete {task} first to access this mission',
         subtitle: 'Lanyang Coast・Three-Stage Inner Growth Hero Journey',
         heroTitle: 'Three-Stage Inner Growth Hero Journey (Lanyang Coast)',
         heroDescription: 'Along the coastline from Honeymoon Bay to Lover\'s Bay, let your heartbeat sync with the sea breeze, growing into a new self step by step.',
@@ -2306,10 +2318,18 @@ const TRANSLATIONS = {
         unknownTaskLocation: '不明なタスクの場所',
         testModeFailed: 'テストモードの有効化に失敗しました。もう一度お試しください',
         retryFailed: '再確認に失敗しました。もう一度お試しください',
-        backHomeFailed: 'ホームに戻るのに失敗しました。手動で戻ってください'
+        backHomeFailed: 'ホームに戻るのに失敗しました。手動で戻ってください',
+        pageTitle: '🧪 蘭陽ヒーロー旅 [テストモード]',
+        metaDescription: '宜蘭海岸の冒険の旅に乗り出し、果てしない海、神秘的な島々、刺激的な航海探検を探索します。',
+        selectLanguage: '言語を選択',
+        taskLockedMessage: 'このミッションにアクセスするには、まず {task} を完了する必要があります'
     },
     'ko': {
         title: '🌊 란양 히어로 여정',
+        pageTitle: '🧪 란양 히어로 여정 [테스트 모드]',
+        metaDescription: '이란 해안을 따라 모험을 시작하고, 끝없는 바다, 신비로운 섬, 흥미진진한 해상 탐험을 탐색하세요.',
+        selectLanguage: '언어 선택',
+        taskLockedMessage: '이 미션에 액세스하려면 먼저 {task}를 완료해야 합니다',
         subtitle: '란양 해안・내적 성장형 3단계 히어로 여정',
         heroTitle: '내적 성장형 3단계 히어로 여정（란양 해안）',
         heroDescription: '허니문 베이에서 연인만까지의 해안선을 따라 심장박동과 바닷바람을 동기화하고, 단계별로 새로운 자신을 키워갑니다.',
@@ -2936,10 +2956,30 @@ function applyTranslations(lang) {
         }
     });
     
+    // 更新所有帶有 data-i18n-aria-label 屬性的元素的 aria-label
+    document.querySelectorAll('[data-i18n-aria-label]').forEach(el => {
+        const key = el.getAttribute('data-i18n-aria-label');
+        if (t[key]) {
+            el.setAttribute('aria-label', t[key]);
+        }
+    });
+    
     // 更新標題
-    const titleEl = document.querySelector('title');
+    const titleEl = document.querySelector('title') || document.getElementById('page-title');
     if (titleEl) {
-        titleEl.textContent = t.title;
+        titleEl.textContent = t.pageTitle || t.title || '🌊 Lanyang Hero Journey';
+    }
+    
+    // 更新 meta description
+    const metaDescEl = document.getElementById('meta-description') || document.querySelector('meta[name="description"]');
+    if (metaDescEl && t.metaDescription) {
+        metaDescEl.setAttribute('content', t.metaDescription);
+    }
+    
+    // 更新語言選擇器的 aria-label
+    const langToggleBtn = document.getElementById('lang-toggle-btn');
+    if (langToggleBtn && t.selectLanguage) {
+        langToggleBtn.setAttribute('aria-label', t.selectLanguage);
     }
     
     // 觸發自訂事件，讓其他模組知道語言已變更

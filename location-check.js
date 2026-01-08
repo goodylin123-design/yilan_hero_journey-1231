@@ -100,7 +100,7 @@ function getUserLocation() {
         const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
         
         if (!navigator.geolocation) {
-            reject(new Error(t.geoLocationNotSupported || '您的瀏覽器不支援地理定位功能'));
+            reject(new Error(t.geoLocationNotSupported || 'Geolocation not supported'));
             return;
         }
 
@@ -119,16 +119,16 @@ function getUserLocation() {
                 });
             },
             (error) => {
-                let errorMessage = t.locationError || '無法獲取位置資訊';
+                let errorMessage = t.locationError || 'Unable to get location';
                 switch(error.code) {
                     case error.PERMISSION_DENIED:
-                        errorMessage = t.locationPermissionDenied || '位置權限被拒絕，請允許瀏覽器存取您的位置';
+                        errorMessage = t.locationPermissionDenied || 'Location permission denied';
                         break;
                     case error.POSITION_UNAVAILABLE:
-                        errorMessage = t.locationUnavailable || '位置資訊不可用';
+                        errorMessage = t.locationUnavailable || 'Location unavailable';
                         break;
                     case error.TIMEOUT:
-                        errorMessage = t.locationTimeout || '獲取位置超時，請重試';
+                        errorMessage = t.locationTimeout || 'Location timeout';
                         break;
                 }
                 reject(new Error(errorMessage));
@@ -148,7 +148,7 @@ function checkLocationAccess(taskKey) {
             
             const taskLocation = TASK_LOCATIONS[taskKey];
             if (!taskLocation) {
-                reject(new Error(t.unknownTaskLocation || '未知的任務位置'));
+                reject(new Error(t.unknownTaskLocation || 'Unknown task location'));
                 return;
             }
 
@@ -173,6 +173,57 @@ function checkLocationAccess(taskKey) {
             reject(error);
         }
     });
+}
+
+// 獲取翻譯後的地點名稱
+function getTranslatedLocationName(taskKey, lang) {
+    const locationKeyMap = {
+        'wave': 'missionWaveLoc',
+        'rain': 'missionRainLoc',
+        'dawn': 'missionDawnLoc',
+        'mission4': 'mission4Loc',
+        'mission5': 'mission5Loc',
+        'mission6': 'mission6Loc',
+        'mission7': 'mission7Loc',
+        'mission8': 'mission8Loc',
+        'mission9': 'mission9Loc',
+        'mission10': 'mission10Loc'
+    };
+    
+    const t = window.I18n ? window.I18n.getTranslation(lang) : {};
+    const locationKey = locationKeyMap[taskKey];
+    if (locationKey && t[locationKey]) {
+        // 移除 📍 前綴（如果有的話）
+        return t[locationKey].replace(/^📍\s*/, '');
+    }
+    
+    // 如果沒有翻譯，返回原始名稱
+    return TASK_LOCATIONS[taskKey] ? TASK_LOCATIONS[taskKey].name : '';
+}
+
+// 獲取翻譯後的地點描述
+function getTranslatedLocationDescription(taskKey, lang) {
+    const descriptionKeyMap = {
+        'wave': 'waveSubtitle',
+        'rain': 'rainSubtitle',
+        'dawn': 'dawnSubtitle',
+        'mission4': 'mission4Subtitle',
+        'mission5': 'mission5Subtitle',
+        'mission6': 'mission6Subtitle',
+        'mission7': 'mission7Subtitle',
+        'mission8': 'mission8Subtitle',
+        'mission9': 'mission9Subtitle',
+        'mission10': 'mission10Subtitle'
+    };
+    
+    const t = window.I18n ? window.I18n.getTranslation(lang) : {};
+    const descriptionKey = descriptionKeyMap[taskKey];
+    if (descriptionKey && t[descriptionKey]) {
+        return t[descriptionKey];
+    }
+    
+    // 如果沒有翻譯，返回原始描述
+    return TASK_LOCATIONS[taskKey] ? TASK_LOCATIONS[taskKey].description : '';
 }
 
 // 顯示位置驗證 UI
@@ -213,11 +264,12 @@ function showLocationCheckUI(taskKey) {
     // 取得當前語言和翻譯
     const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
     const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
+    const locationName = getTranslatedLocationName(taskKey, currentLang);
     
     checkingCard.innerHTML = `
         <div style="font-size: 3rem; margin-bottom: 20px;">📍</div>
-        <h2 style="color: #0F172A; margin-bottom: 15px;">${t.locationChecking || '正在檢查位置...'}</h2>
-        <p style="color: #475569; margin-bottom: 20px;">${(t.locationCheckingDesc || '正在確認您是否在 {location} 附近').replace(/{location}/g, taskLocation.name)}</p>
+        <h2 style="color: #0F172A; margin-bottom: 15px;">${t.locationChecking || 'Checking location...'}</h2>
+        <p style="color: #475569; margin-bottom: 20px;">${(t.locationCheckingDesc || 'Confirming if you are near {location}').replace(/{location}/g, locationName)}</p>
         <div class="loading-spinner" style="
             width: 40px;
             height: 40px;
@@ -255,6 +307,8 @@ function showLocationResult(overlay, result, taskKey) {
     // 取得當前語言和翻譯
     const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
     const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
+    const locationName = getTranslatedLocationName(taskKey, currentLang);
+    const locationDescription = getTranslatedLocationDescription(taskKey, currentLang);
     
     overlay.innerHTML = '';
 
@@ -273,9 +327,9 @@ function showLocationResult(overlay, result, taskKey) {
         // 在範圍內 - 允許進入
         resultCard.innerHTML = `
             <div style="font-size: 4rem; margin-bottom: 20px;">✅</div>
-            <h2 style="color: #10B981; margin-bottom: 15px;">${t.locationVerifySuccess || '位置驗證成功！'}</h2>
-            <p style="color: #475569; margin-bottom: 10px;">${(t.locationDistance || '您距離 {location} 約 {distance} 公尺').replace('{location}', taskLocation.name).replace('{distance}', Math.round(result.distance))}</p>
-            <p style="color: #64748B; font-size: 0.9rem; margin-bottom: 25px;">${t.locationWelcome || '歡迎開始您的任務'}</p>
+            <h2 style="color: #10B981; margin-bottom: 15px;">${t.locationVerifySuccess || 'Location verification successful!'}</h2>
+            <p style="color: #475569; margin-bottom: 10px;">${(t.locationDistance || 'You are about {distance} meters from {location}').replace('{location}', locationName).replace('{distance}', Math.round(result.distance))}</p>
+            <p style="color: #64748B; font-size: 0.9rem; margin-bottom: 25px;">${t.locationWelcome || 'Welcome to start your mission'}</p>
             <button id="location-check-close" style="
                 padding: 12px 30px;
                 background: linear-gradient(135deg, #10B981, #059669);
@@ -286,7 +340,7 @@ function showLocationResult(overlay, result, taskKey) {
                 font-weight: 600;
                 cursor: pointer;
                 transition: transform 0.3s ease;
-            ">${t.btnStartTask || '開始任務'}</button>
+            ">${t.btnStartTask || 'Start Mission'}</button>
         `;
 
         // 保存驗證狀態（5 分鐘內有效）
@@ -300,9 +354,9 @@ function showLocationResult(overlay, result, taskKey) {
         // 不在範圍內 - 顯示提示
         resultCard.innerHTML = `
             <div style="font-size: 4rem; margin-bottom: 20px;">📍</div>
-            <h2 style="color: #EF4444; margin-bottom: 15px;">${t.locationVerifyFailed || '位置驗證失敗'}</h2>
-            <p style="color: #475569; margin-bottom: 10px;">${(t.locationDistance || '您距離 {location} 約 {distance} 公尺').replace('{location}', taskLocation.name).replace('{distance}', Math.round(result.distance))}</p>
-            <p style="color: #64748B; font-size: 0.9rem; margin-bottom: 15px;">${(t.locationNeedWithin || '需要距離 {location} 100 公尺內才能開啟任務').replace(/{location}/g, taskLocation.name).replace('50', '100')}</p>
+            <h2 style="color: #EF4444; margin-bottom: 15px;">${t.locationVerifyFailed || 'Location verification failed'}</h2>
+            <p style="color: #475569; margin-bottom: 10px;">${(t.locationDistance || 'You are about {distance} meters from {location}').replace('{location}', locationName).replace('{distance}', Math.round(result.distance))}</p>
+            <p style="color: #64748B; font-size: 0.9rem; margin-bottom: 15px;">${(t.locationNeedWithin || 'Need to be within 100 meters of {location} to start the mission').replace(/{location}/g, locationName).replace('50', '100')}</p>
             <div style="
                 background: #FEF3C7;
                 border-left: 4px solid #F59E0B;
@@ -312,7 +366,7 @@ function showLocationResult(overlay, result, taskKey) {
                 text-align: left;
             ">
                 <p style="color: #92400E; margin: 0; font-size: 0.9rem;">
-                    <strong>${t.locationTip || '提示：'}</strong>${(t.locationTipDesc || '請前往 {description} 附近，然後重新載入頁面。').replace(/{description}/g, taskLocation.description)}
+                    <strong>${t.locationTip || 'Tip:'}</strong>${(t.locationTipDesc || 'Please go near {description} and reload the page.').replace(/{description}/g, locationDescription)}
                 </p>
             </div>
             <div style="margin-bottom: 15px;">
@@ -328,8 +382,8 @@ function showLocationResult(overlay, result, taskKey) {
                     width: 100%;
                     margin-bottom: 10px;
                     transition: transform 0.3s ease;
-                ">${t.btnTestMode || '🧪 體驗測試模式'}</button>
-                <p style="color: #64748B; font-size: 0.85rem; margin: 0;">${t.testModeDesc || '（跳過位置驗證，方便測試）'}</p>
+                ">${t.btnTestMode || '🧪 Experience Test Mode'}</button>
+                <p style="color: #64748B; font-size: 0.85rem; margin: 0;">${t.testModeDesc || '(Skip location verification for testing)'}</p>
             </div>
             <div style="display: flex; gap: 10px; justify-content: center;">
                 <button id="location-check-retry" style="
@@ -343,7 +397,7 @@ function showLocationResult(overlay, result, taskKey) {
                     cursor: pointer;
                     transition: transform 0.3s ease;
                     flex: 1;
-                ">${t.btnRetryCheck || '重新檢查'}</button>
+                ">${t.btnRetryCheck || 'Retry Check'}</button>
                 <button id="location-check-back" style="
                     padding: 12px 30px;
                     background: #E5E7EB;
@@ -355,7 +409,7 @@ function showLocationResult(overlay, result, taskKey) {
                     cursor: pointer;
                     transition: transform 0.3s ease;
                     flex: 1;
-                ">${t.btnBackHome || '返回首頁'}</button>
+                ">${t.btnBackHome || 'Back to Home'}</button>
             </div>
         `;
     }
@@ -433,9 +487,9 @@ function showLocationResult(overlay, result, taskKey) {
                 
                 testCard.innerHTML = `
                     <div style="font-size: 4rem; margin-bottom: 20px;">🧪</div>
-                    <h2 style="color: #10B981; margin-bottom: 15px;">${t.testModeEnabled || '體驗測試模式已啟用'}</h2>
-                    <p style="color: #475569; margin-bottom: 10px;">${t.testModeSkipped || '已跳過位置驗證'}</p>
-                    <p style="color: #64748B; font-size: 0.9rem; margin-bottom: 25px;">${t.testModeCanStart || '您可以開始體驗任務內容'}</p>
+                    <h2 style="color: #10B981; margin-bottom: 15px;">${t.testModeEnabled || 'Experience Test Mode Enabled'}</h2>
+                    <p style="color: #475569; margin-bottom: 10px;">${t.testModeSkipped || 'Location verification skipped'}</p>
+                    <p style="color: #64748B; font-size: 0.9rem; margin-bottom: 25px;">${t.testModeCanStart || 'You can now start experiencing the mission content'}</p>
                     <div style="
                         background: #ECFDF5;
                         border-left: 4px solid #10B981;
@@ -445,7 +499,7 @@ function showLocationResult(overlay, result, taskKey) {
                         text-align: left;
                     ">
                         <p style="color: #065F46; margin: 0; font-size: 0.9rem;">
-                            <strong>${t.testModeNote || '注意：'}</strong>${t.testModeNoteDesc || '此為測試模式，實際使用時請前往指定地點。'}
+                            <strong>${t.testModeNote || 'Note:'}</strong>${t.testModeNoteDesc || 'This is test mode. Please go to the specified location for actual use.'}
                         </p>
                     </div>
                     <button id="location-check-close-test" style="
@@ -458,7 +512,7 @@ function showLocationResult(overlay, result, taskKey) {
                         font-weight: 600;
                         cursor: pointer;
                         transition: transform 0.3s ease;
-                    ">${t.btnStartTask || '開始任務'}</button>
+                    ">${t.btnStartTask || 'Start Mission'}</button>
                 `;
                 overlay.appendChild(testCard);
                 
@@ -485,7 +539,7 @@ function showLocationResult(overlay, result, taskKey) {
                 console.error('[位置驗證] 啟用測試模式失敗:', err);
                 const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
                 const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
-                alert(t.testModeFailed || '啟用測試模式失敗，請重試');
+                alert(t.testModeFailed || 'Failed to enable test mode. Please try again');
             }
         });
     }, 100);
@@ -518,7 +572,7 @@ async function initLocationCheck(taskKey) {
         
         errorCard.innerHTML = `
             <div style="font-size: 4rem; margin-bottom: 20px;">⚠️</div>
-            <h2 style="color: #EF4444; margin-bottom: 15px;">${t.locationVerifyFailed || '位置檢查失敗'}</h2>
+            <h2 style="color: #EF4444; margin-bottom: 15px;">${t.locationVerifyFailed || 'Location verification failed'}</h2>
             <p style="color: #475569; margin-bottom: 20px;">${error.message}</p>
             <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 15px;">
                 <button id="location-check-retry-error" type="button" style="
@@ -532,7 +586,7 @@ async function initLocationCheck(taskKey) {
                     cursor: pointer;
                     transition: transform 0.3s ease;
                     flex: 1;
-                ">${t.btnRetryCheck || '重新檢查'}</button>
+                ">${t.btnRetryCheck || 'Retry Check'}</button>
                 <button id="location-check-back-error" type="button" style="
                     padding: 12px 30px;
                     background: #E5E7EB;
@@ -544,7 +598,7 @@ async function initLocationCheck(taskKey) {
                     cursor: pointer;
                     transition: transform 0.3s ease;
                     flex: 1;
-                ">${t.btnBackHome || '返回首頁'}</button>
+                ">${t.btnBackHome || 'Back to Home'}</button>
             </div>
             <div style="margin-bottom: 10px;">
                 <button id="location-check-test-mode-error" type="button" style="
@@ -560,8 +614,8 @@ async function initLocationCheck(taskKey) {
                     transition: transform 0.3s ease;
                     position: relative;
                     z-index: 1;
-                ">${t.btnTestMode || '🧪 體驗測試模式'}</button>
-                <p style="color: #64748B; font-size: 0.85rem; margin: 10px 0 0 0; text-align: center;">${t.testModeDesc || '（跳過位置驗證，方便測試）'}</p>
+                ">${t.btnTestMode || '🧪 Experience Test Mode'}</button>
+                <p style="color: #64748B; font-size: 0.85rem; margin: 10px 0 0 0; text-align: center;">${t.testModeDesc || '(Skip location verification for testing)'}</p>
             </div>
         `;
         overlay.appendChild(errorCard);
@@ -586,7 +640,7 @@ async function initLocationCheck(taskKey) {
                         console.error('[位置驗證] 重試失敗:', err);
                         const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
                         const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
-                        alert(t.retryFailed || '重新檢查失敗，請重試');
+                        alert(t.retryFailed || 'Retry failed. Please try again');
                     }
                 });
             } else {
@@ -610,7 +664,7 @@ async function initLocationCheck(taskKey) {
                         console.error('[位置驗證] 返回首頁失敗:', err);
                         const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
                         const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
-                        alert(t.backHomeFailed || '返回首頁失敗，請手動返回');
+                        alert(t.backHomeFailed || 'Failed to return home. Please return manually');
                     }
                 });
             } else {
@@ -662,7 +716,7 @@ async function initLocationCheck(taskKey) {
                         console.error('[位置驗證] 啟用測試模式失敗:', err);
                         const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
                         const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
-                        alert((t.testModeFailed || '啟用測試模式失敗，請重試。錯誤：') + err.message);
+                        alert((t.testModeFailed || 'Failed to enable test mode. Error: ') + err.message);
                     }
                 });
             } else {
@@ -785,13 +839,12 @@ function blockTaskContent(taskKey) {
     // 取得當前語言和翻譯
     const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
     const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
-    
-    // 確保翻譯鍵存在
-    const titleText = t.locationNeedVerify || '需要位置驗證';
-    const descText = (t.locationTaskNeedNear || '此任務需要在 {location} 附近才能開啟').replace(/{location}/g, taskLocation ? taskLocation.name : '指定地點');
-    const btnCheckText = t.btnStartLocationCheck || '開始位置檢查';
-    const btnTestText = t.btnTestMode || '🧪 體驗測試模式';
-    const testDescText = t.testModeDesc || '（跳過位置驗證，方便測試）';
+    const locationName = taskLocation ? getTranslatedLocationName(taskKey, currentLang) : 'specified location';
+    const titleText = t.locationNeedVerify || 'Location Verification Required';
+    const descText = (t.locationTaskNeedNear || 'This mission needs to be near {location} to start').replace(/{location}/g, locationName);
+    const btnCheckText = t.btnStartLocationCheck || 'Start Location Check';
+    const btnTestText = t.btnTestMode || '🧪 Experience Test Mode';
+    const testDescText = t.testModeDesc || '(Skip location verification for testing)';
     
     blockOverlay.innerHTML = `
         <div style="text-align: center; max-width: 400px; width: 100%; padding: 20px;">

@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="踏上宜蘭海岸冒險之旅，探索無盡海洋、神秘島嶼與刺激的航海探險。">
-    <title>🧪 擺渡蘭陽英雄之旅 [測試模式]</title>
+    <meta name="description" content="" id="meta-description">
+    <title id="page-title">🌊 擺渡蘭陽英雄之旅</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -25,7 +25,7 @@
     <div class="container">
         <!-- 語言選擇器 -->
         <div class="language-selector" id="language-selector">
-            <button type="button" class="lang-toggle-btn" id="lang-toggle-btn" aria-label="選擇語言">
+            <button type="button" class="lang-toggle-btn" id="lang-toggle-btn" aria-label="" data-i18n-aria-label="selectLanguage">
                 <span class="lang-icon">🌐</span>
                 <span class="lang-current" id="lang-current">繁體中文</span>
                 <span class="lang-arrow">▼</span>
@@ -64,7 +64,7 @@
                 </ol>
 
                 <!-- 英雄任務選擇 -->
-                <section class="hero-missions" aria-label="英雄任務選擇" data-i18n-aria-label="ariaLabelChooseMission">
+                <section class="hero-missions" aria-label="" data-i18n-aria-label="ariaLabelChooseMission">
                     <h3 class="hero-missions-title" data-i18n="chooseMission">選擇今天的英雄任務</h3>
                     <p class="hero-missions-subtitle" data-i18n="chooseMissionSub">依照當下的狀態，挑一個任務，開始你的內在成長旅程。</p>
 
@@ -147,7 +147,7 @@
                         <div class="progress-bar-container">
                             <div class="progress-bar" id="progress-bar"></div>
                         </div>
-                        <p class="progress-text" id="progress-text"><span data-i18n="progress">進度</span>：0%</p>
+                        <p class="progress-text" id="progress-text"></p>
                     </div>
 
                     <div class="qr-scan-section">
@@ -202,7 +202,7 @@
             </section>
             
             <!-- 旅人儀表板（測試版） -->
-            <section class="card traveler-dashboard" aria-label="旅人儀表板">
+            <section class="card traveler-dashboard" aria-label="" data-i18n-aria-label="ariaLabelDashboard">
                 <h2 data-i18n="dashboardTitle">旅人儀表板（測試版）</h2>
                 <p data-i18n="dashboardDesc">這是為了設計與展示而準備的統計區塊，會根據你在三關中的行為，慢慢長出屬於你的海岸旅程數據。</p>
                 <div class="traveler-stats-grid" id="traveler-stats">
@@ -229,7 +229,7 @@
                 </div>
             </section>
 
-            <section class="features" aria-label="冒險特色">
+            <section class="features" aria-label="" data-i18n-aria-label="ariaLabelAdventure">
                 <article class="feature-card">
                     <div class="feature-icon">🌊</div>
                     <h3 data-i18n="feature1Title">啟程・蜜月灣</h3>
@@ -309,7 +309,7 @@
                 }
                 if (progressText) {
                     const t = window.I18n ? window.I18n.getTranslation(window.I18n.getCurrentLanguage()) : {};
-                    const progressFormat = t.progressFormat || '進度：{percentage}% ({completed}/10)';
+                    const progressFormat = t.progressFormat || 'Progress: {percentage}% ({completed}/10)';
                     progressText.textContent = progressFormat
                         .replace('{percentage}', percentage)
                         .replace('{completed}', progress.completed.length);
@@ -336,7 +336,9 @@
                             btnLink.href = 'javascript:void(0)';
                             btnLink.addEventListener('click', (e) => {
                                 e.preventDefault();
-                                alert(`需要先完成 ${status.requiredTask} 才能進入此任務`);
+                                const t = window.I18n ? window.I18n.getTranslation(window.I18n.getCurrentLanguage()) : {};
+                                const taskLockedMsg = (t.taskLockedMessage || 'You need to complete {task} first to access this mission').replace('{task}', status.requiredTask);
+                                alert(taskLockedMsg);
                             });
                         } else {
                             btnLink.style.pointerEvents = 'auto';
