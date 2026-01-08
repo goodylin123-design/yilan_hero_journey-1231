@@ -11,70 +11,70 @@ const TASK_LOCATIONS = {
         name: '蜜月灣',
         lat: 24.9336,
         lng: 121.8858,
-        radius: 50,
+        radius: 100, // 100公尺範圍
         description: '📍 蜜月灣・眺望龜山島'
     },
     rain: {
         name: '礁溪櫻花陵園',
         lat: 24.8230,
         lng: 121.7025,
-        radius: 50,
+        radius: 100, // 100公尺範圍
         description: '📍 礁溪櫻花陵園・山風掃帚'
     },
     dawn: {
         name: '三敆水',
         lat: 24.7020,
         lng: 121.8363,
-        radius: 50,
+        radius: 100, // 100公尺範圍
         description: '📍 三敆水・沙丘上的腳印'
     },
     mission4: {
         name: '壯圍沙丘生態園區',
         lat: 24.7372,
         lng: 121.8201,
-        radius: 50,
+        radius: 100, // 100公尺範圍
         description: '📍 壯圍沙丘生態園區・大地的擁抱'
     },
     mission5: {
         name: '東港榕樹公園',
         lat: 24.7172,
         lng: 121.8270,
-        radius: 50,
+        radius: 100, // 100公尺範圍
         description: '📍 東港榕樹公園・星空下的祈願'
     },
     mission6: {
         name: '五十二甲溼地',
         lat: 24.6632,
         lng: 121.8178,
-        radius: 50,
+        radius: 100, // 100公尺範圍
         description: '📍 五十二甲溼地・風中的聲音'
     },
     mission7: {
         name: '傳藝中心',
         lat: 24.6866,
         lng: 121.8241,
-        radius: 50,
+        radius: 100, // 100公尺範圍
         description: '📍 傳藝中心・拾起一片落葉'
     },
     mission8: {
         name: '利澤沙丘海岸',
         lat: 24.6678,
         lng: 121.8385,
-        radius: 50,
+        radius: 100, // 100公尺範圍
         description: '📍 利澤沙丘海岸・河流中的倒影'
     },
     mission9: {
         name: '無尾港水鳥保護區',
         lat: 24.6141,
         lng: 121.8539,
-        radius: 50,
+        radius: 100, // 100公尺範圍
         description: '📍 無尾港水鳥保護區・拍打海浪的節奏'
     },
     mission10: {
         name: '內埤情人灣',
         lat: 24.5774,
         lng: 121.8708,
-        radius: 50,
+        radius: 100, // 100公尺範圍
         description: '📍 內埤情人灣・自然中的告別儀式'
     }
 };
@@ -294,7 +294,7 @@ function showLocationResult(overlay, result, taskKey) {
             <div style="font-size: 4rem; margin-bottom: 20px;">📍</div>
             <h2 style="color: #EF4444; margin-bottom: 15px;">${t.locationVerifyFailed || '位置驗證失敗'}</h2>
             <p style="color: #475569; margin-bottom: 10px;">${(t.locationDistance || '您距離 {location} 約 {distance} 公尺').replace('{location}', taskLocation.name).replace('{distance}', Math.round(result.distance))}</p>
-            <p style="color: #64748B; font-size: 0.9rem; margin-bottom: 15px;">${(t.locationNeedWithin || '需要距離 {location} 50 公尺內才能開啟任務').replace(/{location}/g, taskLocation.name)}</p>
+            <p style="color: #64748B; font-size: 0.9rem; margin-bottom: 15px;">${(t.locationNeedWithin || '需要距離 {location} 100 公尺內才能開啟任務').replace(/{location}/g, taskLocation.name).replace('50', '100')}</p>
             <div style="
                 background: #FEF3C7;
                 border-left: 4px solid #F59E0B;
@@ -537,10 +537,13 @@ async function initLocationCheck(taskKey) {
 
 // 檢查是否已驗證（5 分鐘內有效）
 function isLocationVerified(taskKey) {
-    // 🧪 測試模式：自動通過所有位置驗證
-    return true;
+    // 檢查是否使用測試模式
+    const testMode = sessionStorage.getItem(`test_mode_${taskKey}`) === 'true';
+    if (testMode) {
+        return true; // 測試模式：直接通過
+    }
     
-    /* 原始邏輯（已停用以便測試）
+    // 正常模式：檢查位置驗證
     const verificationData = sessionStorage.getItem(`location_verified_${taskKey}`);
     if (!verificationData) return false;
 
@@ -555,7 +558,13 @@ function isLocationVerified(taskKey) {
     } catch {
         return false;
     }
-    */
+}
+
+// 啟用測試模式（模擬在當地位置）
+function enableTestMode(taskKey) {
+    sessionStorage.setItem(`test_mode_${taskKey}`, 'true');
+    // 同時標記為已驗證，以便後續檢查
+    markLocationVerified(taskKey);
 }
 
 // 阻止任務內容顯示（如果未驗證）
@@ -630,14 +639,8 @@ function blockTaskContent(taskKey) {
 
     // 體驗測試模式：直接跳過驗證
     document.getElementById('start-test-mode')?.addEventListener('click', () => {
-        // 設置測試模式標記
-        const verificationData = {
-            taskKey,
-            timestamp: Date.now(),
-            expiresAt: Date.now() + 5 * 60 * 1000,
-            isTestMode: true
-        };
-        sessionStorage.setItem(`location_verified_${taskKey}`, JSON.stringify(verificationData));
+        // 啟用測試模式（模擬在當地位置）
+        enableTestMode(taskKey);
         blockOverlay.remove();
         // 觸發頁面重新載入以顯示任務內容
         window.location.reload();
