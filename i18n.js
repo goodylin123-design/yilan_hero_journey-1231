@@ -592,7 +592,17 @@ const TRANSLATIONS = {
         btnRetryCheck: '重新檢查',
         btnBackHome: '返回首頁',
         btnStartTask: '開始',
-        testModeEnabled: '體驗測試模式已啟用'
+        testModeEnabled: '體驗測試模式已啟用',
+        // 位置錯誤訊息
+        geoLocationNotSupported: '您的瀏覽器不支援地理定位功能',
+        locationError: '無法獲取位置資訊',
+        locationPermissionDenied: '位置權限被拒絕，請允許瀏覽器存取您的位置',
+        locationUnavailable: '位置資訊不可用',
+        locationTimeout: '獲取位置超時，請重試',
+        unknownTaskLocation: '未知的任務位置',
+        testModeFailed: '啟用測試模式失敗，請重試',
+        retryFailed: '重新檢查失敗，請重試',
+        backHomeFailed: '返回首頁失敗，請手動返回'
     },
     'zh-CN': {
         title: '🌊 摆渡兰阳英雄之旅',
@@ -1162,7 +1172,17 @@ const TRANSLATIONS = {
         testModeSkipped: '已跳過位置驗證',
         testModeCanStart: '您可以開始體驗內容',
         testModeNote: '注意：',
-        testModeNoteDesc: '此為測試模式，實際使用時請前往指定地點。'
+        testModeNoteDesc: '此為測試模式，實際使用時請前往指定地點。',
+        // 位置錯誤訊息
+        geoLocationNotSupported: '您的瀏覽器不支援地理定位功能',
+        locationError: '無法獲取位置資訊',
+        locationPermissionDenied: '位置權限被拒絕，請允許瀏覽器存取您的位置',
+        locationUnavailable: '位置資訊不可用',
+        locationTimeout: '獲取位置超時，請重試',
+        unknownTaskLocation: '未知的任務位置',
+        testModeFailed: '啟用測試模式失敗，請重試',
+        retryFailed: '重新檢查失敗，請重試',
+        backHomeFailed: '返回首頁失敗，請手動返回'
     },
     'en': {
         title: '🌊 Lanyang Hero Journey',
@@ -1714,7 +1734,17 @@ const TRANSLATIONS = {
         testModeSkipped: 'Location verification skipped',
         testModeCanStart: 'You can now start experiencing the mission content',
         testModeNote: 'Note:',
-        testModeNoteDesc: 'This is test mode. Please go to the specified location for actual use.'
+        testModeNoteDesc: 'This is test mode. Please go to the specified location for actual use.',
+        // Location error messages
+        geoLocationNotSupported: 'Your browser does not support geolocation',
+        locationError: 'Unable to get location information',
+        locationPermissionDenied: 'Location permission denied. Please allow the browser to access your location',
+        locationUnavailable: 'Location information unavailable',
+        locationTimeout: 'Location request timed out. Please try again',
+        unknownTaskLocation: 'Unknown task location',
+        testModeFailed: 'Failed to enable test mode. Please try again',
+        retryFailed: 'Retry failed. Please try again',
+        backHomeFailed: 'Failed to return home. Please return manually'
     },
     'ja': {
         title: '🌊 蘭陽ヒーロー旅',
@@ -2243,7 +2273,40 @@ const TRANSLATIONS = {
         heroFeedbackWave: '親愛なる旅人よ、あなたはハネムーンベイで座って、波を聞き、自分の心も聞くことを望みました。これはすでに珍しい勇気です。その後、心がどのように揺れ動いても、覚えておいてください：あなたはかつて自分にこのような静かな時間を与えました。次のステップで、私は蘭陽の小雨の中で、風雨の中でもしっかりと立つ練習をします。',
         heroFeedbackRain: 'あなたはちょうど蘭陽の風雨の中で、心配や疲労と一緒に呼吸する方法を練習しました。これは、あなたが海岸の風景に直面しているだけでなく、自分自身に直面することも望んでいることを示しています。準備ができたら、一緒に恋人湾に行き、太陽がゆっくりと昇るとき、あなたの心がどのように成長するかを見てみましょう。',
         heroFeedbackDawn: 'この三つの海岸を歩き終えたことをお祝いします。ハネムーンベイのささやきから、小雨の中の沈殿、恋人湾の日の出まで、あなたは一歩一歩自分の変化を目撃しました。この旅は、ミッションが完了したからといって終わりません。これらの瞬間を思い出す限り、その勇気は再び目覚め、私はあなたが歩いた道をずっと覚えています。',
-        heroFeedbackDefault: 'あなたは簡単ではないミッションを完了しました。今はこの道が何を変えたかはっきり言えないかもしれませんが、大丈夫です。本当の変化は日常の中でゆっくりと現れます。私はあなたが今日ここを歩いたことを覚えています。'
+        heroFeedbackDefault: 'あなたは簡単ではないミッションを完了しました。今はこの道が何を変えたかはっきり言えないかもしれませんが、大丈夫です。本当の変化は日常の中でゆっくりと現れます。私はあなたが今日ここを歩いたことを覚えています。',
+        // location-check.js 位置驗證訊息（日文）
+        locationChecking: '位置を確認中...',
+        locationCheckingDesc: 'あなたが {location} の近くにいるか確認しています',
+        locationVerifySuccess: '位置確認成功！',
+        locationDistance: 'あなたは {location} から約 {distance} メートル離れています',
+        locationWelcome: 'ミッションを開始することを歓迎します',
+        locationVerifyFailed: '位置確認失敗',
+        locationNeedWithin: 'ミッションを開始するには {location} から 100 メートル以内にいる必要があります',
+        locationTip: 'ヒント：',
+        locationTipDesc: '{description} の近くに行き、ページを再読み込みしてください。',
+        locationNeedVerify: '位置確認が必要です',
+        locationTaskNeedNear: 'このミッションを開始するには {location} の近くにいる必要があります',
+        btnStartLocationCheck: '位置確認を開始',
+        btnTestMode: '🧪 体験テストモード',
+        testModeDesc: '（位置確認をスキップしてテストに便利）',
+        btnRetryCheck: '再確認',
+        btnBackHome: 'ホームに戻る',
+        btnStartTask: 'ミッション開始',
+        testModeEnabled: '体験テストモードが有効になりました',
+        testModeSkipped: '位置確認をスキップしました',
+        testModeCanStart: 'これでミッションコンテンツを体験できます',
+        testModeNote: '注意：',
+        testModeNoteDesc: 'これはテストモードです。実際の使用時は指定の場所に移動してください。',
+        // 位置錯誤訊息（日文）
+        geoLocationNotSupported: 'お使いのブラウザは地理的位置情報をサポートしていません',
+        locationError: '位置情報を取得できません',
+        locationPermissionDenied: '位置情報の権限が拒否されました。ブラウザに位置情報へのアクセスを許可してください',
+        locationUnavailable: '位置情報が利用できません',
+        locationTimeout: '位置情報の取得がタイムアウトしました。もう一度お試しください',
+        unknownTaskLocation: '不明なタスクの場所',
+        testModeFailed: 'テストモードの有効化に失敗しました。もう一度お試しください',
+        retryFailed: '再確認に失敗しました。もう一度お試しください',
+        backHomeFailed: 'ホームに戻るのに失敗しました。手動で戻ってください'
     },
     'ko': {
         title: '🌊 란양 히어로 여정',
@@ -2804,7 +2867,17 @@ const TRANSLATIONS = {
         testModeSkipped: '위치 확인을 건너뛰었습니다',
         testModeCanStart: '이제 미션 콘텐츠를 체험할 수 있습니다',
         testModeNote: '주의:',
-        testModeNoteDesc: '이것은 테스트 모드입니다. 실제 사용 시에는 지정된 위치로 이동하세요.'
+        testModeNoteDesc: '이것은 테스트 모드입니다. 실제 사용 시에는 지정된 위치로 이동하세요.',
+        // 위치 오류 메시지（韓文）
+        geoLocationNotSupported: '귀하의 브라우저는 지리적 위치 기능을 지원하지 않습니다',
+        locationError: '위치 정보를 가져올 수 없습니다',
+        locationPermissionDenied: '위치 권한이 거부되었습니다. 브라우저가 귀하의 위치에 액세스할 수 있도록 허용하세요',
+        locationUnavailable: '위치 정보를 사용할 수 없습니다',
+        locationTimeout: '위치 가져오기 시간 초과. 다시 시도하세요',
+        unknownTaskLocation: '알 수 없는 작업 위치',
+        testModeFailed: '테스트 모드 활성화 실패. 다시 시도하세요',
+        retryFailed: '다시 확인 실패. 다시 시도하세요',
+        backHomeFailed: '홈으로 돌아가기 실패. 수동으로 돌아가세요'
     }
 };
 

@@ -95,8 +95,12 @@ function calculateDistance(lat1, lng1, lat2, lng2) {
 // 獲取用戶位置
 function getUserLocation() {
     return new Promise((resolve, reject) => {
+        // 取得當前語言和翻譯
+        const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
+        const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
+        
         if (!navigator.geolocation) {
-            reject(new Error('您的瀏覽器不支援地理定位功能'));
+            reject(new Error(t.geoLocationNotSupported || '您的瀏覽器不支援地理定位功能'));
             return;
         }
 
@@ -115,16 +119,16 @@ function getUserLocation() {
                 });
             },
             (error) => {
-                let errorMessage = '無法獲取位置資訊';
+                let errorMessage = t.locationError || '無法獲取位置資訊';
                 switch(error.code) {
                     case error.PERMISSION_DENIED:
-                        errorMessage = '位置權限被拒絕，請允許瀏覽器存取您的位置';
+                        errorMessage = t.locationPermissionDenied || '位置權限被拒絕，請允許瀏覽器存取您的位置';
                         break;
                     case error.POSITION_UNAVAILABLE:
-                        errorMessage = '位置資訊不可用';
+                        errorMessage = t.locationUnavailable || '位置資訊不可用';
                         break;
                     case error.TIMEOUT:
-                        errorMessage = '獲取位置超時，請重試';
+                        errorMessage = t.locationTimeout || '獲取位置超時，請重試';
                         break;
                 }
                 reject(new Error(errorMessage));
@@ -138,9 +142,13 @@ function getUserLocation() {
 function checkLocationAccess(taskKey) {
     return new Promise(async (resolve, reject) => {
         try {
+            // 取得當前語言和翻譯
+            const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
+            const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
+            
             const taskLocation = TASK_LOCATIONS[taskKey];
             if (!taskLocation) {
-                reject(new Error('未知的任務位置'));
+                reject(new Error(t.unknownTaskLocation || '未知的任務位置'));
                 return;
             }
 
@@ -475,7 +483,9 @@ function showLocationResult(overlay, result, taskKey) {
                 }, 100);
             } catch (err) {
                 console.error('[位置驗證] 啟用測試模式失敗:', err);
-                alert('啟用測試模式失敗，請重試');
+                const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
+                const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
+                alert(t.testModeFailed || '啟用測試模式失敗，請重試');
             }
         });
     }, 100);
@@ -574,7 +584,9 @@ async function initLocationCheck(taskKey) {
                         initLocationCheck(taskKey);
                     } catch (err) {
                         console.error('[位置驗證] 重試失敗:', err);
-                        alert('重新檢查失敗，請重試');
+                        const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
+                        const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
+                        alert(t.retryFailed || '重新檢查失敗，請重試');
                     }
                 });
             } else {
@@ -596,7 +608,9 @@ async function initLocationCheck(taskKey) {
                         window.location.href = 'index.html';
                     } catch (err) {
                         console.error('[位置驗證] 返回首頁失敗:', err);
-                        alert('返回首頁失敗，請手動返回');
+                        const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
+                        const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
+                        alert(t.backHomeFailed || '返回首頁失敗，請手動返回');
                     }
                 });
             } else {
@@ -646,7 +660,9 @@ async function initLocationCheck(taskKey) {
                         }
                     } catch (err) {
                         console.error('[位置驗證] 啟用測試模式失敗:', err);
-                        alert('啟用測試模式失敗，請重試。錯誤：' + err.message);
+                        const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
+                        const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
+                        alert((t.testModeFailed || '啟用測試模式失敗，請重試。錯誤：') + err.message);
                     }
                 });
             } else {
