@@ -217,7 +217,17 @@ const AIDialogue = {
         // 等待一小段時間確保停止完成
         setTimeout(() => {
             const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = lang === 'zh-TW' || lang === 'zh-CN' ? 'zh-TW' : lang;
+            
+            // 語言代碼對應（Speech Synthesis API 使用的格式）
+            const langMap = {
+                'zh-TW': 'zh-TW',
+                'zh-CN': 'zh-CN',
+                'en': 'en-US',
+                'ja': 'ja-JP',
+                'ko': 'ko-KR'
+            };
+            
+            utterance.lang = langMap[lang] || 'zh-TW';
             utterance.rate = 0.9;
             utterance.pitch = 1.0;
             utterance.volume = 1.0;
@@ -232,6 +242,8 @@ const AIDialogue = {
                 utterance.rate = 0.9;
                 utterance.pitch = 1.0;
             }
+            
+            console.log('[AI對話] 語音合成設置，語言:', lang, '語言代碼:', utterance.lang, '文字:', text.substring(0, 50));
             
             utterance.onstart = () => {
                 console.log('[AI對話] 開始播放語音:', text.substring(0, 50));
