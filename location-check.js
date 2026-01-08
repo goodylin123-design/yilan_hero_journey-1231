@@ -442,6 +442,9 @@ function showLocationResult(overlay, result, taskKey) {
 // 初始化位置檢查
 async function initLocationCheck(taskKey) {
     const overlay = showLocationCheckUI(taskKey);
+    // 在函數開頭宣告變數，避免重複宣告
+    const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
+    const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
 
     try {
         const result = await checkLocationAccess(taskKey);
@@ -459,9 +462,7 @@ async function initLocationCheck(taskKey) {
             text-align: center;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
         `;
-        // 取得當前語言和翻譯
-        const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
-        const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
+        // 使用已在函數開頭宣告的變數
         
         errorCard.innerHTML = `
             <div style="font-size: 4rem; margin-bottom: 20px;">⚠️</div>
