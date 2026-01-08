@@ -498,8 +498,6 @@ async function initLocationCheck(taskKey) {
         });
 
         // 在錯誤情況下也添加體驗測試按鈕
-        const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
-        const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
         const errorTestBtn = document.createElement('button');
         errorTestBtn.id = 'location-check-test-mode-error';
         errorTestBtn.textContent = t.btnTestMode || '🧪 體驗測試模式';
@@ -516,13 +514,50 @@ async function initLocationCheck(taskKey) {
             width: 100%;
             transition: transform 0.3s ease;
         `;
-        errorTestBtn.addEventListener('click', () => {
-            // 使用統一的測試模式啟用函數
-            enableTestMode(taskKey);
-            overlay.remove();
-            window.location.reload();
+        
+        // 使用事件委派和直接綁定兩種方式確保按鈕可以點擊
+        errorTestBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('[位置驗證] 錯誤頁面點擊測試模式按鈕');
+            try {
+                // 使用統一的測試模式啟用函數
+                if (typeof enableTestMode === 'function') {
+                    enableTestMode(taskKey);
+                } else if (typeof window.enableTestMode === 'function') {
+                    window.enableTestMode(taskKey);
+                } else {
+                    console.error('[位置驗證] enableTestMode 函數不存在');
+                    // 手動設置測試模式
+                    sessionStorage.setItem(`test_mode_${taskKey}`, 'true');
+                    const verificationData = {
+                        taskKey,
+                        timestamp: Date.now(),
+                        expiresAt: Date.now() + 5 * 60 * 1000,
+                        isTestMode: true
+                    };
+                    sessionStorage.setItem(`location_verified_${taskKey}`, JSON.stringify(verificationData));
+                }
+                overlay.remove();
+                window.location.reload();
+            } catch (err) {
+                console.error('[位置驗證] 啟用測試模式失敗:', err);
+                alert('啟用測試模式失敗，請重試');
+            }
         });
+        
+        // 添加測試模式說明文字
+        const testModeDesc = document.createElement('p');
+        testModeDesc.textContent = t.testModeDesc || '（跳過位置驗證，方便測試）';
+        testModeDesc.style.cssText = `
+            color: #64748B;
+            font-size: 0.85rem;
+            margin: 10px 0 0 0;
+            text-align: center;
+        `;
+        
         errorCard.appendChild(errorTestBtn);
+        errorCard.appendChild(testModeDesc);
     }
 }
 
