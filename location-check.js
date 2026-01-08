@@ -643,6 +643,19 @@ function enableTestMode(taskKey) {
 function blockTaskContent(taskKey) {
     console.log('[位置驗證] blockTaskContent 函數被調用，taskKey:', taskKey);
     
+    // 檢查 taskKey 是否有效
+    if (!taskKey) {
+        console.error('[位置驗證] taskKey 為空');
+        return;
+    }
+    
+    // 檢查 TASK_LOCATIONS 中是否有該任務
+    if (!TASK_LOCATIONS[taskKey]) {
+        console.error('[位置驗證] 找不到任務位置配置，taskKey:', taskKey);
+        console.log('[位置驗證] 可用的任務鍵:', Object.keys(TASK_LOCATIONS));
+        return;
+    }
+    
     // 確保 body 元素存在
     if (!document.body) {
         console.warn('[位置驗證] document.body not found, retrying after delay...');

@@ -166,14 +166,14 @@
     <script src="index-i18n.js"></script>
     <script>
         // 頁面載入時檢查任務解鎖和位置（最後執行，確保所有腳本已載入）
-        (function() {
+        document.addEventListener('DOMContentLoaded', function() {
             const taskKey = 'mission6';
             
-            function checkLocation() {
+            // 延遲執行確保所有腳本已載入
+            setTimeout(function() {
                 // 確保函數已載入
                 if (typeof window.isLocationVerified === 'undefined' || typeof window.blockTaskContent === 'undefined') {
-                    console.warn('[mission6.html] 位置檢測函數未載入，500ms 後重試');
-                    setTimeout(checkLocation, 500);
+                    console.error('[mission6.html] 位置檢測函數未載入');
                     return;
                 }
                 
@@ -186,16 +186,8 @@
                 if (!window.isLocationVerified(taskKey)) {
                     window.blockTaskContent(taskKey);
                 }
-            }
-            
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', function() {
-                    setTimeout(checkLocation, 500);
-                });
-            } else {
-                setTimeout(checkLocation, 500);
-            }
-        })();
+            }, 500);
+        });
     </script>
 </body>
 </html>
