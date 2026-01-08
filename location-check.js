@@ -375,14 +375,8 @@ function showLocationResult(overlay, result, taskKey) {
 
     // 體驗測試模式：跳過位置驗證
     testModeBtn?.addEventListener('click', () => {
-        // 設置測試模式標記（5 分鐘內有效）
-        const verificationData = {
-            taskKey,
-            timestamp: Date.now(),
-            expiresAt: Date.now() + 5 * 60 * 1000, // 5 分鐘
-            isTestMode: true // 標記為測試模式
-        };
-        sessionStorage.setItem(`location_verified_${taskKey}`, JSON.stringify(verificationData));
+        // 使用統一的測試模式啟用函數
+        enableTestMode(taskKey);
         
         // 顯示測試模式確認
         overlay.innerHTML = '';
@@ -432,6 +426,8 @@ function showLocationResult(overlay, result, taskKey) {
         overlay.appendChild(testCard);
         
         document.getElementById('location-check-close-test')?.addEventListener('click', () => {
+            // 確保測試模式已啟用（以防萬一）
+            enableTestMode(taskKey);
             overlay.remove();
             // 觸發頁面重新載入以顯示任務內容
             window.location.reload();
@@ -521,14 +517,8 @@ async function initLocationCheck(taskKey) {
             transition: transform 0.3s ease;
         `;
         errorTestBtn.addEventListener('click', () => {
-            // 設置測試模式標記
-            const verificationData = {
-                taskKey,
-                timestamp: Date.now(),
-                expiresAt: Date.now() + 5 * 60 * 1000,
-                isTestMode: true
-            };
-            sessionStorage.setItem(`location_verified_${taskKey}`, JSON.stringify(verificationData));
+            // 使用統一的測試模式啟用函數
+            enableTestMode(taskKey);
             overlay.remove();
             window.location.reload();
         });
@@ -538,50 +528,79 @@ async function initLocationCheck(taskKey) {
 
 // 檢查是否已驗證（5 分鐘內有效）
 function isLocationVerified(taskKey) {
-    // 檢查是否使用測試模式
-    const testMode = sessionStorage.getItem(`test_mode_${taskKey}`) === 'true';
-    if (testMode) {
-        return true; // 測試模式：直接通過
-    }
-    
-    // 正常模式：檢查位置驗證
+    // 不檢查測試模式 - 測試模式只在當前會話有效，頁面重新載入後需要重新驗證
+    // 只檢查正常的位置驗證（GPS 驗證通過的）
     const verificationData = sessionStorage.getItem(`location_verified_${taskKey}`);
-    if (!verificationData) return false;
-
-    try {
-        const data = JSON.parse(verificationData);
-        if (data.taskKey !== taskKey) return false;
-        if (Date.now() > data.expiresAt) {
-            sessionStorage.removeItem(`location_verified_${taskKey}`);
+    if (verificationData) {
+        try {
+            const data = JSON.parse(verificationData);
+            // 如果是測試模式，直接返回 false（不記住測試模式）
+            if (data.isTestMode === true) {
+                // 清除測試模式的記憶
+                sessionStorage.removeItem(`location_verified_${taskKey}`);
+                sessionStorage.removeItem(`test_mode_${taskKey}`);
+                return false;
+            }
+            // 正常驗證模式：檢查過期時間
+            if (data.taskKey !== taskKey) return false;
+            if (Date.now() > data.expiresAt) {
+                sessionStorage.removeItem(`location_verified_${taskKey}`);
+                return false;
+            }
+            return true;
+        } catch {
             return false;
         }
-        return true;
-    } catch {
-        return false;
     }
+    
+    // 清除可能殘留的測試模式標記
+    sessionStorage.removeItem(`test_mode_${taskKey}`);
+    
+    return false;
+}
+
+// 標記位置為已驗證
+function markLocationVerified(taskKey) {
+    const verificationData = {
+        taskKey,
+        timestamp: Date.now(),
+        expiresAt: Date.now() + 5 * 60 * 1000, // 5 分鐘
+        isTestMode: false
+    };
+    sessionStorage.setItem(`location_verified_${taskKey}`, JSON.stringify(verificationData));
 }
 
 // 啟用測試模式（模擬在當地位置）
+// 注意：測試模式只在當前頁面會話有效，不會被記住
 function enableTestMode(taskKey) {
-    sessionStorage.setItem(`test_mode_${taskKey}`, 'true');
-    // 同時標記為已驗證，以便後續檢查
-    markLocationVerified(taskKey);
+    // 測試模式：只在當前會話中標記，不持久化
+    // 當頁面重新載入時，測試模式會失效，需要重新驗證
+    const verificationData = {
+        taskKey,
+        timestamp: Date.now(),
+        expiresAt: Date.now() + 5 * 60 * 1000, // 5 分鐘（但實際上不會被記住）
+        isTestMode: true // 標記為測試模式
+    };
+    sessionStorage.setItem(`location_verified_${taskKey}`, JSON.stringify(verificationData));
+    // 不設置 test_mode 標記，因為我們不記住測試模式
 }
 
 // 阻止任務內容顯示（如果未驗證）
 function blockTaskContent(taskKey) {
-    console.log('blockTaskContent 函數被調用，taskKey:', taskKey);
+    console.log('[位置驗證] blockTaskContent 函數被調用，taskKey:', taskKey);
+    
+    // 確保 body 元素存在
+    if (!document.body) {
+        console.warn('[位置驗證] document.body not found, retrying after delay...');
+        setTimeout(() => blockTaskContent(taskKey), 100);
+        return;
+    }
+    
     // 先清除可能存在的舊遮罩
     const existingOverlay = document.getElementById('task-block-overlay');
     if (existingOverlay) {
+        console.log('[位置驗證] 移除舊的遮罩');
         existingOverlay.remove();
-    }
-    
-    const mainContent = document.getElementById('main-content');
-    if (!mainContent) {
-        console.warn('main-content element not found, retrying after delay...');
-        setTimeout(() => blockTaskContent(taskKey), 100);
-        return;
     }
 
     // 創建阻止遮罩
@@ -655,20 +674,46 @@ function blockTaskContent(taskKey) {
 
     // 直接添加到 body，確保遮罩在最上層
     document.body.appendChild(blockOverlay);
+    console.log('[位置驗證] 遮罩已添加到頁面，taskKey:', taskKey);
 
-    document.getElementById('start-location-check')?.addEventListener('click', () => {
-        blockOverlay.remove();
-        initLocationCheck(taskKey);
+    // 使用事件委派確保按鈕點擊事件正確綁定
+    blockOverlay.addEventListener('click', (e) => {
+        if (e.target.id === 'start-location-check' || e.target.closest('#start-location-check')) {
+            console.log('[位置驗證] 點擊開始位置檢查按鈕');
+            blockOverlay.remove();
+            initLocationCheck(taskKey);
+        } else if (e.target.id === 'start-test-mode' || e.target.closest('#start-test-mode')) {
+            console.log('[位置驗證] 點擊測試模式按鈕');
+            // 啟用測試模式（模擬在當地位置）
+            enableTestMode(taskKey);
+            blockOverlay.remove();
+            // 觸發頁面重新載入以顯示任務內容
+            window.location.reload();
+        }
     });
-
-    // 體驗測試模式：直接跳過驗證
-    document.getElementById('start-test-mode')?.addEventListener('click', () => {
-        // 啟用測試模式（模擬在當地位置）
-        enableTestMode(taskKey);
-        blockOverlay.remove();
-        // 觸發頁面重新載入以顯示任務內容
-        window.location.reload();
-    });
+    
+    // 備用：直接綁定事件監聽器
+    setTimeout(() => {
+        const checkBtn = document.getElementById('start-location-check');
+        const testBtn = document.getElementById('start-test-mode');
+        
+        if (checkBtn) {
+            checkBtn.addEventListener('click', () => {
+                console.log('[位置驗證] 點擊開始位置檢查按鈕（備用）');
+                blockOverlay.remove();
+                initLocationCheck(taskKey);
+            });
+        }
+        
+        if (testBtn) {
+            testBtn.addEventListener('click', () => {
+                console.log('[位置驗證] 點擊測試模式按鈕（備用）');
+                enableTestMode(taskKey);
+                blockOverlay.remove();
+                window.location.reload();
+            });
+        }
+    }, 50);
 }
 
 // 確保函數在全局作用域可用

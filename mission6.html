@@ -165,17 +165,37 @@
     <script src="mission6-script.js"></script>
     <script src="index-i18n.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        // 頁面載入時檢查任務解鎖和位置（最後執行，確保所有腳本已載入）
+        (function() {
             const taskKey = 'mission6';
-            if (TaskProgress && TaskProgress.blockUnlockedTask(taskKey)) return;
-            console.log('檢查位置驗證，taskKey:', taskKey, 'isLocationVerified:', isLocationVerified(taskKey));
-            if (!isLocationVerified(taskKey)) {
-                console.log('位置未驗證，顯示遮罩');
-                blockTaskContent(taskKey);
-            } else {
-                console.log('位置驗證通過，任務已解鎖');
+            
+            function checkLocation() {
+                // 確保函數已載入
+                if (typeof window.isLocationVerified === 'undefined' || typeof window.blockTaskContent === 'undefined') {
+                    console.warn('[mission6.html] 位置檢測函數未載入，500ms 後重試');
+                    setTimeout(checkLocation, 500);
+                    return;
+                }
+                
+                // 先檢查任務是否解鎖
+                if (typeof TaskProgress !== 'undefined' && TaskProgress.blockUnlockedTask && TaskProgress.blockUnlockedTask(taskKey)) {
+                    return;
+                }
+                
+                // 檢查位置驗證
+                if (!window.isLocationVerified(taskKey)) {
+                    window.blockTaskContent(taskKey);
+                }
             }
-        });
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', function() {
+                    setTimeout(checkLocation, 500);
+                });
+            } else {
+                setTimeout(checkLocation, 500);
+            }
+        })();
     </script>
 </body>
 </html>
