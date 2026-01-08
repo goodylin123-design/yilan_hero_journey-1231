@@ -537,6 +537,10 @@ async function initLocationCheck(taskKey) {
 
 // 檢查是否已驗證（5 分鐘內有效）
 function isLocationVerified(taskKey) {
+    // 🧪 測試模式：自動通過所有位置驗證
+    return true;
+    
+    /* 原始邏輯（已停用以便測試）
     const verificationData = sessionStorage.getItem(`location_verified_${taskKey}`);
     if (!verificationData) return false;
 
@@ -551,6 +555,7 @@ function isLocationVerified(taskKey) {
     } catch {
         return false;
     }
+    */
 }
 
 // 阻止任務內容顯示（如果未驗證）

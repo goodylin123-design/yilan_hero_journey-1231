@@ -1,10 +1,17 @@
 // 十關任務系統（目前不鎖關，可自由選擇）
 
-const TASK_ORDER = ['wave', 'rain', 'dawn'];
+const TASK_ORDER = ['wave', 'rain', 'dawn', 'mission4', 'mission5', 'mission6', 'mission7', 'mission8', 'mission9', 'mission10'];
 const TASK_NAMES = {
     wave: '第一關：海風中的呢喃',
-    rain: '第二關：蘭陽細雨陪伴',
-    dawn: '第三關：情人灣日出勇氣'
+    rain: '第二關：山風掃帚',
+    dawn: '第三關：沙丘上的腳印',
+    mission4: '第四關：大地的擁抱',
+    mission5: '第五關：星空下的祈願',
+    mission6: '第六關：風中的聲音',
+    mission7: '第七關：拾起一片落葉',
+    mission8: '第八關：河流中的倒影',
+    mission9: '第九關：拍打海浪的節奏',
+    mission10: '第十關：自然中的告別儀式'
 };
 
 // 從 localStorage 獲取任務進度
@@ -33,37 +40,15 @@ function saveTaskProgress(progress) {
     localStorage.setItem('taskProgress', JSON.stringify(progress));
 }
 
-// 檢查任務是否已解鎖
+// 檢查任務是否已解鎖（測試模式：所有任務都可進入）
 function isTaskUnlocked(taskKey) {
-    const progress = getTaskProgress();
-    
-    // 第一關永遠解鎖
-    if (taskKey === 'wave') {
-        return true;
-    }
-    
-    // 檢查前置任務是否完成
-    const taskIndex = TASK_ORDER.indexOf(taskKey);
-    if (taskIndex === -1) return false;
-    
-    // 檢查前一關是否完成
-    if (taskIndex > 0) {
-        const previousTask = TASK_ORDER[taskIndex - 1];
-        return progress.completed.includes(previousTask);
-    }
-    
-    return false;
+    // 測試模式：所有任務都解鎖
+    return true;
 }
 
 // 標記任務為已完成
 function completeTask(taskKey) {
     const progress = getTaskProgress();
-    
-    // 檢查是否已解鎖
-    if (!isTaskUnlocked(taskKey)) {
-        console.warn(`任務 ${taskKey} 尚未解鎖，無法完成`);
-        return false;
-    }
     
     // 如果尚未完成，則標記為完成
     if (!progress.completed.includes(taskKey)) {
