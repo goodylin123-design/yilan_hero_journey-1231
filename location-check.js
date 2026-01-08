@@ -569,6 +569,7 @@ function enableTestMode(taskKey) {
 
 // 阻止任務內容顯示（如果未驗證）
 function blockTaskContent(taskKey) {
+    console.log('blockTaskContent 函數被調用，taskKey:', taskKey);
     // 先清除可能存在的舊遮罩
     const existingOverlay = document.getElementById('task-block-overlay');
     if (existingOverlay) {
@@ -669,6 +670,12 @@ function blockTaskContent(taskKey) {
     });
 }
 
+// 確保函數在全局作用域可用
+window.blockTaskContent = blockTaskContent;
+window.isLocationVerified = isLocationVerified;
+window.enableTestMode = enableTestMode;
+window.initLocationCheck = initLocationCheck;
+
 // 導出函數供其他腳本使用
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
@@ -676,7 +683,8 @@ if (typeof module !== 'undefined' && module.exports) {
         initLocationCheck,
         isLocationVerified,
         blockTaskContent,
-        checkLocationAccess
+        checkLocationAccess,
+        enableTestMode
     };
 }
 
