@@ -416,41 +416,45 @@ function showLocationResult(overlay, result, taskKey) {
 
     overlay.appendChild(resultCard);
 
-    // 使用 setTimeout 確保 DOM 已更新後再綁定事件
-    setTimeout(() => {
-        // 綁定按鈕事件
-        const closeBtn = document.getElementById('location-check-close');
-        const retryBtn = document.getElementById('location-check-retry');
-        const backBtn = document.getElementById('location-check-back');
-        const testModeBtn = document.getElementById('location-check-test-mode');
-
-        closeBtn?.addEventListener('click', function(e) {
+    // 使用事件委派確保按鈕點擊事件正確處理
+    resultCard.addEventListener('click', function(e) {
+        const target = e.target;
+        const targetId = target.id;
+        
+        // 處理關閉按鈕
+        if (targetId === 'location-check-close' || target.closest('#location-check-close')) {
             e.preventDefault();
             e.stopPropagation();
             console.log('[位置驗證] 點擊關閉按鈕');
             overlay.remove();
-        });
-
-        retryBtn?.addEventListener('click', function(e) {
+            return;
+        }
+        
+        // 處理重新檢查按鈕
+        if (targetId === 'location-check-retry' || target.closest('#location-check-retry')) {
             e.preventDefault();
             e.stopPropagation();
             console.log('[位置驗證] 點擊重新檢查按鈕');
             overlay.remove();
             initLocationCheck(taskKey);
-        });
-
-        backBtn?.addEventListener('click', function(e) {
+            return;
+        }
+        
+        // 處理返回首頁按鈕
+        if (targetId === 'location-check-back' || target.closest('#location-check-back')) {
             e.preventDefault();
             e.stopPropagation();
             console.log('[位置驗證] 點擊返回首頁按鈕');
             window.location.href = 'index.html';
-        });
-
-        // 體驗測試模式：跳過位置驗證
-        testModeBtn?.addEventListener('click', function(e) {
+            return;
+        }
+        
+        // 處理測試模式按鈕
+        if (targetId === 'location-check-test-mode' || target.closest('#location-check-test-mode')) {
             e.preventDefault();
             e.stopPropagation();
             console.log('[位置驗證] 點擊測試模式按鈕');
+            
             try {
                 // 使用統一的測試模式啟用函數
                 const enableTest = window.enableTestMode || enableTestMode;
@@ -541,7 +545,146 @@ function showLocationResult(overlay, result, taskKey) {
                 const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
                 alert(t.testModeFailed || 'Failed to enable test mode. Please try again');
             }
-        });
+            return;
+        }
+    });
+    
+    // 備用：直接綁定事件監聽器（確保按鈕可點擊）
+    setTimeout(() => {
+        const closeBtn = document.getElementById('location-check-close');
+        const retryBtn = document.getElementById('location-check-retry');
+        const backBtn = document.getElementById('location-check-back');
+        const testModeBtn = document.getElementById('location-check-test-mode');
+
+        if (closeBtn && !closeBtn.hasAttribute('data-listener-attached')) {
+            closeBtn.setAttribute('data-listener-attached', 'true');
+            closeBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('[位置驗證] 點擊關閉按鈕（備用）');
+                overlay.remove();
+            });
+        }
+
+        if (retryBtn && !retryBtn.hasAttribute('data-listener-attached')) {
+            retryBtn.setAttribute('data-listener-attached', 'true');
+            retryBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('[位置驗證] 點擊重新檢查按鈕（備用）');
+                overlay.remove();
+                initLocationCheck(taskKey);
+            });
+        }
+
+        if (backBtn && !backBtn.hasAttribute('data-listener-attached')) {
+            backBtn.setAttribute('data-listener-attached', 'true');
+            backBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('[位置驗證] 點擊返回首頁按鈕（備用）');
+                window.location.href = 'index.html';
+            });
+        }
+
+        if (testModeBtn && !testModeBtn.hasAttribute('data-listener-attached')) {
+            testModeBtn.setAttribute('data-listener-attached', 'true');
+            testModeBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('[位置驗證] 點擊測試模式按鈕（備用）');
+                try {
+                    // 使用統一的測試模式啟用函數
+                    const enableTest = window.enableTestMode || enableTestMode;
+                    if (typeof enableTest === 'function') {
+                        enableTest(taskKey);
+                    } else {
+                        console.error('[位置驗證] enableTestMode 函數不存在，手動設置');
+                        // 手動設置測試模式
+                        sessionStorage.setItem(`test_mode_${taskKey}`, 'true');
+                        const verificationData = {
+                            taskKey,
+                            timestamp: Date.now(),
+                            expiresAt: Date.now() + 5 * 60 * 1000,
+                            isTestMode: true
+                        };
+                        sessionStorage.setItem(`location_verified_${taskKey}`, JSON.stringify(verificationData));
+                    }
+                    
+                    // 顯示測試模式確認
+                    overlay.innerHTML = '';
+                    const testCard = document.createElement('div');
+                    testCard.style.cssText = `
+                        background: white;
+                        border-radius: 20px;
+                        padding: 30px;
+                        max-width: 400px;
+                        width: 100%;
+                        text-align: center;
+                        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+                    `;
+                    // 取得當前語言和翻譯
+                    const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
+                    const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
+                    
+                    testCard.innerHTML = `
+                        <div style="font-size: 4rem; margin-bottom: 20px;">🧪</div>
+                        <h2 style="color: #10B981; margin-bottom: 15px;">${t.testModeEnabled || 'Experience Test Mode Enabled'}</h2>
+                        <p style="color: #475569; margin-bottom: 10px;">${t.testModeSkipped || 'Location verification skipped'}</p>
+                        <p style="color: #64748B; font-size: 0.9rem; margin-bottom: 25px;">${t.testModeCanStart || 'You can now start experiencing the mission content'}</p>
+                        <div style="
+                            background: #ECFDF5;
+                            border-left: 4px solid #10B981;
+                            padding: 15px;
+                            border-radius: 10px;
+                            margin-bottom: 20px;
+                            text-align: left;
+                        ">
+                            <p style="color: #065F46; margin: 0; font-size: 0.9rem;">
+                                <strong>${t.testModeNote || 'Note:'}</strong>${t.testModeNoteDesc || 'This is test mode. Please go to the specified location for actual use.'}
+                            </p>
+                        </div>
+                        <button id="location-check-close-test" style="
+                            padding: 12px 30px;
+                            background: linear-gradient(135deg, #10B981, #059669);
+                            color: white;
+                            border: none;
+                            border-radius: 25px;
+                            font-size: 1rem;
+                            font-weight: 600;
+                            cursor: pointer;
+                            transition: transform 0.3s ease;
+                        ">${t.btnStartTask || 'Start Mission'}</button>
+                    `;
+                    overlay.appendChild(testCard);
+                    
+                    // 使用 setTimeout 確保新按鈕已添加到 DOM
+                    setTimeout(() => {
+                        const closeTestBtn = document.getElementById('location-check-close-test');
+                        if (closeTestBtn) {
+                            closeTestBtn.addEventListener('click', function(e2) {
+                                e2.preventDefault();
+                                e2.stopPropagation();
+                                console.log('[位置驗證] 點擊開始任務按鈕（測試模式）');
+                                // 確保測試模式已啟用（以防萬一）
+                                const enableTest2 = window.enableTestMode || enableTestMode;
+                                if (typeof enableTest2 === 'function') {
+                                    enableTest2(taskKey);
+                                }
+                                overlay.remove();
+                                // 觸發頁面重新載入以顯示任務內容
+                                window.location.reload();
+                            });
+                        }
+                    }, 100);
+                } catch (err) {
+                    console.error('[位置驗證] 啟用測試模式失敗:', err);
+                    const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
+                    const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
+                    alert(t.testModeFailed || 'Failed to enable test mode. Please try again');
+                }
+            });
+        }
     }, 100);
 }
 
