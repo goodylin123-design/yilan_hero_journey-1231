@@ -275,6 +275,28 @@
     <script>
         // 更新主頁面的任務進度顯示
         document.addEventListener('DOMContentLoaded', () => {
+            // 回到主頁時清除所有測試模式標記
+            const allTasks = ['wave', 'rain', 'dawn', 'mission4', 'mission5', 'mission6', 'mission7', 'mission8', 'mission9', 'mission10'];
+            allTasks.forEach(taskKey => {
+                // 清除測試模式標記
+                sessionStorage.removeItem(`test_mode_${taskKey}`);
+                // 清除測試模式的驗證數據
+                const verificationData = sessionStorage.getItem(`location_verified_${taskKey}`);
+                if (verificationData) {
+                    try {
+                        const data = JSON.parse(verificationData);
+                        if (data.isTestMode === true) {
+                            // 如果是測試模式，清除它
+                            sessionStorage.removeItem(`location_verified_${taskKey}`);
+                        }
+                    } catch (e) {
+                        // 解析失敗，清除數據
+                        sessionStorage.removeItem(`location_verified_${taskKey}`);
+                    }
+                }
+            });
+            console.log('[index.html] 已清除所有測試模式標記');
+            
             function updateTaskProgress() {
                 const progress = TaskProgress.getTaskProgress();
                 const percentage = TaskProgress.getProgressPercentage();

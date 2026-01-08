@@ -528,18 +528,21 @@ async function initLocationCheck(taskKey) {
 
 // 檢查是否已驗證（5 分鐘內有效）
 function isLocationVerified(taskKey) {
-    // 不檢查測試模式 - 測試模式只在當前會話有效，頁面重新載入後需要重新驗證
-    // 只檢查正常的位置驗證（GPS 驗證通過的）
+    // 檢查是否使用測試模式
+    const testMode = sessionStorage.getItem(`test_mode_${taskKey}`) === 'true';
+    if (testMode) {
+        return true; // 測試模式：直接通過
+    }
+    
+    // 檢查 location_verified 中是否標記為測試模式
     const verificationData = sessionStorage.getItem(`location_verified_${taskKey}`);
     if (verificationData) {
         try {
             const data = JSON.parse(verificationData);
-            // 如果是測試模式，直接返回 false（不記住測試模式）
             if (data.isTestMode === true) {
-                // 清除測試模式的記憶
-                sessionStorage.removeItem(`location_verified_${taskKey}`);
-                sessionStorage.removeItem(`test_mode_${taskKey}`);
-                return false;
+                // 如果標記為測試模式，同時設置 test_mode 標記以便統一檢查
+                sessionStorage.setItem(`test_mode_${taskKey}`, 'true');
+                return true;
             }
             // 正常驗證模式：檢查過期時間
             if (data.taskKey !== taskKey) return false;
@@ -552,9 +555,6 @@ function isLocationVerified(taskKey) {
             return false;
         }
     }
-    
-    // 清除可能殘留的測試模式標記
-    sessionStorage.removeItem(`test_mode_${taskKey}`);
     
     return false;
 }
@@ -571,18 +571,17 @@ function markLocationVerified(taskKey) {
 }
 
 // 啟用測試模式（模擬在當地位置）
-// 注意：測試模式只在當前頁面會話有效，不會被記住
 function enableTestMode(taskKey) {
-    // 測試模式：只在當前會話中標記，不持久化
-    // 當頁面重新載入時，測試模式會失效，需要重新驗證
+    // 設置測試模式標記（兩種方式都設置，確保兼容性）
+    sessionStorage.setItem(`test_mode_${taskKey}`, 'true');
+    // 同時標記為已驗證，並標記為測試模式
     const verificationData = {
         taskKey,
         timestamp: Date.now(),
-        expiresAt: Date.now() + 5 * 60 * 1000, // 5 分鐘（但實際上不會被記住）
+        expiresAt: Date.now() + 5 * 60 * 1000, // 5 分鐘
         isTestMode: true // 標記為測試模式
     };
     sessionStorage.setItem(`location_verified_${taskKey}`, JSON.stringify(verificationData));
-    // 不設置 test_mode 標記，因為我們不記住測試模式
 }
 
 // 阻止任務內容顯示（如果未驗證）
