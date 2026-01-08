@@ -607,14 +607,21 @@ function blockTaskContent(taskKey) {
     const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
     const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
     
+    // 確保翻譯鍵存在
+    const titleText = t.locationNeedVerify || '需要位置驗證';
+    const descText = (t.locationTaskNeedNear || '此任務需要在 {location} 附近才能開啟').replace(/{location}/g, taskLocation ? taskLocation.name : '指定地點');
+    const btnCheckText = t.btnStartLocationCheck || '開始位置檢查';
+    const btnTestText = t.btnTestMode || '🧪 體驗測試模式';
+    const testDescText = t.testModeDesc || '（跳過位置驗證，方便測試）';
+    
     blockOverlay.innerHTML = `
-        <div style="text-align: center; max-width: 400px;">
+        <div style="text-align: center; max-width: 400px; width: 100%; padding: 20px;">
             <div style="font-size: 4rem; margin-bottom: 20px;">🔒</div>
-            <h2 style="color: #0F172A; margin-bottom: 15px;">${t.locationNeedVerify || '需要位置驗證'}</h2>
-            <p style="color: #475569; margin-bottom: 20px;">${(t.locationTaskNeedNear || '此任務需要在 {location} 附近才能開啟').replace(/{location}/g, taskLocation.name)}</p>
-            <div style="display: flex; flex-direction: column; gap: 10px;">
-                <button id="start-location-check" style="
-                    padding: 12px 30px;
+            <h2 style="color: #0F172A; margin-bottom: 15px; font-size: 1.5rem; font-weight: 700;">${titleText}</h2>
+            <p style="color: #475569; margin-bottom: 25px; font-size: 1rem; line-height: 1.6;">${descText}</p>
+            <div style="display: flex; flex-direction: column; gap: 15px; width: 100%;">
+                <button id="start-location-check" type="button" style="
+                    padding: 15px 30px;
                     background: linear-gradient(135deg, #3B82F6, #2563EB);
                     color: white;
                     border: none;
@@ -622,10 +629,12 @@ function blockTaskContent(taskKey) {
                     font-size: 1rem;
                     font-weight: 600;
                     cursor: pointer;
-                    transition: transform 0.3s ease;
-                ">${t.btnStartLocationCheck || '開始位置檢查'}</button>
-                <button id="start-test-mode" style="
-                    padding: 12px 30px;
+                    transition: all 0.3s ease;
+                    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+                    width: 100%;
+                ">${btnCheckText}</button>
+                <button id="start-test-mode" type="button" style="
+                    padding: 15px 30px;
                     background: linear-gradient(135deg, #10B981, #059669);
                     color: white;
                     border: none;
@@ -633,9 +642,11 @@ function blockTaskContent(taskKey) {
                     font-size: 1rem;
                     font-weight: 600;
                     cursor: pointer;
-                    transition: transform 0.3s ease;
-                ">${t.btnTestMode || '🧪 體驗測試模式'}</button>
-                <p style="color: #64748B; font-size: 0.85rem; margin: 0;">${t.testModeDesc || '（跳過位置驗證，方便測試）'}</p>
+                    transition: all 0.3s ease;
+                    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+                    width: 100%;
+                ">${btnTestText}</button>
+                <p style="color: #64748B; font-size: 0.85rem; margin: 0; text-align: center;">${testDescText}</p>
             </div>
         </div>
     `;
