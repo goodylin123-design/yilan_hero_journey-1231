@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="河流中的倒影 - 利澤簡任務">
-    <title>🌊 河流中的倒影任務</title>
+    <meta name="description" content="自然中的告別儀式 - 內埤情人灣任務">
+    <title>🌅 自然中的告別儀式任務</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -22,6 +22,7 @@
     </div>
     
     <div class="container">
+        <!-- 語言選擇器 -->
         <div class="language-selector" id="language-selector">
             <button type="button" class="lang-toggle-btn" id="lang-toggle-btn" aria-label="選擇語言">
                 <span class="lang-icon">🌐</span>
@@ -39,22 +40,22 @@
         
         <header class="header">
             <a href="index.html" class="back-link" data-i18n="backToHome">← 返回首頁</a>
-            <h1 class="title" data-i18n="mission8Title">🌊 河流中的倒影任務</h1>
-            <p class="subtitle" data-i18n="mission8Subtitle">📍 利澤簡・第八關</p>
+            <h1 class="title" data-i18n="mission10Title">🌅 自然中的告別儀式任務</h1>
+            <p class="subtitle" data-i18n="mission10Subtitle">📍 內埤情人灣・第十關</p>
         </header>
         
         <main id="main-content" class="content">
-            <section class="card" aria-labelledby="mission8-title">
-                <h2 id="mission8-title" data-i18n="mission8PageTitle">第八關｜河流中的倒影（利澤簡）</h2>
-                <p class="mission-intro" data-i18n="mission8PageIntro">在利澤簡的河邊，旅行者會被 AI 引導觀察自己的倒影，並思考：這是現在的自己，還是過去的自己？旅行者可以拍下自己的倒影，並記錄感受。</p>
+            <section class="card" aria-labelledby="mission10-title">
+                <h2 id="mission10-title" data-i18n="mission10PageTitle">第十關｜自然中的告別儀式（內埤情人灣）</h2>
+                <p class="mission-intro" data-i18n="mission10PageIntro">在內埤情人灣，這是旅程的最後一站。旅行者會被 AI 引導在葉子上寫下過去的擔憂與遺憾，然後將葉子放入海中，讓海浪帶走。這象徵著放下過去，迎接未來的自由。</p>
                 
                 <div class="mission-content">
                     <div class="whisper-container">
                         <!-- AI 引導區域 -->
                         <div class="ai-guide-area">
-                            <div class="ai-avatar">🌊</div>
+                            <div class="ai-avatar">🌅</div>
                             <div class="ai-message" id="ai-message">
-                                <p data-i18n="mission8AIMessage">準備好了嗎？點擊「開始引導」來開始這段內在旅程。</p>
+                                <p data-i18n="mission10AIMessage">準備好了嗎？點擊「開始引導」來開始這段內在旅程。</p>
                             </div>
                         </div>
                         
@@ -97,7 +98,7 @@
                                 <textarea 
                                     id="text-response" 
                                     data-i18n-placeholder="textResponsePlaceholder"
-                                    placeholder="請分享：那是現在的你，還是過去的你？是什麼讓你感受到當下的真實？"
+                                    placeholder="請分享：你想放下什麼？這個告別如何準備你迎接什麼樣的未來？"
                                     rows="4"
                                 ></textarea>
                             </div>
@@ -134,13 +135,10 @@
                 </div>
             </section>
 
+            <!-- QR 碼掃描區域 -->
             <section class="qr-section card">
-                <h3 data-i18n="scanQRNext">📷 掃描 QR 碼進入下一個任務</h3>
-                <p data-i18n="scanQRNextDesc">完成此任務後，掃描下一個任務的 QR 碼繼續旅程</p>
-                <button type="button" class="btn-qr-scan" id="btn-scan-qr">
-                    <span data-i18n="btnScanQR">📷 掃描 QR 碼</span>
-                </button>
-                <div id="qr-reader" style="display: none; margin-top: 20px;"></div>
+                <h3 data-i18n="scanQRComplete">📷 掃描 QR 碼完成旅程</h3>
+                <p data-i18n="scanQRNextDesc">恭喜你完成所有十關英雄旅程！</p>
             </section>
         </main>
     </div>
@@ -162,16 +160,14 @@
     <script src="traveler-store.js"></script>
     <script src="task-script.js"></script>
     <script src="ai-dialogue.js"></script>
-    <script src="mission8-script.js"></script>
+    <script src="mission10-script.js"></script>
     <script src="index-i18n.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const taskKey = 'mission8';
-            if (TaskProgress && TaskProgress.blockUnlockedTask(taskKey)) return;
+            const taskKey = 'mission10';
+            if (TaskProgress.blockUnlockedTask(taskKey)) return;
             if (!isLocationVerified(taskKey)) {
                 blockTaskContent(taskKey);
-            } else {
-                console.log('位置驗證通過，任務已解鎖');
             }
         });
     </script>
