@@ -370,7 +370,7 @@ function showLocationResult(overlay, result, taskKey) {
                 </p>
             </div>
             <div style="margin-bottom: 15px;">
-                <button id="location-check-test-mode" style="
+                <button id="location-check-test-mode" type="button" style="
                     padding: 12px 30px;
                     background: linear-gradient(135deg, #10B981, #059669);
                     color: white;
@@ -382,11 +382,14 @@ function showLocationResult(overlay, result, taskKey) {
                     width: 100%;
                     margin-bottom: 10px;
                     transition: transform 0.3s ease;
+                    pointer-events: auto !important;
+                    position: relative;
+                    z-index: 10;
                 ">${t.btnTestMode || '🧪 Experience Test Mode'}</button>
                 <p style="color: #64748B; font-size: 0.85rem; margin: 0;">${t.testModeDesc || '(Skip location verification for testing)'}</p>
             </div>
             <div style="display: flex; gap: 10px; justify-content: center;">
-                <button id="location-check-retry" style="
+                <button id="location-check-retry" type="button" style="
                     padding: 12px 30px;
                     background: linear-gradient(135deg, #3B82F6, #2563EB);
                     color: white;
@@ -397,8 +400,11 @@ function showLocationResult(overlay, result, taskKey) {
                     cursor: pointer;
                     transition: transform 0.3s ease;
                     flex: 1;
+                    pointer-events: auto !important;
+                    position: relative;
+                    z-index: 10;
                 ">${t.btnRetryCheck || 'Retry Check'}</button>
-                <button id="location-check-back" style="
+                <button id="location-check-back" type="button" style="
                     padding: 12px 30px;
                     background: #E5E7EB;
                     color: #374151;
@@ -409,6 +415,9 @@ function showLocationResult(overlay, result, taskKey) {
                     cursor: pointer;
                     transition: transform 0.3s ease;
                     flex: 1;
+                    pointer-events: auto !important;
+                    position: relative;
+                    z-index: 10;
                 ">${t.btnBackHome || 'Back to Home'}</button>
             </div>
         `;
@@ -416,46 +425,87 @@ function showLocationResult(overlay, result, taskKey) {
 
     overlay.appendChild(resultCard);
 
-    // 使用事件委派確保按鈕點擊事件正確處理
-    resultCard.addEventListener('click', function(e) {
-        const target = e.target;
-        const targetId = target.id;
-        
-        // 處理關閉按鈕
-        if (targetId === 'location-check-close' || target.closest('#location-check-close')) {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('[位置驗證] 點擊關閉按鈕');
-            overlay.remove();
-            return;
+    // 直接綁定按鈕事件（使用多種方式確保按鈕可點擊）
+    const bindButtonEvents = () => {
+        console.log('[位置驗證] 開始綁定按鈕事件');
+        // 關閉按鈕
+        const closeBtn = document.getElementById('location-check-close');
+        if (closeBtn) {
+            console.log('[位置驗證] 找到關閉按鈕');
+            closeBtn.onclick = function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('[位置驗證] 點擊關閉按鈕');
+                overlay.remove();
+            };
+            closeBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('[位置驗證] 點擊關閉按鈕（addEventListener）');
+                overlay.remove();
+            }, { once: false });
         }
         
-        // 處理重新檢查按鈕
-        if (targetId === 'location-check-retry' || target.closest('#location-check-retry')) {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('[位置驗證] 點擊重新檢查按鈕');
-            overlay.remove();
-            initLocationCheck(taskKey);
-            return;
+        // 重新檢查按鈕
+        const retryBtn = document.getElementById('location-check-retry');
+        if (retryBtn) {
+            console.log('[位置驗證] 找到重新檢查按鈕');
+            retryBtn.onclick = function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('[位置驗證] 點擊重新檢查按鈕');
+                overlay.remove();
+                initLocationCheck(taskKey);
+            };
+            retryBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('[位置驗證] 點擊重新檢查按鈕（addEventListener）');
+                overlay.remove();
+                initLocationCheck(taskKey);
+            }, { once: false });
         }
         
-        // 處理返回首頁按鈕
-        if (targetId === 'location-check-back' || target.closest('#location-check-back')) {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('[位置驗證] 點擊返回首頁按鈕');
-            window.location.href = 'index.html';
-            return;
+        // 返回首頁按鈕
+        const backBtn = document.getElementById('location-check-back');
+        if (backBtn) {
+            console.log('[位置驗證] 找到返回首頁按鈕');
+            backBtn.onclick = function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('[位置驗證] 點擊返回首頁按鈕');
+                window.location.href = 'index.html';
+            };
+            backBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('[位置驗證] 點擊返回首頁按鈕（addEventListener）');
+                window.location.href = 'index.html';
+            }, { once: false });
         }
         
-        // 處理測試模式按鈕
-        if (targetId === 'location-check-test-mode' || target.closest('#location-check-test-mode')) {
-            e.preventDefault();
-            e.stopPropagation();
-            console.log('[位置驗證] 點擊測試模式按鈕');
-            
-            try {
+        // 測試模式按鈕
+        const testModeBtn = document.getElementById('location-check-test-mode');
+        if (testModeBtn) {
+            console.log('[位置驗證] 找到測試模式按鈕');
+            testModeBtn.onclick = function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('[位置驗證] 點擊測試模式按鈕（onclick）');
+                handleTestModeClick(e, taskKey, overlay);
+            };
+            testModeBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('[位置驗證] 點擊測試模式按鈕（addEventListener）');
+                handleTestModeClick(e, taskKey, overlay);
+            }, { once: false });
+        }
+    };
+    
+    // 處理測試模式點擊的函數
+    const handleTestModeClick = function(e, taskKey, overlay) {
+        try {
                 // 使用統一的測試模式啟用函數
                 const enableTest = window.enableTestMode || enableTestMode;
                 if (typeof enableTest === 'function') {
@@ -545,147 +595,20 @@ function showLocationResult(overlay, result, taskKey) {
                 const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
                 alert(t.testModeFailed || 'Failed to enable test mode. Please try again');
             }
-            return;
-        }
-    });
+        };
     
-    // 備用：直接綁定事件監聽器（確保按鈕可點擊）
+    // 立即綁定事件
+    bindButtonEvents();
+    
+    // 使用 setTimeout 確保 DOM 已更新後再次綁定（雙重保險）
     setTimeout(() => {
-        const closeBtn = document.getElementById('location-check-close');
-        const retryBtn = document.getElementById('location-check-retry');
-        const backBtn = document.getElementById('location-check-back');
-        const testModeBtn = document.getElementById('location-check-test-mode');
-
-        if (closeBtn && !closeBtn.hasAttribute('data-listener-attached')) {
-            closeBtn.setAttribute('data-listener-attached', 'true');
-            closeBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('[位置驗證] 點擊關閉按鈕（備用）');
-                overlay.remove();
-            });
-        }
-
-        if (retryBtn && !retryBtn.hasAttribute('data-listener-attached')) {
-            retryBtn.setAttribute('data-listener-attached', 'true');
-            retryBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('[位置驗證] 點擊重新檢查按鈕（備用）');
-                overlay.remove();
-                initLocationCheck(taskKey);
-            });
-        }
-
-        if (backBtn && !backBtn.hasAttribute('data-listener-attached')) {
-            backBtn.setAttribute('data-listener-attached', 'true');
-            backBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('[位置驗證] 點擊返回首頁按鈕（備用）');
-                window.location.href = 'index.html';
-            });
-        }
-
-        if (testModeBtn && !testModeBtn.hasAttribute('data-listener-attached')) {
-            testModeBtn.setAttribute('data-listener-attached', 'true');
-            testModeBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                console.log('[位置驗證] 點擊測試模式按鈕（備用）');
-                try {
-                    // 使用統一的測試模式啟用函數
-                    const enableTest = window.enableTestMode || enableTestMode;
-                    if (typeof enableTest === 'function') {
-                        enableTest(taskKey);
-                    } else {
-                        console.error('[位置驗證] enableTestMode 函數不存在，手動設置');
-                        // 手動設置測試模式
-                        sessionStorage.setItem(`test_mode_${taskKey}`, 'true');
-                        const verificationData = {
-                            taskKey,
-                            timestamp: Date.now(),
-                            expiresAt: Date.now() + 5 * 60 * 1000,
-                            isTestMode: true
-                        };
-                        sessionStorage.setItem(`location_verified_${taskKey}`, JSON.stringify(verificationData));
-                    }
-                    
-                    // 顯示測試模式確認
-                    overlay.innerHTML = '';
-                    const testCard = document.createElement('div');
-                    testCard.style.cssText = `
-                        background: white;
-                        border-radius: 20px;
-                        padding: 30px;
-                        max-width: 400px;
-                        width: 100%;
-                        text-align: center;
-                        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-                    `;
-                    // 取得當前語言和翻譯
-                    const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
-                    const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
-                    
-                    testCard.innerHTML = `
-                        <div style="font-size: 4rem; margin-bottom: 20px;">🧪</div>
-                        <h2 style="color: #10B981; margin-bottom: 15px;">${t.testModeEnabled || 'Experience Test Mode Enabled'}</h2>
-                        <p style="color: #475569; margin-bottom: 10px;">${t.testModeSkipped || 'Location verification skipped'}</p>
-                        <p style="color: #64748B; font-size: 0.9rem; margin-bottom: 25px;">${t.testModeCanStart || 'You can now start experiencing the mission content'}</p>
-                        <div style="
-                            background: #ECFDF5;
-                            border-left: 4px solid #10B981;
-                            padding: 15px;
-                            border-radius: 10px;
-                            margin-bottom: 20px;
-                            text-align: left;
-                        ">
-                            <p style="color: #065F46; margin: 0; font-size: 0.9rem;">
-                                <strong>${t.testModeNote || 'Note:'}</strong>${t.testModeNoteDesc || 'This is test mode. Please go to the specified location for actual use.'}
-                            </p>
-                        </div>
-                        <button id="location-check-close-test" style="
-                            padding: 12px 30px;
-                            background: linear-gradient(135deg, #10B981, #059669);
-                            color: white;
-                            border: none;
-                            border-radius: 25px;
-                            font-size: 1rem;
-                            font-weight: 600;
-                            cursor: pointer;
-                            transition: transform 0.3s ease;
-                        ">${t.btnStartTask || 'Start Mission'}</button>
-                    `;
-                    overlay.appendChild(testCard);
-                    
-                    // 使用 setTimeout 確保新按鈕已添加到 DOM
-                    setTimeout(() => {
-                        const closeTestBtn = document.getElementById('location-check-close-test');
-                        if (closeTestBtn) {
-                            closeTestBtn.addEventListener('click', function(e2) {
-                                e2.preventDefault();
-                                e2.stopPropagation();
-                                console.log('[位置驗證] 點擊開始任務按鈕（測試模式）');
-                                // 確保測試模式已啟用（以防萬一）
-                                const enableTest2 = window.enableTestMode || enableTestMode;
-                                if (typeof enableTest2 === 'function') {
-                                    enableTest2(taskKey);
-                                }
-                                overlay.remove();
-                                // 觸發頁面重新載入以顯示任務內容
-                                window.location.reload();
-                            });
-                        }
-                    }, 100);
-                } catch (err) {
-                    console.error('[位置驗證] 啟用測試模式失敗:', err);
-                    const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
-                    const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
-                    alert(t.testModeFailed || 'Failed to enable test mode. Please try again');
-                }
-            });
-        }
-    }, 100);
+        bindButtonEvents();
+    }, 50);
+    
+    // 再次延遲綁定（三重保險）
+    setTimeout(() => {
+        bindButtonEvents();
+    }, 200);
 }
 
 // 初始化位置檢查
@@ -729,6 +652,9 @@ async function initLocationCheck(taskKey) {
                     cursor: pointer;
                     transition: transform 0.3s ease;
                     flex: 1;
+                    pointer-events: auto !important;
+                    position: relative;
+                    z-index: 10;
                 ">${t.btnRetryCheck || 'Retry Check'}</button>
                 <button id="location-check-back-error" type="button" style="
                     padding: 12px 30px;
@@ -741,6 +667,9 @@ async function initLocationCheck(taskKey) {
                     cursor: pointer;
                     transition: transform 0.3s ease;
                     flex: 1;
+                    pointer-events: auto !important;
+                    position: relative;
+                    z-index: 10;
                 ">${t.btnBackHome || 'Back to Home'}</button>
             </div>
             <div style="margin-bottom: 10px;">
@@ -756,26 +685,116 @@ async function initLocationCheck(taskKey) {
                     width: 100%;
                     transition: transform 0.3s ease;
                     position: relative;
-                    z-index: 1;
+                    z-index: 10;
+                    pointer-events: auto !important;
                 ">${t.btnTestMode || '🧪 Experience Test Mode'}</button>
                 <p style="color: #64748B; font-size: 0.85rem; margin: 10px 0 0 0; text-align: center;">${t.testModeDesc || '(Skip location verification for testing)'}</p>
             </div>
         `;
         overlay.appendChild(errorCard);
 
-        // 使用 setTimeout 確保 DOM 已更新後再綁定事件
+        // 使用事件委派確保按鈕點擊事件正確處理
+        errorCard.addEventListener('click', function(e) {
+            const target = e.target;
+            const targetId = target.id;
+            
+            console.log('[位置驗證] 錯誤卡片點擊事件，targetId:', targetId);
+            
+            // 處理重新檢查按鈕
+            if (targetId === 'location-check-retry-error' || target.closest('#location-check-retry-error')) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('[位置驗證] 點擊重試按鈕，taskKey:', taskKey);
+                try {
+                    overlay.remove();
+                    initLocationCheck(taskKey);
+                } catch (err) {
+                    console.error('[位置驗證] 重試失敗:', err);
+                    const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
+                    const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
+                    alert(t.retryFailed || 'Retry failed. Please try again');
+                }
+                return;
+            }
+            
+            // 處理返回首頁按鈕
+            if (targetId === 'location-check-back-error' || target.closest('#location-check-back-error')) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('[位置驗證] 點擊返回首頁按鈕');
+                try {
+                    window.location.href = 'index.html';
+                } catch (err) {
+                    console.error('[位置驗證] 返回首頁失敗:', err);
+                    const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
+                    const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
+                    alert(t.backHomeFailed || 'Failed to return home. Please return manually');
+                }
+                return;
+            }
+            
+            // 處理測試模式按鈕
+            if (targetId === 'location-check-test-mode-error' || target.closest('#location-check-test-mode-error')) {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('[位置驗證] 錯誤頁面點擊測試模式按鈕，taskKey:', taskKey);
+                handleErrorTestModeClick(e, taskKey, overlay);
+                return;
+            }
+        });
+        
+        // 處理錯誤狀態下的測試模式點擊
+        const handleErrorTestModeClick = function(e, taskKey, overlay) {
+            try {
+                // 使用統一的測試模式啟用函數
+                const enableTest = window.enableTestMode || enableTestMode;
+                if (typeof enableTest === 'function') {
+                    console.log('[位置驗證] 使用 enableTestMode 函數');
+                    enableTest(taskKey);
+                } else {
+                    console.warn('[位置驗證] enableTestMode 函數不存在，手動設置');
+                    // 手動設置測試模式
+                    sessionStorage.setItem(`test_mode_${taskKey}`, 'true');
+                    const verificationData = {
+                        taskKey,
+                        timestamp: Date.now(),
+                        expiresAt: Date.now() + 5 * 60 * 1000,
+                        isTestMode: true
+                    };
+                    sessionStorage.setItem(`location_verified_${taskKey}`, JSON.stringify(verificationData));
+                }
+                
+                // 驗證設置是否成功
+                const testModeSet = sessionStorage.getItem(`test_mode_${taskKey}`) === 'true';
+                console.log('[位置驗證] 測試模式設置結果:', testModeSet);
+                
+                if (testModeSet) {
+                    overlay.remove();
+                    console.log('[位置驗證] 重新載入頁面');
+                    window.location.reload();
+                } else {
+                    throw new Error('測試模式設置失敗');
+                }
+            } catch (err) {
+                console.error('[位置驗證] 啟用測試模式失敗:', err);
+                const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
+                const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
+                alert((t.testModeFailed || 'Failed to enable test mode. Error: ') + err.message);
+            }
+        };
+        
+        // 備用：直接綁定事件監聽器（確保按鈕可點擊）
         setTimeout(() => {
+            console.log('[位置驗證] 備用綁定錯誤狀態按鈕事件');
+            
             // 重新檢查按鈕
             const retryBtn = document.getElementById('location-check-retry-error');
             if (retryBtn) {
-                // 移除舊的事件監聽器（如果有的話）
-                const newRetryBtn = retryBtn.cloneNode(true);
-                retryBtn.parentNode.replaceChild(newRetryBtn, retryBtn);
-                
-                newRetryBtn.addEventListener('click', function(e) {
+                console.log('[位置驗證] 找到重試按鈕（備用）');
+                retryBtn.onclick = function(e) {
                     e.preventDefault();
                     e.stopPropagation();
-                    console.log('[位置驗證] 點擊重試按鈕，taskKey:', taskKey);
+                    console.log('[位置驗證] 點擊重試按鈕（備用 onclick），taskKey:', taskKey);
                     try {
                         overlay.remove();
                         initLocationCheck(taskKey);
@@ -785,22 +804,19 @@ async function initLocationCheck(taskKey) {
                         const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
                         alert(t.retryFailed || 'Retry failed. Please try again');
                     }
-                });
+                };
             } else {
-                console.warn('[位置驗證] 找不到重試按鈕');
+                console.warn('[位置驗證] 找不到重試按鈕（備用）');
             }
 
             // 返回首頁按鈕
             const backBtn = document.getElementById('location-check-back-error');
             if (backBtn) {
-                // 移除舊的事件監聽器（如果有的話）
-                const newBackBtn = backBtn.cloneNode(true);
-                backBtn.parentNode.replaceChild(newBackBtn, backBtn);
-                
-                newBackBtn.addEventListener('click', function(e) {
+                console.log('[位置驗證] 找到返回首頁按鈕（備用）');
+                backBtn.onclick = function(e) {
                     e.preventDefault();
                     e.stopPropagation();
-                    console.log('[位置驗證] 點擊返回首頁按鈕');
+                    console.log('[位置驗證] 點擊返回首頁按鈕（備用 onclick）');
                     try {
                         window.location.href = 'index.html';
                     } catch (err) {
@@ -809,61 +825,23 @@ async function initLocationCheck(taskKey) {
                         const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
                         alert(t.backHomeFailed || 'Failed to return home. Please return manually');
                     }
-                });
+                };
             } else {
-                console.warn('[位置驗證] 找不到返回首頁按鈕');
+                console.warn('[位置驗證] 找不到返回首頁按鈕（備用）');
             }
 
             // 測試模式按鈕
             const testBtn = document.getElementById('location-check-test-mode-error');
             if (testBtn) {
-                // 移除舊的事件監聽器（如果有的話）
-                const newTestBtn = testBtn.cloneNode(true);
-                testBtn.parentNode.replaceChild(newTestBtn, testBtn);
-                
-                newTestBtn.addEventListener('click', function(e) {
+                console.log('[位置驗證] 找到測試模式按鈕（備用）');
+                testBtn.onclick = function(e) {
                     e.preventDefault();
                     e.stopPropagation();
-                    console.log('[位置驗證] 錯誤頁面點擊測試模式按鈕，taskKey:', taskKey);
-                    try {
-                        // 使用統一的測試模式啟用函數
-                        const enableTest = window.enableTestMode || enableTestMode;
-                        if (typeof enableTest === 'function') {
-                            console.log('[位置驗證] 使用 enableTestMode 函數');
-                            enableTest(taskKey);
-                        } else {
-                            console.warn('[位置驗證] enableTestMode 函數不存在，手動設置');
-                            // 手動設置測試模式
-                            sessionStorage.setItem(`test_mode_${taskKey}`, 'true');
-                            const verificationData = {
-                                taskKey,
-                                timestamp: Date.now(),
-                                expiresAt: Date.now() + 5 * 60 * 1000,
-                                isTestMode: true
-                            };
-                            sessionStorage.setItem(`location_verified_${taskKey}`, JSON.stringify(verificationData));
-                        }
-                        
-                        // 驗證設置是否成功
-                        const testModeSet = sessionStorage.getItem(`test_mode_${taskKey}`) === 'true';
-                        console.log('[位置驗證] 測試模式設置結果:', testModeSet);
-                        
-                        if (testModeSet) {
-                            overlay.remove();
-                            console.log('[位置驗證] 重新載入頁面');
-                            window.location.reload();
-                        } else {
-                            throw new Error('測試模式設置失敗');
-                        }
-                    } catch (err) {
-                        console.error('[位置驗證] 啟用測試模式失敗:', err);
-                        const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
-                        const t = window.I18n ? window.I18n.getTranslation(currentLang) : {};
-                        alert((t.testModeFailed || 'Failed to enable test mode. Error: ') + err.message);
-                    }
-                });
+                    console.log('[位置驗證] 錯誤頁面點擊測試模式按鈕（備用 onclick），taskKey:', taskKey);
+                    handleErrorTestModeClick(e, taskKey, overlay);
+                };
             } else {
-                console.warn('[位置驗證] 找不到測試模式按鈕');
+                console.warn('[位置驗證] 找不到測試模式按鈕（備用）');
             }
         }, 100);
     }
