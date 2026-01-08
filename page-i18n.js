@@ -5,6 +5,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.I18n) {
         const currentLang = window.I18n.getCurrentLanguage();
         window.I18n.applyTranslations(currentLang);
+        
+        // 手機版可能需要延遲執行，確保所有元素都已創建
+        if (window.innerWidth <= 768) {
+            setTimeout(() => {
+                window.I18n.applyTranslations(currentLang);
+            }, 100);
+            setTimeout(() => {
+                window.I18n.applyTranslations(currentLang);
+            }, 500);
+        }
     }
     
     // 語言選擇器邏輯
@@ -38,6 +48,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.I18n.setLanguage(lang);
                 updateLanguageDisplay();
                 langDropdown.style.display = 'none';
+                
+                // 手機版可能需要延遲重新應用翻譯
+                if (window.innerWidth <= 768) {
+                    setTimeout(() => {
+                        window.I18n.applyTranslations(lang);
+                    }, 100);
+                    setTimeout(() => {
+                        window.I18n.applyTranslations(lang);
+                    }, 500);
+                }
             }
         });
     });
@@ -46,6 +66,24 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', () => {
         if (langDropdown) {
             langDropdown.style.display = 'none';
+        }
+    });
+    
+    // 監聽語言變更事件（確保動態創建的元素也能被翻譯）
+    window.addEventListener('languageChanged', (e) => {
+        if (window.I18n) {
+            const lang = e.detail?.language || window.I18n.getCurrentLanguage();
+            window.I18n.applyTranslations(lang);
+            
+            // 手機版可能需要額外的延遲
+            if (window.innerWidth <= 768) {
+                setTimeout(() => {
+                    window.I18n.applyTranslations(lang);
+                }, 100);
+                setTimeout(() => {
+                    window.I18n.applyTranslations(lang);
+                }, 500);
+            }
         }
     });
     
