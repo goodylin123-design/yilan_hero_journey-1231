@@ -569,26 +569,37 @@ function enableTestMode(taskKey) {
 
 // 阻止任務內容顯示（如果未驗證）
 function blockTaskContent(taskKey) {
+    // 先清除可能存在的舊遮罩
+    const existingOverlay = document.getElementById('task-block-overlay');
+    if (existingOverlay) {
+        existingOverlay.remove();
+    }
+    
     const mainContent = document.getElementById('main-content');
-    if (!mainContent) return;
+    if (!mainContent) {
+        console.warn('main-content element not found, retrying after delay...');
+        setTimeout(() => blockTaskContent(taskKey), 100);
+        return;
+    }
 
     // 創建阻止遮罩
     const blockOverlay = document.createElement('div');
     blockOverlay.id = 'task-block-overlay';
     blockOverlay.style.cssText = `
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        z-index: 9999;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-        box-sizing: border-box;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        background: rgba(255, 255, 255, 0.98) !important;
+        backdrop-filter: blur(10px) !important;
+        z-index: 999999 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 20px !important;
+        box-sizing: border-box !important;
+        margin: 0 !important;
     `;
 
     const taskLocation = TASK_LOCATIONS[taskKey];
@@ -629,8 +640,8 @@ function blockTaskContent(taskKey) {
         </div>
     `;
 
-    mainContent.style.position = 'relative';
-    mainContent.appendChild(blockOverlay);
+    // 直接添加到 body，確保遮罩在最上層
+    document.body.appendChild(blockOverlay);
 
     document.getElementById('start-location-check')?.addEventListener('click', () => {
         blockOverlay.remove();

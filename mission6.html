@@ -168,7 +168,9 @@
         document.addEventListener('DOMContentLoaded', () => {
             const taskKey = 'mission6';
             if (TaskProgress && TaskProgress.blockUnlockedTask(taskKey)) return;
+            console.log('檢查位置驗證，taskKey:', taskKey, 'isLocationVerified:', isLocationVerified(taskKey));
             if (!isLocationVerified(taskKey)) {
+                console.log('位置未驗證，顯示遮罩');
                 blockTaskContent(taskKey);
             } else {
                 console.log('位置驗證通過，任務已解鎖');
