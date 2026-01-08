@@ -50,24 +50,87 @@
                 <p class="mission-intro" data-i18n="mission4PageIntro">在壯圍沙丘生態園區，旅行者可以坐在沙丘上，用雙手觸摸沙粒，感受沙的溫度與質地。AI 會引導你思考：大地如何支撐著我們？在你的生命中，誰是你的「大地」？旅行者可以用手指在沙上畫畫，拍下沙畫並保存。</p>
                 
                 <div class="mission-content">
-                    <div class="ai-guide-area">
-                        <div class="ai-avatar">🌍</div>
-                        <div class="ai-message">
-                            <p data-i18n="mission4AIMessage">請找一個可以坐下的地方，讓身體放鬆。用雙手輕輕觸摸腳下的沙，感受它的溫度、質地、顆粒感。閉上眼睛，想像這片大地如何承載著你，就像它承載著無數生命一樣。在你的生命中，有誰像大地一樣，默默地支撐著你？他們給了你什麼樣的支持？當你準備好，可以在沙上用手指畫一個圖案，或寫下一句話，表達你對這些「大地」的感謝。</p>
+                    <div class="whisper-container">
+                        <!-- AI 引導區域 -->
+                        <div class="ai-guide-area">
+                            <div class="ai-avatar">🌍</div>
+                            <div class="ai-message" id="ai-message">
+                                <p data-i18n="mission4AIMessage">準備好了嗎？點擊「開始引導」來開始這段內在旅程。</p>
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="reflection-area">
-                        <h3 data-i18n="reflectionPractice">💭 反思練習</h3>
-                        <textarea 
-                            id="mission4-reflection" 
-                            data-i18n-placeholder="reflectionPlaceholder"
-                            placeholder="請分享：在你的生命中，誰是你的「大地」？他們給了你什麼樣的支持？"
-                            rows="6"
-                        ></textarea>
-                        <button type="button" class="btn-submit" id="btn-submit-reflection">
-                            <span data-i18n="btnSaveReflection">💾 保存反思</span>
-                        </button>
+                        
+                        <!-- 控制按鈕區 -->
+                        <div class="whisper-controls">
+                            <button type="button" class="btn-whisper btn-start" id="btn-start-guide">
+                                <span data-i18n="btnStartGuide">🎤 開始引導</span>
+                            </button>
+                            <button type="button" class="btn-whisper btn-stop" id="btn-stop-guide" style="display: none;">
+                                <span data-i18n="btnStopGuide">⏸️ 暫停</span>
+                            </button>
+                        </div>
+                        
+                        <!-- 使用者回應區域 -->
+                        <div class="user-response-area" id="user-response-area" style="display: none;">
+                            <h3 data-i18n="yourFeelings">你的感受</h3>
+                            <div class="input-methods">
+                                <button type="button" class="btn-input-method active" id="btn-voice-input" data-method="voice">
+                                    <span data-i18n="voiceInput">🎤 語音輸入</span>
+                                </button>
+                                <button type="button" class="btn-input-method" id="btn-text-input" data-method="text">
+                                    <span data-i18n="textInput">✍️ 文字輸入</span>
+                                </button>
+                            </div>
+                            
+                            <!-- 語音輸入介面 -->
+                            <div class="voice-input-panel" id="voice-input-panel">
+                                <div class="recording-indicator" id="recording-indicator" style="display: none;">
+                                    <span class="recording-dot"></span>
+                                    <span data-i18n="listening">正在聆聽...</span>
+                                </div>
+                                <button type="button" class="btn-record" id="btn-record">
+                                    <span data-i18n="btnStartSpeaking">🎙️ 開始說話</span>
+                                </button>
+                                <div class="transcript-display" id="transcript-display"></div>
+                            </div>
+                            
+                            <!-- 文字輸入介面 -->
+                            <div class="text-input-panel" id="text-input-panel" style="display: none;">
+                                <textarea 
+                                    id="text-response" 
+                                    data-i18n-placeholder="textResponsePlaceholder"
+                                    placeholder="請分享：在你的生命中，誰是你的「大地」？他們給了你什麼樣的支持？"
+                                    rows="4"
+                                ></textarea>
+                            </div>
+                            
+                            <button type="button" class="btn-submit" id="btn-submit-response" style="display: none;">
+                                <span data-i18n="btnSubmitResponse">💭 送出感受</span>
+                            </button>
+                        </div>
+                        
+                        <!-- AI 反饋區域 -->
+                        <div class="ai-feedback-area" id="ai-feedback-area" style="display: none;">
+                            <div class="feedback-content" id="feedback-content"></div>
+                        </div>
+                        
+                        <!-- 錄音與保存區域 -->
+                        <div class="recording-save-area" id="recording-save-area" style="display: none;">
+                            <h3 data-i18n="recordFeelings">📝 記錄你的感受</h3>
+                            <div class="recording-controls">
+                                <button type="button" class="btn-record-feeling" id="btn-record-feeling">
+                                    <span data-i18n="btnRecordFeeling">🎙️ 錄下感受</span>
+                                </button>
+                                <div class="recording-status" id="recording-status"></div>
+                            </div>
+                            <div class="save-controls">
+                                <button type="button" class="btn-save" id="btn-save-note">
+                                    <span data-i18n="btnSaveNote">💾 保存至心靈筆記</span>
+                                </button>
+                                <button type="button" class="btn-view-notes" id="btn-view-notes">
+                                    <span data-i18n="btnViewNotes">📖 查看心靈筆記</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -84,6 +147,15 @@
         </main>
     </div>
     
+    <!-- 心靈筆記模態視窗 -->
+    <div class="modal" id="notes-modal" style="display: none;">
+        <div class="modal-content">
+            <span class="modal-close" id="modal-close">&times;</span>
+            <h2 data-i18n="mindNotes">📖 心靈筆記</h2>
+            <div class="notes-list" id="notes-list"></div>
+        </div>
+    </div>
+    
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
     <script src="i18n.js"></script>
     <script src="task-progress.js"></script>
@@ -91,6 +163,7 @@
     <script src="esg-stats.js"></script>
     <script src="traveler-store.js"></script>
     <script src="task-script.js"></script>
+    <script src="ai-dialogue.js"></script>
     <script src="mission4-script.js"></script>
     <script src="index-i18n.js"></script>
     <script>
@@ -99,7 +172,7 @@
             const taskKey = 'mission4';
             
             // 先檢查任務是否解鎖
-            if (TaskProgress && TaskProgress.blockUnlockedTask(taskKey)) {
+            if (TaskProgress.blockUnlockedTask(taskKey)) {
                 return; // 任務未解鎖，已顯示阻止畫面
             }
             
@@ -115,4 +188,3 @@
     </script>
 </body>
 </html>
-
