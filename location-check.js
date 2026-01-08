@@ -252,14 +252,16 @@ function showLocationCheckUI(taskKey) {
 
     // 創建檢查中提示
     const checkingCard = document.createElement('div');
+    const isMobile = window.innerWidth <= 768;
     checkingCard.style.cssText = `
         background: white;
-        border-radius: 20px;
-        padding: 30px;
+        border-radius: ${isMobile ? '16px' : '20px'};
+        padding: ${isMobile ? '20px' : '30px'};
         max-width: 400px;
         width: 100%;
         text-align: center;
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        margin: ${isMobile ? '10px' : '0'};
     `;
     // 取得當前語言和翻譯
     const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
@@ -267,9 +269,9 @@ function showLocationCheckUI(taskKey) {
     const locationName = getTranslatedLocationName(taskKey, currentLang);
     
     checkingCard.innerHTML = `
-        <div style="font-size: 3rem; margin-bottom: 20px;">📍</div>
-        <h2 style="color: #0F172A; margin-bottom: 15px;">${t.locationChecking || 'Checking location...'}</h2>
-        <p style="color: #475569; margin-bottom: 20px;">${(t.locationCheckingDesc || 'Confirming if you are near {location}').replace(/{location}/g, locationName)}</p>
+        <div style="font-size: ${isMobile ? '2.5rem' : '3rem'}; margin-bottom: ${isMobile ? '15px' : '20px'};">📍</div>
+        <h2 style="color: #0F172A; margin-bottom: ${isMobile ? '12px' : '15px'}; font-size: ${isMobile ? '1.2rem' : '1.5rem'}; line-height: 1.3;">${t.locationChecking || 'Checking location...'}</h2>
+        <p style="color: #475569; margin-bottom: ${isMobile ? '15px' : '20px'}; font-size: ${isMobile ? '0.9rem' : '1rem'}; line-height: 1.5;">${(t.locationCheckingDesc || 'Confirming if you are near {location}').replace(/{location}/g, locationName)}</p>
         <div class="loading-spinner" style="
             width: 40px;
             height: 40px;
@@ -313,33 +315,40 @@ function showLocationResult(overlay, result, taskKey) {
     overlay.innerHTML = '';
 
     const resultCard = document.createElement('div');
+    const isMobile = window.innerWidth <= 768;
     resultCard.style.cssText = `
         background: white;
-        border-radius: 20px;
-        padding: 30px;
+        border-radius: ${isMobile ? '16px' : '20px'};
+        padding: ${isMobile ? '20px' : '30px'};
         max-width: 400px;
         width: 100%;
         text-align: center;
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        margin: ${isMobile ? '10px' : '0'};
     `;
     
     if (result.isInRange) {
         // 在範圍內 - 允許進入
+        const isMobile = window.innerWidth <= 768;
         resultCard.innerHTML = `
-            <div style="font-size: 4rem; margin-bottom: 20px;">✅</div>
-            <h2 style="color: #10B981; margin-bottom: 15px;">${t.locationVerifySuccess || 'Location verification successful!'}</h2>
-            <p style="color: #475569; margin-bottom: 10px;">${(t.locationDistance || 'You are about {distance} meters from {location}').replace('{location}', locationName).replace('{distance}', Math.round(result.distance))}</p>
-            <p style="color: #64748B; font-size: 0.9rem; margin-bottom: 25px;">${t.locationWelcome || 'Welcome to start your mission'}</p>
+            <div style="font-size: ${isMobile ? '3rem' : '4rem'}; margin-bottom: ${isMobile ? '15px' : '20px'};">✅</div>
+            <h2 style="color: #10B981; margin-bottom: ${isMobile ? '12px' : '15px'}; font-size: ${isMobile ? '1.2rem' : '1.5rem'}; line-height: 1.3;">${t.locationVerifySuccess || 'Location verification successful!'}</h2>
+            <p style="color: #475569; margin-bottom: ${isMobile ? '8px' : '10px'}; font-size: ${isMobile ? '0.9rem' : '1rem'}; line-height: 1.5;">${(t.locationDistance || 'You are about {distance} meters from {location}').replace('{location}', locationName).replace('{distance}', Math.round(result.distance))}</p>
+            <p style="color: #64748B; font-size: ${isMobile ? '0.85rem' : '0.9rem'}; margin-bottom: ${isMobile ? '20px' : '25px'}; line-height: 1.4;">${t.locationWelcome || 'Welcome to start your mission'}</p>
             <button id="location-check-close" style="
-                padding: 12px 30px;
+                padding: ${isMobile ? '14px 24px' : '12px 30px'};
                 background: linear-gradient(135deg, #10B981, #059669);
                 color: white;
                 border: none;
-                border-radius: 25px;
-                font-size: 1rem;
+                border-radius: ${isMobile ? '20px' : '25px'};
+                font-size: ${isMobile ? '0.95rem' : '1rem'};
                 font-weight: 600;
                 cursor: pointer;
                 transition: transform 0.3s ease;
+                width: 100%;
+                min-height: ${isMobile ? '48px' : '44px'};
+                touch-action: manipulation;
+                -webkit-tap-highlight-color: transparent;
             ">${t.btnStartTask || 'Start Mission'}</button>
         `;
 
@@ -352,11 +361,12 @@ function showLocationResult(overlay, result, taskKey) {
         sessionStorage.setItem(`location_verified_${taskKey}`, JSON.stringify(verificationData));
     } else {
         // 不在範圍內 - 顯示提示
+        const isMobile = window.innerWidth <= 768;
         resultCard.innerHTML = `
-            <div style="font-size: 4rem; margin-bottom: 20px;">📍</div>
-            <h2 style="color: #EF4444; margin-bottom: 15px;">${t.locationVerifyFailed || 'Location verification failed'}</h2>
-            <p style="color: #475569; margin-bottom: 10px;">${(t.locationDistance || 'You are about {distance} meters from {location}').replace('{location}', locationName).replace('{distance}', Math.round(result.distance))}</p>
-            <p style="color: #64748B; font-size: 0.9rem; margin-bottom: 15px;">${(t.locationNeedWithin || 'Need to be within 100 meters of {location} to start the mission').replace(/{location}/g, locationName).replace('50', '100')}</p>
+            <div style="font-size: ${isMobile ? '3rem' : '4rem'}; margin-bottom: ${isMobile ? '15px' : '20px'};">📍</div>
+            <h2 style="color: #EF4444; margin-bottom: ${isMobile ? '12px' : '15px'}; font-size: ${isMobile ? '1.2rem' : '1.5rem'}; line-height: 1.3;">${t.locationVerifyFailed || 'Location verification failed'}</h2>
+            <p style="color: #475569; margin-bottom: ${isMobile ? '8px' : '10px'}; font-size: ${isMobile ? '0.9rem' : '1rem'}; line-height: 1.5;">${(t.locationDistance || 'You are about {distance} meters from {location}').replace('{location}', locationName).replace('{distance}', Math.round(result.distance))}</p>
+            <p style="color: #64748B; font-size: ${isMobile ? '0.85rem' : '0.9rem'}; margin-bottom: ${isMobile ? '12px' : '15px'}; line-height: 1.4;">${(t.locationNeedWithin || 'Need to be within 100 meters of {location} to start the mission').replace(/{location}/g, locationName).replace('50', '100')}</p>
             <div style="
                 background: #FEF3C7;
                 border-left: 4px solid #F59E0B;
@@ -369,22 +379,25 @@ function showLocationResult(overlay, result, taskKey) {
                     <strong>${t.locationTip || 'Tip:'}</strong>${(t.locationTipDesc || 'Please go near {description} and reload the page.').replace(/{description}/g, locationDescription)}
                 </p>
             </div>
-            <div style="margin-bottom: 15px;">
+            <div style="margin-bottom: ${isMobile ? '12px' : '15px'};">
                 <button id="location-check-test-mode" type="button" style="
-                    padding: 12px 30px;
+                    padding: ${isMobile ? '14px 24px' : '12px 30px'};
                     background: linear-gradient(135deg, #10B981, #059669);
                     color: white;
                     border: none;
-                    border-radius: 25px;
-                    font-size: 1rem;
+                    border-radius: ${isMobile ? '20px' : '25px'};
+                    font-size: ${isMobile ? '0.95rem' : '1rem'};
                     font-weight: 600;
                     cursor: pointer;
                     width: 100%;
-                    margin-bottom: 10px;
+                    margin-bottom: ${isMobile ? '8px' : '10px'};
                     transition: transform 0.3s ease;
                     pointer-events: auto !important;
                     position: relative;
                     z-index: 10;
+                    min-height: ${isMobile ? '48px' : '44px'};
+                    touch-action: manipulation;
+                    -webkit-tap-highlight-color: transparent;
                 ">${t.btnTestMode || '🧪 Experience Test Mode'}</button>
                 <p style="color: #64748B; font-size: 0.85rem; margin: 0;">${t.testModeDesc || '(Skip location verification for testing)'}</p>
             </div>
@@ -460,7 +473,7 @@ function showLocationResult(overlay, result, taskKey) {
             retryBtn.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                console.log('[位置驗證] 點擊重新檢查按鈕（addEventListener）');
+                console.log('[位置驗證] 點擊重新檢查按鈕（oaddEventListener）');
                 overlay.remove();
                 initLocationCheck(taskKey);
             }, { once: false });
@@ -967,39 +980,46 @@ function blockTaskContent(taskKey) {
     const btnTestText = t.btnTestMode || '🧪 Experience Test Mode';
     const testDescText = t.testModeDesc || '(Skip location verification for testing)';
     
+    const isMobile = window.innerWidth <= 768;
     blockOverlay.innerHTML = `
-        <div style="text-align: center; max-width: 400px; width: 100%; padding: 20px;">
-            <div style="font-size: 4rem; margin-bottom: 20px;">🔒</div>
-            <h2 style="color: #0F172A; margin-bottom: 15px; font-size: 1.5rem; font-weight: 700;">${titleText}</h2>
-            <p style="color: #475569; margin-bottom: 25px; font-size: 1rem; line-height: 1.6;">${descText}</p>
-            <div style="display: flex; flex-direction: column; gap: 15px; width: 100%;">
+        <div style="text-align: center; max-width: 400px; width: 100%; padding: ${isMobile ? '15px' : '20px'};">
+            <div style="font-size: ${isMobile ? '3rem' : '4rem'}; margin-bottom: ${isMobile ? '15px' : '20px'};">🔒</div>
+            <h2 style="color: #0F172A; margin-bottom: ${isMobile ? '12px' : '15px'}; font-size: ${isMobile ? '1.2rem' : '1.5rem'}; font-weight: 700; line-height: 1.3;">${titleText}</h2>
+            <p style="color: #475569; margin-bottom: ${isMobile ? '20px' : '25px'}; font-size: ${isMobile ? '0.9rem' : '1rem'}; line-height: 1.6;">${descText}</p>
+            <div style="display: flex; flex-direction: column; gap: ${isMobile ? '12px' : '15px'}; width: 100%;">
                 <button id="start-location-check" type="button" style="
-                    padding: 15px 30px;
+                    padding: ${isMobile ? '14px 24px' : '15px 30px'};
                     background: linear-gradient(135deg, #3B82F6, #2563EB);
                     color: white;
                     border: none;
-                    border-radius: 25px;
-                    font-size: 1rem;
+                    border-radius: ${isMobile ? '20px' : '25px'};
+                    font-size: ${isMobile ? '0.95rem' : '1rem'};
                     font-weight: 600;
                     cursor: pointer;
                     transition: all 0.3s ease;
                     box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
                     width: 100%;
+                    min-height: ${isMobile ? '48px' : '44px'};
+                    touch-action: manipulation;
+                    -webkit-tap-highlight-color: transparent;
                 ">${btnCheckText}</button>
                 <button id="start-test-mode" type="button" style="
-                    padding: 15px 30px;
+                    padding: ${isMobile ? '14px 24px' : '15px 30px'};
                     background: linear-gradient(135deg, #10B981, #059669);
                     color: white;
                     border: none;
-                    border-radius: 25px;
-                    font-size: 1rem;
+                    border-radius: ${isMobile ? '20px' : '25px'};
+                    font-size: ${isMobile ? '0.95rem' : '1rem'};
                     font-weight: 600;
                     cursor: pointer;
                     transition: all 0.3s ease;
                     box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
                     width: 100%;
+                    min-height: ${isMobile ? '48px' : '44px'};
+                    touch-action: manipulation;
+                    -webkit-tap-highlight-color: transparent;
                 ">${btnTestText}</button>
-                <p style="color: #64748B; font-size: 0.85rem; margin: 0; text-align: center;">${testDescText}</p>
+                <p style="color: #64748B; font-size: ${isMobile ? '0.8rem' : '0.85rem'}; margin: 0; text-align: center; line-height: 1.4;">${testDescText}</p>
             </div>
         </div>
     `;
