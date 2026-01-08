@@ -178,22 +178,44 @@
     <script src="index-i18n.js"></script>
     <script>
         // 頁面載入時檢查任務解鎖和位置
-        document.addEventListener('DOMContentLoaded', () => {
+        function initLocationCheckForRain() {
             const taskKey = 'rain';
             
+            // 確保函數已載入，如果沒有則延遲重試
+            if (typeof window.isLocationVerified === 'undefined' || typeof window.blockTaskContent === 'undefined') {
+                console.warn('位置檢測功能未載入，500ms 後重試...');
+                setTimeout(initLocationCheckForRain, 500);
+                return;
+            }
+            
             // 先檢查任務是否解鎖
-            if (TaskProgress.blockUnlockedTask(taskKey)) {
+            if (typeof TaskProgress !== 'undefined' && TaskProgress.blockUnlockedTask && TaskProgress.blockUnlockedTask(taskKey)) {
                 return; // 任務未解鎖，已顯示阻止畫面
             }
             
             // 檢查位置驗證（5 分鐘內有效）
-            if (!isLocationVerified(taskKey)) {
+            console.log('檢查位置驗證，taskKey:', taskKey, 'isLocationVerified:', window.isLocationVerified(taskKey));
+            if (!window.isLocationVerified(taskKey)) {
                 // 阻止任務內容顯示
-                blockTaskContent(taskKey);
+                console.log('位置未驗證，顯示遮罩');
+                window.blockTaskContent(taskKey);
             } else {
                 // 已驗證，允許使用任務
                 console.log('位置驗證通過，任務已解鎖');
             }
+        }
+        
+        // 使用多種方式確保腳本載入完成
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initLocationCheckForRain);
+        } else {
+            // DOM 已經載入完成
+            setTimeout(initLocationCheckForRain, 100);
+        }
+        
+        // 備用：在 window.load 事件後也執行一次
+        window.addEventListener('load', () => {
+            setTimeout(initLocationCheckForRain, 200);
         });
     </script>
 </body>

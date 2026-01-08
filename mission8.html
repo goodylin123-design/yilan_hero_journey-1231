@@ -167,10 +167,20 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const taskKey = 'mission8';
-            if (TaskProgress && TaskProgress.blockUnlockedTask(taskKey)) return;
+            
+            // 先檢查任務是否解鎖
+            if (TaskProgress && TaskProgress.blockUnlockedTask(taskKey)) {
+                return; // 任務未解鎖，已顯示阻止畫面
+            }
+            
+            // 檢查位置驗證（5 分鐘內有效）
+            console.log('檢查位置驗證，taskKey:', taskKey, 'isLocationVerified:', isLocationVerified(taskKey));
             if (!isLocationVerified(taskKey)) {
+                // 阻止任務內容顯示
+                console.log('位置未驗證，顯示遮罩');
                 blockTaskContent(taskKey);
             } else {
+                // 已驗證，允許使用任務
                 console.log('位置驗證通過，任務已解鎖');
             }
         });
