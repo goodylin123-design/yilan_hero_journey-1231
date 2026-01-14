@@ -4,372 +4,1170 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="" id="meta-description">
-    <title id="page-title">🌊 擺渡蘭陽英雄之旅</title>
+    <title id="page-title">2026年壯圍沙丘地景藝術生活節節目表</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="i18n.js"></script>
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+        
+        @keyframes wave {
+            0%, 100% { transform: translateX(0) translateY(0); }
+            50% { transform: translateX(-25px) translateY(-10px); }
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+        
+        .festival-landing {
+            min-height: 100vh;
+            background: 
+                /* 雲朵效果 */
+                radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 15%),
+                radial-gradient(circle at 60% 30%, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0) 12%),
+                radial-gradient(circle at 80% 15%, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0) 10%),
+                /* 明亮藍天 */
+                linear-gradient(180deg,
+                    #87CEEB 0%,      /* 明亮天空藍 */
+                    #4A90E2 30%,    /* 海洋藍 */
+                    #1E90FF 60%,    /* 天藍色 */
+                    #4682B4 85%,    /* 鋼藍色 */
+                    #2F4F4F 100%    /* 深灰藍 */
+                );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* 雲朵動畫 */
+        @keyframes cloudMove {
+            0% { transform: translateX(0) translateY(0); }
+            50% { transform: translateX(20px) translateY(-10px); }
+            100% { transform: translateX(0) translateY(0); }
+        }
+        
+        .cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 50px;
+            opacity: 0.8;
+            z-index: 0;
+            animation: cloudMove 20s ease-in-out infinite;
+        }
+        
+        .cloud::before,
+        .cloud::after {
+            content: '';
+            position: absolute;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 50px;
+        }
+        
+        .cloud1 {
+            width: 120px;
+            height: 40px;
+            top: 15%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .cloud1::before {
+            width: 60px;
+            height: 60px;
+            top: -30px;
+            left: 10px;
+        }
+        
+        .cloud1::after {
+            width: 80px;
+            height: 80px;
+            top: -40px;
+            right: 10px;
+        }
+        
+        .cloud2 {
+            width: 150px;
+            height: 50px;
+            top: 25%;
+            right: 15%;
+            animation-delay: -5s;
+        }
+        
+        .cloud2::before {
+            width: 70px;
+            height: 70px;
+            top: -35px;
+            left: 20px;
+        }
+        
+        .cloud2::after {
+            width: 90px;
+            height: 90px;
+            top: -45px;
+            right: 20px;
+        }
+        
+        .cloud3 {
+            width: 100px;
+            height: 35px;
+            top: 8%;
+            left: 50%;
+            animation-delay: -10s;
+        }
+        
+        .cloud3::before {
+            width: 50px;
+            height: 50px;
+            top: -25px;
+            left: 15px;
+        }
+        
+        .cloud3::after {
+            width: 70px;
+            height: 70px;
+            top: -35px;
+            right: 15px;
+        }
+        
+        /* 水面反射效果 */
+        .water-reflection {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 35vh;
+            background: linear-gradient(180deg,
+                rgba(70, 130, 180, 0.3) 0%,
+                rgba(95, 158, 160, 0.4) 30%,
+                rgba(139, 176, 174, 0.5) 60%,
+                rgba(160, 196, 196, 0.6) 100%
+            );
+            z-index: 0;
+            opacity: 0.7;
+            backdrop-filter: blur(2px);
+        }
+        
+        /* 水面波紋 */
+        .water-reflection::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 200"><path d="M0,100 Q300,80 600,100 T1200,100" stroke="rgba(255,255,255,0.1)" stroke-width="2" fill="none"/><path d="M0,120 Q300,100 600,120 T1200,120" stroke="rgba(255,255,255,0.08)" stroke-width="2" fill="none"/></svg>') repeat-x;
+            background-size: 1200px 200px;
+            animation: wave 10s linear infinite;
+            opacity: 0.5;
+        }
+        
+        /* 沙丘/草地背景 */
+        .festival-landing::before {
+            content: '';
+            position: absolute;
+            bottom: 35vh;
+            left: -15%;
+            width: 150%;
+            height: 40vh;
+            background: linear-gradient(180deg,
+                rgba(34, 139, 34, 0.4) 0%,      /* 森林綠 */
+                rgba(50, 205, 50, 0.5) 20%,     /* 酸橙綠 */
+                rgba(144, 238, 144, 0.6) 40%,   /* 淺綠色 */
+                rgba(250, 232, 186, 0.7) 60%,   /* 沙色 */
+                rgba(234, 179, 113, 0.8) 80%,   /* 沙金色 */
+                rgba(217, 119, 6, 0.6) 100%     /* 深沙色 */
+            );
+            border-radius: 70% 30% 0 0;
+            z-index: 0;
+            filter: drop-shadow(0 -6px 18px rgba(15, 23, 42, 0.25));
+        }
+        
+        /* 第二層草地/沙丘 */
+        .festival-landing::after {
+            content: '';
+            position: absolute;
+            bottom: 35vh;
+            left: -5%;
+            width: 130%;
+            height: 35vh;
+            background: linear-gradient(180deg,
+                rgba(50, 205, 50, 0.3) 0%,
+                rgba(144, 238, 144, 0.4) 30%,
+                rgba(250, 232, 186, 0.5) 60%,
+                rgba(234, 179, 113, 0.6) 100%
+            );
+            border-radius: 60% 40% 0 0;
+            z-index: 0;
+            opacity: 0.9;
+            transform: translateY(3vh);
+        }
+        
+        /* 建築裝飾元素 */
+        .building-decoration {
+            position: absolute;
+            bottom: 38vh;
+            right: 5%;
+            width: 120px;
+            height: 80px;
+            background: linear-gradient(135deg,
+                rgba(30, 30, 30, 0.6) 0%,
+                rgba(50, 50, 50, 0.6) 100%
+            );
+            clip-path: polygon(0 100%, 0 40%, 20% 40%, 20% 20%, 40% 20%, 40% 40%, 60% 40%, 60% 20%, 80% 20%, 80% 40%, 100% 40%, 100% 100%);
+            z-index: 1;
+            opacity: 0.4;
+            filter: blur(1px);
+        }
+        
+        .building-decoration::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 30%;
+            background: rgba(34, 139, 34, 0.5);
+            clip-path: polygon(0 100%, 0 0, 100% 0, 100% 100%);
+        }
+        
+        /* 紀念碑裝飾 */
+        .monument-decoration {
+            position: absolute;
+            bottom: 38vh;
+            left: 8%;
+            width: 20px;
+            height: 100px;
+            background: linear-gradient(180deg,
+                rgba(200, 200, 200, 0.6) 0%,
+                rgba(180, 180, 180, 0.6) 100%
+            );
+            z-index: 1;
+            opacity: 0.4;
+            border-radius: 2px;
+            filter: blur(0.5px);
+        }
+        
+        .monument-decoration::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 8px;
+            background: rgba(50, 50, 50, 0.6);
+            border-radius: 50%;
+        }
+        
+        .festival-container {
+            max-width: 1000px;
+            width: 100%;
+            background: linear-gradient(145deg, 
+                rgba(255, 255, 255, 0.98) 0%,
+                rgba(240, 248, 255, 0.95) 30%,
+                rgba(250, 250, 250, 0.95) 50%,
+                rgba(240, 248, 255, 0.95) 70%,
+                rgba(255, 255, 255, 0.98) 100%
+            );
+            border-radius: 32px;
+            padding: 50px;
+            box-shadow: 
+                0 25px 80px rgba(0, 0, 0, 0.25),
+                0 0 0 1px rgba(255, 255, 255, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9),
+                0 0 100px rgba(70, 130, 180, 0.1);
+            position: relative;
+            z-index: 2;
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+        }
+        
+        /* 裝飾性光暈 */
+        .festival-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .festival-container::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -15%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(234, 179, 113, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+        
+        .festival-header {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+            padding-bottom: 30px;
+        }
+        
+        .festival-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, 
+                transparent 0%,
+                #667eea 20%,
+                #F59E0B 50%,
+                #667eea 80%,
+                transparent 100%
+            );
+            border-radius: 2px;
+        }
+        
+        .festival-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, 
+                #1E3A8A 0%,
+                #4A90E2 30%,
+                #F59E0B 60%,
+                #EA580C 100%
+            );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            line-height: 1.2;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .festival-title::before {
+            content: '🏜️';
+            position: absolute;
+            left: -60px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .festival-title::after {
+            content: '🌊';
+            position: absolute;
+            right: -60px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            animation: float 3s ease-in-out infinite reverse;
+        }
+        
+        .festival-subtitle {
+            font-size: 1.3rem;
+            color: #4A90E2;
+            margin-bottom: 25px;
+            font-weight: 600;
+            text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8);
+        }
+        
+        .festival-year {
+            display: inline-block;
+            background: linear-gradient(135deg, 
+                #F59E0B 0%,
+                #EA580C 50%,
+                #DC2626 100%
+            );
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            box-shadow: 
+                0 4px 15px rgba(245, 158, 11, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .program-schedule {
+            margin-bottom: 40px;
+        }
+        
+        .schedule-section {
+            margin-bottom: 40px;
+            position: relative;
+        }
+        
+        /* 不同場次使用不同顏色主題 */
+        .schedule-section:nth-child(1) .schedule-date {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            border-bottom-color: #667eea;
+        }
+        
+        .schedule-section:nth-child(1) .schedule-item {
+            border-left-color: #667eea;
+            background: linear-gradient(135deg, 
+                rgba(102, 126, 234, 0.05) 0%,
+                rgba(118, 75, 162, 0.05) 100%
+            );
+        }
+        
+        .schedule-section:nth-child(2) .schedule-date {
+            background: linear-gradient(135deg, #F59E0B 0%, #EA580C 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            border-bottom-color: #F59E0B;
+        }
+        
+        .schedule-section:nth-child(2) .schedule-item {
+            border-left-color: #F59E0B;
+            background: linear-gradient(135deg, 
+                rgba(245, 158, 11, 0.05) 0%,
+                rgba(234, 88, 12, 0.05) 100%
+            );
+        }
+        
+        .schedule-section:nth-child(3) .schedule-date {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            border-bottom-color: #10B981;
+        }
+        
+        .schedule-section:nth-child(3) .schedule-item {
+            border-left-color: #10B981;
+            background: linear-gradient(135deg, 
+                rgba(16, 185, 129, 0.05) 0%,
+                rgba(5, 150, 105, 0.05) 100%
+            );
+        }
+        
+        .schedule-section:nth-child(4) .schedule-date {
+            background: linear-gradient(135deg, #EC4899 0%, #DB2777 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            border-bottom-color: #EC4899;
+        }
+        
+        .schedule-section:nth-child(4) .schedule-item {
+            border-left-color: #EC4899;
+            background: linear-gradient(135deg, 
+                rgba(236, 72, 153, 0.05) 0%,
+                rgba(219, 39, 119, 0.05) 100%
+            );
+        }
+        
+        .schedule-date {
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 4px solid;
+            position: relative;
+            padding-left: 40px;
+        }
+        
+        .schedule-date::before {
+            content: '📅';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+        }
+        
+        .schedule-item {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.9) 0%,
+                rgba(254, 243, 199, 0.3) 100%
+            );
+            border-left: 5px solid;
+            padding: 25px;
+            margin-bottom: 18px;
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 2px 8px rgba(0, 0, 0, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .schedule-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent,
+                rgba(255, 255, 255, 0.4),
+                transparent
+            );
+            transition: left 0.5s;
+        }
+        
+        .schedule-item:hover {
+            transform: translateX(8px) translateY(-2px);
+            box-shadow: 
+                0 8px 25px rgba(0, 0, 0, 0.15),
+                0 0 0 1px rgba(255, 255, 255, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+        }
+        
+        .schedule-item:hover::before {
+            left: 100%;
+        }
+        
+        .schedule-time {
+            font-size: 1.15rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+            display: inline-block;
+            padding: 6px 12px;
+            background-color: rgba(102, 126, 234, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+        
+        .schedule-section:nth-child(2) .schedule-time {
+            background: linear-gradient(135deg, #F59E0B 0%, #EA580C 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-color: rgba(245, 158, 11, 0.1);
+            border-color: rgba(245, 158, 11, 0.2);
+        }
+        
+        .schedule-section:nth-child(3) .schedule-time {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-color: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.2);
+        }
+        
+        .schedule-section:nth-child(4) .schedule-time {
+            background: linear-gradient(135deg, #EC4899 0%, #DB2777 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-color: rgba(236, 72, 153, 0.1);
+            border-color: rgba(236, 72, 153, 0.2);
+        }
+        
+        .schedule-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 8px;
+            line-height: 1.4;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .schedule-title::before {
+            content: '✨';
+            font-size: 1.2rem;
+        }
+        
+        .schedule-location {
+            font-size: 1rem;
+            color: #4A90E2;
+            margin-bottom: 10px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .schedule-description {
+            font-size: 0.95rem;
+            color: #4a5568;
+            line-height: 1.7;
+            margin-top: 12px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 8px;
+            border-left: 3px solid rgba(102, 126, 234, 0.3);
+        }
+        
+        .enter-button-container {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e2e8f0;
+        }
+        
+        .enter-button {
+            display: inline-block;
+            background: linear-gradient(135deg, 
+                #667eea 0%,
+                #764ba2 50%,
+                #F59E0B 100%
+            );
+            color: white;
+            padding: 20px 60px;
+            border-radius: 35px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.4s ease;
+            box-shadow: 
+                0 8px 25px rgba(102, 126, 234, 0.5),
+                0 0 0 0 rgba(102, 126, 234, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            background-size: 200% 200%;
+            animation: shimmer 3s linear infinite;
+        }
+        
+        .enter-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            transition: left 0.5s;
+        }
+        
+        .enter-button:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 
+                0 12px 35px rgba(102, 126, 234, 0.6),
+                0 0 0 4px rgba(102, 126, 234, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        }
+        
+        .enter-button:hover::before {
+            left: 100%;
+        }
+        
+        .enter-button:active {
+            transform: translateY(-2px) scale(1.02);
+        }
+        
+        .enter-button-text {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        /* 語言選擇器樣式 */
+        .language-selector {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .lang-toggle-btn {
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid #667eea;
+            border-radius: 25px;
+            padding: 10px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #667eea;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+        }
+        
+        .lang-toggle-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        .lang-icon {
+            font-size: 1.2rem;
+        }
+        
+        .lang-arrow {
+            font-size: 0.8rem;
+            transition: transform 0.3s;
+        }
+        
+        .lang-toggle-btn.active .lang-arrow {
+            transform: rotate(180deg);
+        }
+        
+        .lang-dropdown {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            min-width: 150px;
+            margin-top: 5px;
+        }
+        
+        .lang-option {
+            display: block;
+            width: 100%;
+            padding: 12px 20px;
+            border: none;
+            background: white;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: background 0.2s;
+            color: #2d3748;
+        }
+        
+        .lang-option:hover {
+            background: #f7fafc;
+        }
+        
+        .lang-option.active {
+            background: #667eea;
+            color: white;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 768px) {
+            .festival-container {
+                padding: 25px 20px;
+            }
+            
+            .festival-title {
+                font-size: 1.8rem;
+            }
+            
+            .festival-subtitle {
+                font-size: 1rem;
+            }
+            
+            .schedule-date {
+                font-size: 1.3rem;
+            }
+            
+            .schedule-item {
+                padding: 15px;
+            }
+            
+            .schedule-time {
+                font-size: 1rem;
+            }
+            
+            .schedule-title {
+                font-size: 1.1rem;
+            }
+            
+            .enter-button {
+                padding: 15px 40px;
+                font-size: 1.1rem;
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .language-selector {
+                top: 10px;
+                right: 10px;
+            }
+            
+            .lang-toggle-btn {
+                padding: 8px 15px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="ocean-background" aria-hidden="true">
-        <div class="wave wave1"></div>
-        <div class="wave wave2"></div>
-        <div class="wave wave3"></div>
+    <!-- 語言選擇器 -->
+    <div class="language-selector" id="language-selector">
+        <button type="button" class="lang-toggle-btn" id="lang-toggle-btn" aria-label="" data-i18n-aria-label="selectLanguage">
+            <span class="lang-icon">🌐</span>
+            <span class="lang-current" id="lang-current">繁體中文</span>
+            <span class="lang-arrow">▼</span>
+        </button>
+        <div class="lang-dropdown" id="lang-dropdown" style="display: none;">
+            <button type="button" class="lang-option" data-lang="zh-TW">繁體中文</button>
+            <button type="button" class="lang-option" data-lang="zh-CN">简体中文</button>
+            <button type="button" class="lang-option" data-lang="en">English</button>
+            <button type="button" class="lang-option" data-lang="ja">日本語</button>
+            <button type="button" class="lang-option" data-lang="ko">한국어</button>
+        </div>
     </div>
     
-    <!-- 海岸與沙丘前景（純裝飾用） -->
-    <div class="coastline" aria-hidden="true">
-        <div class="dune dune-front"></div>
-        <div class="dune dune-mid"></div>
-        <div class="dune dune-back"></div>
-        <div class="coastline-highlight"></div>
-    </div>
+    <div class="wave-decoration">    </div>
     
-    <div class="container">
-        <!-- 語言選擇器 -->
-        <div class="language-selector" id="language-selector">
-            <button type="button" class="lang-toggle-btn" id="lang-toggle-btn" aria-label="" data-i18n-aria-label="selectLanguage">
-                <span class="lang-icon">🌐</span>
-                <span class="lang-current" id="lang-current">繁體中文</span>
-                <span class="lang-arrow">▼</span>
-            </button>
-            <div class="lang-dropdown" id="lang-dropdown" style="display: none;">
-                <button type="button" class="lang-option" data-lang="zh-TW">繁體中文</button>
-                <button type="button" class="lang-option" data-lang="zh-CN">简体中文</button>
-                <button type="button" class="lang-option" data-lang="en">English</button>
-                <button type="button" class="lang-option" data-lang="ja">日本語</button>
-                <button type="button" class="lang-option" data-lang="ko">한국어</button>
+    <!-- 雲朵裝飾 -->
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
+    <div class="cloud cloud3"></div>
+    
+    <!-- 水面反射 -->
+    <div class="water-reflection"></div>
+    
+    <!-- 建築裝飾 -->
+    <div class="building-decoration"></div>
+    <div class="monument-decoration"></div>
+    
+    <div class="festival-landing">
+        <div class="festival-container">
+            <div class="festival-header">
+                <h1 class="festival-title" data-i18n="festivalTitle">2026年壯圍沙丘地景藝術生活節</h1>
+                <p class="festival-subtitle" data-i18n="festivalSubtitle">節目表</p>
+                <span class="festival-year">2026</span>
+            </div>
+            
+            <div class="program-schedule">
+                <!-- 第一場：7月18日（六）開幕活動 -->
+                <div class="schedule-section">
+                    <h2 class="schedule-date" data-i18n="festivalSession1">第一場 | 2026年7月18日（六）開幕活動</h2>
+                    
+                    <div class="schedule-item">
+                        <div class="schedule-time">09:00 - 10:00</div>
+                        <div class="schedule-title" data-i18n="festivalOpening">開幕儀式</div>
+                        <div class="schedule-location" data-i18n="festivalLocationStage">📍 壯圍沙丘生態園區 主舞台</div>
+                        <div class="schedule-description" data-i18n="festivalOpeningDesc">隆重開幕，介紹本屆地景藝術生活節主題「沙丘與海的對話」，啟動為期一個月的藝術盛宴</div>
+                    </div>
+                    
+                    <div class="schedule-item">
+                        <div class="schedule-time">10:00 - 11:30</div>
+                        <div class="schedule-title" data-i18n="festivalArtTour">地景藝術導覽</div>
+                        <div class="schedule-location" data-i18n="festivalLocation">📍 壯圍沙丘生態園區</div>
+                        <div class="schedule-description" data-i18n="festivalArtTourDesc">專業導覽員帶領參觀本屆地景藝術作品，深入了解創作理念與沙丘生態環境</div>
+                    </div>
+                    
+                    <div class="schedule-item">
+                        <div class="schedule-time">14:00 - 15:30</div>
+                        <div class="schedule-title" data-i18n="festivalMusicConcert1">音樂演唱會 | 海風與沙的旋律</div>
+                        <div class="schedule-location" data-i18n="festivalLocationStage">📍 壯圍沙丘生態園區 主舞台</div>
+                        <div class="schedule-description" data-i18n="festivalMusicConcert1Desc">在地音樂家現場演唱，以音樂詮釋沙丘與海洋的交響，營造開幕歡慶氛圍</div>
+                    </div>
+                    
+                    <div class="schedule-item">
+                        <div class="schedule-time">15:30 - 17:00</div>
+                        <div class="schedule-title" data-i18n="festivalDance1">舞蹈表演 | 沙丘上的舞動</div>
+                        <div class="schedule-location" data-i18n="festivalLocationStage">📍 壯圍沙丘生態園區 主舞台</div>
+                        <div class="schedule-description" data-i18n="festivalDance1Desc">現代舞團以沙丘為舞台，用身體語言展現風與沙的流動，呈現地景藝術的動態美感</div>
+                    </div>
+                    
+                    <div class="schedule-item">
+                        <div class="schedule-time">17:00 - 18:30</div>
+                        <div class="schedule-title" data-i18n="festivalFloral1">花藝秀 | 沙丘花語</div>
+                        <div class="schedule-location" data-i18n="festivalLocationExhibition">📍 壯圍沙丘生態園區 展演區</div>
+                        <div class="schedule-description" data-i18n="festivalFloral1Desc">花藝師以在地植物與沙丘元素創作，展現自然與藝術的完美融合</div>
+                    </div>
+                </div>
+                
+                <!-- 第二場：7月19日（日） -->
+                <div class="schedule-section">
+                    <h2 class="schedule-date" data-i18n="festivalSession2">第二場 | 2026年7月19日（日）</h2>
+                    
+                    <div class="schedule-item">
+                        <div class="schedule-time">09:00 - 10:30</div>
+                        <div class="schedule-title" data-i18n="festivalEcoTour">生態導覽 | 沙丘的呼吸</div>
+                        <div class="schedule-location" data-i18n="festivalLocation">📍 壯圍沙丘生態園區</div>
+                        <div class="schedule-description" data-i18n="festivalEcoTourDesc">探索沙丘生態系統，認識在地動植物與環境，感受沙丘的生命力</div>
+                    </div>
+                    
+                    <div class="schedule-item">
+                        <div class="schedule-time">10:30 - 12:00</div>
+                        <div class="schedule-title" data-i18n="festivalTheater1">藝文表演 | 沙丘故事劇場</div>
+                        <div class="schedule-location" data-i18n="festivalLocationTheater">📍 壯圍沙丘生態園區 劇場區</div>
+                        <div class="schedule-description" data-i18n="festivalTheater1Desc">在地劇團演出，以沙丘為背景，講述宜蘭海岸的故事，結合環境劇場的獨特魅力</div>
+                    </div>
+                    
+                    <div class="schedule-item">
+                        <div class="schedule-time">14:00 - 15:30</div>
+                        <div class="schedule-title" data-i18n="festivalConcert1">音樂演奏會 | 風與沙的對話</div>
+                        <div class="schedule-location" data-i18n="festivalLocationStage">📍 壯圍沙丘生態園區 主舞台</div>
+                        <div class="schedule-description" data-i18n="festivalConcert1Desc">管弦樂團現場演奏，以古典與現代樂曲詮釋沙丘的壯闊與細膩</div>
+                    </div>
+                    
+                    <div class="schedule-item">
+                        <div class="schedule-time">15:30 - 17:00</div>
+                        <div class="schedule-title" data-i18n="festivalFashion">服裝秀 | 沙丘時尚</div>
+                        <div class="schedule-location" data-i18n="festivalLocationExhibition">📍 壯圍沙丘生態園區 展演區</div>
+                        <div class="schedule-description" data-i18n="festivalFashionDesc">設計師以沙丘與海洋為靈感，呈現融合自然元素的時尚服裝秀，展現地景藝術的時尚美學</div>
+                    </div>
+                    
+                    <div class="schedule-item">
+                        <div class="schedule-time">17:00 - 18:30</div>
+                        <div class="schedule-title" data-i18n="festivalSunset">夕陽音樂會 | 沙丘日落</div>
+                        <div class="schedule-location" data-i18n="festivalLocationStage">📍 壯圍沙丘生態園區 主舞台</div>
+                        <div class="schedule-description" data-i18n="festivalSunsetDesc">在沙丘上欣賞夕陽，伴隨現場音樂享受美好時光，感受自然與藝術的完美結合</div>
+                    </div>
+                </div>
+                
+                <!-- 第三場：8月15日（六） -->
+                <div class="schedule-section">
+                    <h2 class="schedule-date" data-i18n="festivalSession3">第三場 | 2026年8月15日（六）</h2>
+                    
+                    <div class="schedule-item">
+                        <div class="schedule-time">09:00 - 10:30</div>
+                        <div class="schedule-title" data-i18n="festivalFamily">親子沙丘體驗 | 沙丘探索之旅</div>
+                        <div class="schedule-location" data-i18n="festivalLocation">📍 壯圍沙丘生態園區</div>
+                        <div class="schedule-description" data-i18n="festivalFamilyDesc">適合親子參與的沙丘探索活動，讓孩子親近自然，體驗沙丘的奧秘</div>
+                    </div>
+                    
+                    <div class="schedule-item">
+                        <div class="schedule-time">10:30 - 12:00</div>
+                        <div class="schedule-title" data-i18n="festivalTheater2">藝文表演 | 沙丘童話劇</div>
+                        <div class="schedule-location" data-i18n="festivalLocationTheater">📍 壯圍沙丘生態園區 劇場區</div>
+                        <div class="schedule-description" data-i18n="festivalTheater2Desc">兒童劇團演出，以沙丘為背景的童話故事，寓教於樂，適合親子共賞</div>
+                    </div>
+                    
+                    <div class="schedule-item">
+                        <div class="schedule-time">14:00 - 15:30</div>
+                        <div class="schedule-title" data-i18n="festivalMusicConcert2">音樂演唱會 | 夏日沙丘</div>
+                        <div class="schedule-location" data-i18n="festivalLocationStage">📍 壯圍沙丘生態園區 主舞台</div>
+                        <div class="schedule-description" data-i18n="festivalMusicConcert2Desc">獨立音樂人現場演唱，以輕快的節奏詮釋夏日沙丘的活力與熱情</div>
+                    </div>
+                    
+                    <div class="schedule-item">
+                        <div class="schedule-time">15:30 - 17:00</div>
+                        <div class="schedule-title" data-i18n="festivalDance2">舞蹈表演 | 沙丘律動</div>
+                        <div class="schedule-location" data-i18n="festivalLocationStage">📍 壯圍沙丘生態園區 主舞台</div>
+                        <div class="schedule-description" data-i18n="festivalDance2Desc">街舞與現代舞的融合，展現年輕活力，在沙丘上創造動感十足的視覺饗宴</div>
+                    </div>
+                    
+                    <div class="schedule-item">
+                        <div class="schedule-time">17:00 - 18:30</div>
+                        <div class="schedule-title" data-i18n="festivalFloral2">花藝秀 | 夏日花語</div>
+                        <div class="schedule-location" data-i18n="festivalLocationExhibition">📍 壯圍沙丘生態園區 展演區</div>
+                        <div class="schedule-description" data-i18n="festivalFloral2Desc">以夏日花卉與沙丘元素創作大型花藝裝置，展現季節與地景的對話</div>
+                    </div>
+                </div>
+                
+                <!-- 第四場：8月16日（日）閉幕 -->
+                <div class="schedule-section">
+                    <h2 class="schedule-date" data-i18n="festivalSession4">第四場 | 2026年8月16日（日）閉幕</h2>
+                    
+                    <div class="schedule-item">
+                        <div class="schedule-time">09:00 - 10:30</div>
+                        <div class="schedule-title" data-i18n="festivalArtTourDeep">地景藝術深度導覽</div>
+                        <div class="schedule-location" data-i18n="festivalLocation">📍 壯圍沙丘生態園區</div>
+                        <div class="schedule-description" data-i18n="festivalArtTourDeepDesc">最後一次深度導覽，回顧本屆所有地景藝術作品，與藝術家面對面交流</div>
+                    </div>
+                    
+                    <div class="schedule-item">
+                        <div class="schedule-time">10:30 - 12:00</div>
+                        <div class="schedule-title" data-i18n="festivalConcert2">音樂演奏會 | 沙丘交響</div>
+                        <div class="schedule-location" data-i18n="festivalLocationStage">📍 壯圍沙丘生態園區 主舞台</div>
+                        <div class="schedule-description" data-i18n="festivalConcert2Desc">交響樂團壓軸演出，以宏偉的樂章為藝術生活節畫下完美句點</div>
+                    </div>
+                    
+                    <div class="schedule-item">
+                        <div class="schedule-time">14:00 - 15:30</div>
+                        <div class="schedule-title" data-i18n="festivalShowcase">綜合展演 | 沙丘藝術匯演</div>
+                        <div class="schedule-location" data-i18n="festivalLocationStage">📍 壯圍沙丘生態園區 主舞台</div>
+                        <div class="schedule-description" data-i18n="festivalShowcaseDesc">集結音樂、舞蹈、劇場、服裝秀的綜合展演，展現本屆藝術生活節的精華</div>
+                    </div>
+                    
+                    <div class="schedule-item">
+                        <div class="schedule-time">15:30 - 17:00</div>
+                        <div class="schedule-title" data-i18n="festivalClosing">閉幕表演 | 沙丘告別</div>
+                        <div class="schedule-location" data-i18n="festivalLocationStage">📍 壯圍沙丘生態園區 主舞台</div>
+                        <div class="schedule-description" data-i18n="festivalClosingDesc">精彩閉幕演出，所有參演藝術家共同謝幕，為本屆藝術生活節畫下完美句點</div>
+                    </div>
+                    
+                    <div class="schedule-item">
+                        <div class="schedule-time">17:00 - 17:30</div>
+                        <div class="schedule-title" data-i18n="festivalClosingCeremony">閉幕儀式</div>
+                        <div class="schedule-location" data-i18n="festivalLocationStage">📍 壯圍沙丘生態園區 主舞台</div>
+                        <div class="schedule-description" data-i18n="festivalClosingCeremonyDesc">感謝所有參與者、藝術家與工作團隊，期待明年再相會，持續探索沙丘與藝術的無限可能</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="enter-button-container">
+                <a href="app.html" class="enter-button">
+                    <span class="enter-button-text">
+                        <span>🌊</span>
+                        <span data-i18n="festivalEnterApp">進入「擺渡蘭陽英雄之旅」</span>
+                        <span>→</span>
+                    </span>
+                </a>
             </div>
         </div>
-        
-        <header class="header">
-            <h1 class="title" data-i18n="title">🌊 擺渡蘭陽英雄之旅</h1>
-            <p class="subtitle" data-i18n="subtitle">蘭陽海岸・內在成長型十關英雄旅程</p>
-            <p class="hero-guide-message" id="hero-guide-message"></p>
-        </header>
-        
-        <main id="main-content" class="content">
-            <section class="card" aria-labelledby="hero-title">
-                <h2 id="hero-title" data-i18n="heroTitle">內在成長型十關英雄旅程（宜蘭海岸）</h2>
-                <p data-i18n="heroDescription">沿著蜜月灣到情人灣的海線，讓心跳與海風同步，一關一關長出新的自己。</p>
-                
-                <ol class="journey-steps">
-                    <li><strong data-i18n="mission1Title">第一關｜啟程：蜜月灣海灘</strong> — <span data-i18n="mission1Desc">找到你的「出航理由」，寫下此刻的勇氣宣言。</span></li>
-                    <li><strong data-i18n="mission2Title">第二關｜山風拂面（礁溪櫻花陵園）</strong> — <span data-i18n="mission2Desc">在山風與櫻花間，整理過去的壓力與掛念。</span></li>
-                    <li><strong data-i18n="mission3Title">第三關｜沙丘上的腳印（三敆水）</strong> — <span data-i18n="mission3Desc">走在沙丘上，回望自己走過的每一步。</span></li>
-                    <li><strong data-i18n="mission4Title">第四關｜大地的擁抱（壯圍沙丘生態園區）</strong> — <span data-i18n="mission4Desc">雙腳踩在沙上，感受大地給你的支持與安穩。</span></li>
-                    <li><strong data-i18n="mission5Title">第五關｜星空下的祈願（榕樹公園）</strong> — <span data-i18n="mission5Desc">仰望星空，寫下給未來自己的祈願。</span></li>
-                    <li><strong data-i18n="mission6Title">第六關｜風中的聲音（五十二甲溼地）</strong> — <span data-i18n="mission6Desc">在稻浪與海風吹拂下，聽見生命的變化。</span></li>
-                    <li><strong data-i18n="mission7Title">第七關｜拾起一片落葉（傳藝中心）</strong> — <span data-i18n="mission7Desc">撿起一片葉子，練習說出想放下的故事。</span></li>
-                    <li><strong data-i18n="mission8Title">第八關｜河流中的倒影（利澤簡）</strong> — <span data-i18n="mission8Desc">看著河水中的倒影，辨認此刻與過去的自己。</span></li>
-                    <li><strong data-i18n="mission9Title">第九關｜拍打海浪的節奏（無尾港）</strong> — <span data-i18n="mission9Desc">跟著海浪的節奏，自由地舞動與釋放情緒。</span></li>
-                    <li><strong data-i18n="mission10Title">第十關｜自然中的告別儀式（內埤情人灣）</strong> — <span data-i18n="mission10Desc">在海邊完成一個告別儀式，向過去的自己道別。</span></li>
-                </ol>
-
-                <!-- 英雄任務選擇 -->
-                <section class="hero-missions" aria-label="" data-i18n-aria-label="ariaLabelChooseMission">
-                    <h3 class="hero-missions-title" data-i18n="chooseMission">選擇今天的英雄任務</h3>
-                    <p class="hero-missions-subtitle" data-i18n="chooseMissionSub">依照當下的狀態，挑一個任務，開始你的內在成長旅程。</p>
-
-                    <div class="hero-missions-buttons" id="mission-buttons">
-                        <a href="wave.html" class="mission-btn-link" data-task="wave">
-                            <button type="button" class="mission-btn" data-mission="wave">
-                                <span data-i18n="missionWave">🌊 海風中的呢喃任務</span>
-                                <span class="mission-location" data-i18n="missionWaveLoc">📍 蜜月灣</span>
-                                <span class="mission-status" id="status-wave"></span>
-                            </button>
-                        </a>
-                        <a href="rain.html" class="mission-btn-link" data-task="rain">
-                            <button type="button" class="mission-btn" data-mission="rain">
-                                <span data-i18n="missionRain">🌧 山風拂面任務</span>
-                                <span class="mission-location" data-i18n="missionRainLoc">📍 礁溪櫻花陵園</span>
-                                <span class="mission-status" id="status-rain"></span>
-                            </button>
-                        </a>
-                        <a href="dawn.html" class="mission-btn-link" data-task="dawn">
-                            <button type="button" class="mission-btn" data-mission="dawn">
-                                <span data-i18n="missionDawn">🌅 沙丘上的腳印任務</span>
-                                <span class="mission-location" data-i18n="missionDawnLoc">📍 三敆水</span>
-                                <span class="mission-status" id="status-dawn"></span>
-                            </button>
-                        </a>
-                        <!-- 第四關到第十關 -->
-                        <a href="mission4.html" class="mission-btn-link" data-task="mission4">
-                            <button type="button" class="mission-btn" data-mission="mission4">
-                                <span data-i18n="mission4">🌍 大地的擁抱任務</span>
-                                <span class="mission-location" data-i18n="mission4Loc">📍 壯圍沙丘生態園區</span>
-                                <span class="mission-status" id="status-mission4"></span>
-                            </button>
-                        </a>
-                        <a href="mission5.html" class="mission-btn-link" data-task="mission5">
-                            <button type="button" class="mission-btn" data-mission="mission5">
-                                <span data-i18n="mission5">⭐ 星空下的祈願任務</span>
-                                <span class="mission-location" data-i18n="mission5Loc">📍 榕樹公園</span>
-                                <span class="mission-status" id="status-mission5"></span>
-                            </button>
-                        </a>
-                        <a href="mission6.html" class="mission-btn-link" data-task="mission6">
-                            <button type="button" class="mission-btn" data-mission="mission6">
-                                <span data-i18n="mission6">🌾 風中的聲音任務</span>
-                                <span class="mission-location" data-i18n="mission6Loc">📍 五十二甲溼地</span>
-                                <span class="mission-status" id="status-mission6"></span>
-                            </button>
-                        </a>
-                        <a href="mission7.html" class="mission-btn-link" data-task="mission7">
-                            <button type="button" class="mission-btn" data-mission="mission7">
-                                <span data-i18n="mission7">🍂 拾起一片落葉任務</span>
-                                <span class="mission-location" data-i18n="mission7Loc">📍 傳藝中心</span>
-                                <span class="mission-status" id="status-mission7"></span>
-                            </button>
-                        </a>
-                        <a href="mission8.html" class="mission-btn-link" data-task="mission8">
-                            <button type="button" class="mission-btn" data-mission="mission8">
-                                <span data-i18n="mission8">🌊 河流中的倒影任務</span>
-                                <span class="mission-location" data-i18n="mission8Loc">📍 利澤簡</span>
-                                <span class="mission-status" id="status-mission8"></span>
-                            </button>
-                        </a>
-                        <a href="mission9.html" class="mission-btn-link" data-task="mission9">
-                            <button type="button" class="mission-btn" data-mission="mission9">
-                                <span data-i18n="mission9">🌊 拍打海浪的節奏任務</span>
-                                <span class="mission-location" data-i18n="mission9Loc">📍 無尾港</span>
-                                <span class="mission-status" id="status-mission9"></span>
-                            </button>
-                        </a>
-                        <a href="mission10.html" class="mission-btn-link" data-task="mission10">
-                            <button type="button" class="mission-btn" data-mission="mission10">
-                                <span data-i18n="mission10">🌅 自然中的告別儀式任務</span>
-                                <span class="mission-location" data-i18n="mission10Loc">📍 內埤情人灣</span>
-                                <span class="mission-status" id="status-mission10"></span>
-                            </button>
-                        </a>
-                    </div>
-                    
-                    <!-- 任務進度顯示 -->
-                    <div class="task-progress-display" id="task-progress-display">
-                        <div class="progress-bar-container">
-                            <div class="progress-bar" id="progress-bar"></div>
-                        </div>
-                        <p class="progress-text" id="progress-text"></p>
-                    </div>
-
-                    <div class="qr-scan-section">
-                        <button type="button" class="btn-qr-scan" id="btn-scan-qr">
-                            <span data-i18n="btnScanQR">📷 掃描 QR 碼進入任務</span>
-                        </button>
-                        <div id="qr-reader" style="display: none; margin-top: 20px;"></div>
-                    </div>
-                </section>
-                
-                <div class="button-group">
-                    <a href="wave.html" class="btn-link">
-                        <button type="button" class="btn btn-primary">
-                            <span class="btn-text" data-i18n="btnStartMission1">🚢 開始第一關</span>
-                            <span class="btn-shine"></span>
-                        </button>
-                    </a>
-                    
-                    <a href="route.html" class="btn-link">
-                        <button type="button" class="btn btn-secondary">
-                            <span class="btn-text" data-i18n="btnViewRoute">🗺️ 查看路線</span>
-                            <span class="btn-shine"></span>
-                        </button>
-                    </a>
-                    
-                    <a href="music-player.html" class="btn-link">
-                        <button type="button" class="btn btn-adventure">
-                            <span class="btn-text" data-i18n="btnHeroMusic">🎵 英雄音樂</span>
-                            <span class="btn-shine"></span>
-                        </button>
-                    </a>
-                    
-                    <button type="button" class="btn btn-adventure" id="btn-view-notes">
-                        <span class="btn-text" data-i18n="btnMindNotes">📖 心靈筆記</span>
-                        <span class="btn-shine"></span>
-                    </button>
-                    
-                    <a href="travel-info.html" class="btn-link">
-                        <button type="button" class="btn btn-secondary">
-                            <span class="btn-text" data-i18n="btnTravelInfo">📋 旅行資訊</span>
-                        <span class="btn-shine"></span>
-                    </button>
-                    </a>
-                    
-                    <a href="points-redeem.html" class="btn-link">
-                        <button type="button" class="btn btn-adventure">
-                            <span class="btn-text" data-i18n="btnPointsRedeem">💚 點數兌換</span>
-                        <span class="btn-shine"></span>
-                    </button>
-                    </a>
-                </div>
-            </section>
-            
-            <!-- 旅人儀表板（測試版） -->
-            <section class="card traveler-dashboard" aria-label="" data-i18n-aria-label="ariaLabelDashboard">
-                <h2 data-i18n="dashboardTitle">旅人儀表板（測試版）</h2>
-                <p data-i18n="dashboardDesc">這是為了設計與展示而準備的統計區塊，會根據你在三關中的行為，慢慢長出屬於你的海岸旅程數據。</p>
-                <div class="traveler-stats-grid" id="traveler-stats">
-                    <div class="traveler-stat-card">
-                        <h3 data-i18n="statMissionCount">任務完成次數</h3>
-                        <p class="stat-number" id="stat-mission-count">–</p>
-                        <p class="stat-note" data-i18n="statMissionCountNote">你已完成的所有關卡總數</p>
-                    </div>
-                    <div class="traveler-stat-card">
-                        <h3 data-i18n="statNotesCount">心靈筆記數</h3>
-                        <p class="stat-number" id="stat-notes-count">–</p>
-                        <p class="stat-note" data-i18n="statNotesCountNote">寫下的所有內在感受與洞見</p>
-                    </div>
-                    <div class="traveler-stat-card">
-                        <h3 data-i18n="statDistance">累積步行里程</h3>
-                        <p class="stat-number" id="stat-distance-km">– km</p>
-                        <p class="stat-note" data-i18n="statDistanceNote">實地走過的海岸路程（估算）</p>
-                </div>
-                    <div class="traveler-stat-card">
-                        <h3 data-i18n="statPoints">環保點數</h3>
-                        <p class="stat-number" id="stat-env-points">– 點</p>
-                        <p class="stat-note" data-i18n="statPointsNote">未來可兌換或折抵的潛在積分</p>
-                </div>
-                </div>
-            </section>
-
-            <section class="features" aria-label="" data-i18n-aria-label="ariaLabelAdventure">
-                <article class="feature-card">
-                    <div class="feature-icon">🌊</div>
-                    <h3 data-i18n="feature1Title">啟程・蜜月灣</h3>
-                    <p data-i18n="feature1Desc">在金色沙丘與海面交界，寫下啟航宣言，預備好第一步。</p>
-                    <a href="wave.html" class="feature-link" data-i18n="featureLink">進入任務 →</a>
-                </article>
-                <article class="feature-card">
-                    <div class="feature-icon">⭐</div>
-                    <h3 data-i18n="feature2Title">星空下的祈願・榕樹公園</h3>
-                    <p data-i18n="feature2Desc">仰望星空，寫下給未來自己的祈願。</p>
-                    <a href="mission5.html" class="feature-link" data-i18n="featureLink">進入任務 →</a>
-                </article>
-                <article class="feature-card">
-                    <div class="feature-icon">🌅</div>
-                    <h3 data-i18n="feature3Title">自然中的告別儀式・內埤情人灣</h3>
-                    <p data-i18n="feature3Desc">在海邊完成一個告別儀式，向過去的自己道別。</p>
-                    <a href="mission10.html" class="feature-link" data-i18n="featureLink">進入任務 →</a>
-                </article>
-            </section>
-        </main>
     </div>
-    
-    <!-- 心靈筆記模態視窗 -->
-    <div class="modal" id="notes-modal" style="display: none;">
-        <div class="modal-content">
-            <span class="modal-close" id="modal-close">&times;</span>
-            <h2 data-i18n="mindNotes">📖 心靈筆記</h2>
-            <div class="notes-list" id="notes-list"></div>
-        </div>
-    </div>
-    
-    <!-- QR 碼掃描庫 -->
-    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
-    <script src="i18n.js"></script>
-    <script src="task-progress.js"></script>
-    <script src="hero-guide.js"></script>
-    <script src="esg-stats.js"></script>
-    <script src="traveler-store.js"></script>
-    <script src="script.js"></script>
-    <script src="index-script.js"></script>
-    <script src="index-i18n.js"></script>
     
     <script>
-        // 更新主頁面的任務進度顯示
-        document.addEventListener('DOMContentLoaded', () => {
-            // 回到主頁時清除所有測試模式標記
-            const allTasks = ['wave', 'rain', 'dawn', 'mission4', 'mission5', 'mission6', 'mission7', 'mission8', 'mission9', 'mission10'];
-            allTasks.forEach(taskKey => {
-                // 清除測試模式標記
-                sessionStorage.removeItem(`test_mode_${taskKey}`);
-                // 清除測試模式的驗證數據
-                const verificationData = sessionStorage.getItem(`location_verified_${taskKey}`);
-                if (verificationData) {
-                    try {
-                        const data = JSON.parse(verificationData);
-                        if (data.isTestMode === true) {
-                            // 如果是測試模式，清除它
-                            sessionStorage.removeItem(`location_verified_${taskKey}`);
-                        }
-                    } catch (e) {
-                        // 解析失敗，清除數據
-                        sessionStorage.removeItem(`location_verified_${taskKey}`);
-                    }
-                }
-            });
-            console.log('[index.html] 已清除所有測試模式標記');
+        // 初始化翻譯
+        document.addEventListener('DOMContentLoaded', function() {
+            // 確保 I18n 已載入
+            if (typeof window.I18n === 'undefined') {
+                console.error('I18n is not loaded');
+                return;
+            }
             
-            function updateTaskProgress() {
-                const progress = TaskProgress.getTaskProgress();
-                const percentage = TaskProgress.getProgressPercentage();
-                
-                // 更新進度條
-                const progressBar = document.getElementById('progress-bar');
-                const progressText = document.getElementById('progress-text');
-                if (progressBar) {
-                    progressBar.style.width = percentage + '%';
-                }
-                if (progressText) {
-                    const t = window.I18n ? window.I18n.getTranslation(window.I18n.getCurrentLanguage()) : {};
-                    const progressFormat = t.progressFormat || 'Progress: {percentage}% ({completed}/10)';
-                    progressText.textContent = progressFormat
-                        .replace('{percentage}', percentage)
-                        .replace('{completed}', progress.completed.length);
-                }
-                
-                // 更新每個任務按鈕的狀態（所有 10 關）
-                const allTasks = ['wave', 'rain', 'dawn', 'mission4', 'mission5', 'mission6', 'mission7', 'mission8', 'mission9', 'mission10'];
-                allTasks.forEach(taskKey => {
-                    const status = TaskProgress.showTaskLockStatus(taskKey);
-                    const statusEl = document.getElementById(`status-${taskKey}`);
-                    const btnLink = document.querySelector(`[data-task="${taskKey}"]`);
-                    const btn = btnLink?.querySelector('.mission-btn');
-                    
-                    if (statusEl) {
-                        statusEl.textContent = status.message;
-                        statusEl.className = 'mission-status ' + status.status;
-                    }
-                    
-                    if (btnLink && btn) {
-                        if (status.status === 'locked') {
-                            btnLink.style.pointerEvents = 'none';
-                            btn.style.opacity = '0.6';
-                            btn.style.cursor = 'not-allowed';
-                            btnLink.href = 'javascript:void(0)';
-                            btnLink.addEventListener('click', (e) => {
-                                e.preventDefault();
-                                const t = window.I18n ? window.I18n.getTranslation(window.I18n.getCurrentLanguage()) : {};
-                                const taskLockedMsg = (t.taskLockedMessage || 'You need to complete {task} first to access this mission').replace('{task}', status.requiredTask);
-                                alert(taskLockedMsg);
-                            });
-                        } else {
-                            btnLink.style.pointerEvents = 'auto';
-                            btn.style.opacity = '1';
-                            btn.style.cursor = 'pointer';
-                            // 根據任務鍵值設定正確的 HTML 文件
-                            if (taskKey === 'wave') {
-                                btnLink.href = 'wave.html';
-                            } else if (taskKey === 'rain') {
-                                btnLink.href = 'rain.html';
-                            } else if (taskKey === 'dawn') {
-                                btnLink.href = 'dawn.html';
-                            } else {
-                                btnLink.href = `${taskKey}.html`;
-                            }
-                        }
-                    }
+            // 應用初始翻譯
+            if (typeof window.I18n.applyTranslations === 'function') {
+                window.I18n.applyTranslations();
+            }
+            
+            // 更新 meta 和 title
+            const currentLang = window.I18n.getCurrentLanguage();
+            const t = window.I18n.getTranslations(currentLang);
+            const metaDesc = document.getElementById('meta-description');
+            const pageTitle = document.getElementById('page-title');
+            if (metaDesc && t.festivalTitle) {
+                metaDesc.content = t.festivalTitle + ' - ' + (t.festivalSubtitle || 'Program Schedule');
+            }
+            if (pageTitle && t.festivalTitle) {
+                pageTitle.textContent = t.festivalTitle + ' ' + (t.festivalSubtitle || '');
+            }
+            
+            // 更新 html lang 屬性
+            document.documentElement.lang = currentLang;
+        });
+        
+        // 語言選擇器功能
+        (function() {
+            const langToggleBtn = document.getElementById('lang-toggle-btn');
+            const langDropdown = document.getElementById('lang-dropdown');
+            const langOptions = document.querySelectorAll('.lang-option');
+            const langCurrent = document.getElementById('lang-current');
+            
+            // 切換下拉選單
+            if (langToggleBtn) {
+                langToggleBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const isOpen = langDropdown.style.display === 'block';
+                    langDropdown.style.display = isOpen ? 'none' : 'block';
+                    langToggleBtn.classList.toggle('active', !isOpen);
                 });
             }
             
-            // 初始更新
-            updateTaskProgress();
-            
-            // 監聽任務完成事件
-            window.addEventListener('taskCompleted', () => {
-                updateTaskProgress();
+            // 點擊外部關閉
+            document.addEventListener('click', function(e) {
+                if (langToggleBtn && langDropdown && !langToggleBtn.contains(e.target) && !langDropdown.contains(e.target)) {
+                    langDropdown.style.display = 'none';
+                    langToggleBtn.classList.remove('active');
+                }
             });
-        });
+            
+            // 更新語言顯示
+            function updateLanguageDisplay(lang) {
+                const langNames = {
+                    'zh-TW': '繁體中文',
+                    'zh-CN': '简体中文',
+                    'en': 'English',
+                    'ja': '日本語',
+                    'ko': '한국어'
+                };
+                if (langCurrent) {
+                    langCurrent.textContent = langNames[lang] || '繁體中文';
+                }
+                if (langOptions) {
+                    langOptions.forEach(opt => {
+                        opt.classList.toggle('active', opt.getAttribute('data-lang') === lang);
+                    });
+                }
+                if (langDropdown) {
+                    langDropdown.style.display = 'none';
+                }
+                if (langToggleBtn) {
+                    langToggleBtn.classList.remove('active');
+                }
+            }
+            
+            // 選擇語言
+            if (langOptions) {
+                langOptions.forEach(option => {
+                    option.addEventListener('click', function() {
+                        const lang = this.getAttribute('data-lang');
+                        if (window.I18n && typeof window.I18n.setLanguage === 'function') {
+                            window.I18n.setLanguage(lang);
+                            updateLanguageDisplay(lang);
+                            
+                            // 更新 meta 和 title
+                            const t = window.I18n.getTranslations(lang);
+                            const metaDesc = document.getElementById('meta-description');
+                            const pageTitle = document.getElementById('page-title');
+                            if (metaDesc && t.festivalTitle) {
+                                metaDesc.content = t.festivalTitle + ' - ' + (t.festivalSubtitle || 'Program Schedule');
+                            }
+                            if (pageTitle && t.festivalTitle) {
+                                pageTitle.textContent = t.festivalTitle + ' ' + (t.festivalSubtitle || '');
+                            }
+                            
+                            // 更新 html lang 屬性
+                            document.documentElement.lang = lang;
+                        }
+                    });
+                });
+            }
+            
+            // 初始化語言顯示
+            document.addEventListener('DOMContentLoaded', function() {
+                const currentLang = window.I18n ? window.I18n.getCurrentLanguage() : 'zh-TW';
+                updateLanguageDisplay(currentLang);
+                
+                // 監聽語言變化事件
+                if (window.I18n) {
+                    window.addEventListener('languageChanged', function() {
+                        const lang = window.I18n.getCurrentLanguage();
+                        updateLanguageDisplay(lang);
+                        
+                        // 更新 meta 和 title
+                        const t = window.I18n.getTranslations(lang);
+                        const metaDesc = document.getElementById('meta-description');
+                        const pageTitle = document.getElementById('page-title');
+                        if (metaDesc && t.festivalTitle) {
+                            metaDesc.content = t.festivalTitle + ' - ' + (t.festivalSubtitle || 'Program Schedule');
+                        }
+                        if (pageTitle && t.festivalTitle) {
+                            pageTitle.textContent = t.festivalTitle + ' ' + (t.festivalSubtitle || '');
+                        }
+                        
+                        // 更新 html lang 屬性
+                        document.documentElement.lang = lang;
+                    });
+                }
+            });
+        })();
     </script>
 </body>
 </html>
-
-
-
