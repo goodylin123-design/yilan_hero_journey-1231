@@ -13,10 +13,6 @@
             50% { transform: translateY(-20px) rotate(5deg); }
         }
         
-        @keyframes wave {
-            0%, 100% { transform: translateX(0) translateY(0); }
-            50% { transform: translateX(-25px) translateY(-10px); }
-        }
         
         @keyframes shimmer {
             0% { background-position: -1000px 0; }
@@ -25,24 +21,14 @@
         
         .festival-landing {
             min-height: 100vh;
-            /* 使用真實圖片作為背景，並提供漸變覆蓋層 */
-            background: 
-                /* 覆蓋層：增強可讀性（可調整透明度） */
-                linear-gradient(180deg, 
-                    rgba(135, 206, 235, 0.2) 0%,
-                    rgba(70, 130, 180, 0.3) 50%,
-                    rgba(47, 79, 79, 0.4) 100%
-                ),
-                /* 真實圖片背景 */
-                url('images/zhuangwei-sand-dune-bg.jpg') center center / cover no-repeat,
-                /* 備用漸變背景（圖片載入失敗時顯示） */
-                linear-gradient(180deg,
-                    #87CEEB 0%,
-                    #4A90E2 30%,
-                    #1E90FF 60%,
-                    #4682B4 85%,
-                    #2F4F4F 100%
-                );
+            /* 簡化背景為純色漸變 */
+            background: linear-gradient(180deg,
+                #87CEEB 0%,
+                #4A90E2 30%,
+                #1E90FF 60%,
+                #4682B4 85%,
+                #2F4F4F 100%
+            );
             display: flex;
             align-items: center;
             justify-content: center;
@@ -51,290 +37,26 @@
             overflow: hidden;
         }
         
-        /* 響應式圖片：根據螢幕尺寸載入不同解析度 */
+        /* 頂部裝飾圖片 */
+        .festival-header-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            background: url('images/S__46940919-scaled.jpg') center center / cover no-repeat;
+            z-index: 0;
+            opacity: 0.6;
+            border-bottom: 3px solid rgba(255, 255, 255, 0.3);
+        }
+        
         @media (max-width: 768px) {
-            .festival-landing {
-                background: 
-                    linear-gradient(180deg, 
-                        rgba(135, 206, 235, 0.2) 0%,
-                        rgba(70, 130, 180, 0.3) 50%,
-                        rgba(47, 79, 79, 0.4) 100%
-                    ),
-                    url('images/zhuangwei-sand-dune-bg-mobile.jpg') center center / cover no-repeat,
-                    url('images/zhuangwei-sand-dune-bg.jpg') center center / cover no-repeat,
-                    linear-gradient(180deg,
-                        #87CEEB 0%,
-                        #4A90E2 30%,
-                        #1E90FF 60%,
-                        #4682B4 85%,
-                        #2F4F4F 100%
-                    );
+            .festival-header-image {
+                height: 150px;
             }
         }
         
-        @media (min-width: 1920px) {
-            .festival-landing {
-                background: 
-                    linear-gradient(180deg, 
-                        rgba(135, 206, 235, 0.2) 0%,
-                        rgba(70, 130, 180, 0.3) 50%,
-                        rgba(47, 79, 79, 0.4) 100%
-                    ),
-                    url('images/zhuangwei-sand-dune-bg-4k.jpg') center center / cover no-repeat,
-                    url('images/zhuangwei-sand-dune-bg.jpg') center center / cover no-repeat,
-                    linear-gradient(180deg,
-                        #87CEEB 0%,
-                        #4A90E2 30%,
-                        #1E90FF 60%,
-                        #4682B4 85%,
-                        #2F4F4F 100%
-                    );
-            }
-        }
         
-        /* 圖片載入動畫 */
-        .festival-landing::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(180deg,
-                #87CEEB 0%,
-                #4A90E2 30%,
-                #1E90FF 60%,
-                #4682B4 85%,
-                #2F4F4F 100%
-            );
-            z-index: -2;
-            opacity: 1;
-            transition: opacity 0.5s ease-in-out;
-        }
-        
-        .festival-landing.image-loaded::before {
-            opacity: 0;
-        }
-        
-        /* 雲朵動畫 */
-        @keyframes cloudMove {
-            0% { transform: translateX(0) translateY(0); }
-            50% { transform: translateX(20px) translateY(-10px); }
-            100% { transform: translateX(0) translateY(0); }
-        }
-        
-        .cloud {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.7);
-            border-radius: 50px;
-            opacity: 0.8;
-            z-index: 0;
-            animation: cloudMove 20s ease-in-out infinite;
-        }
-        
-        .cloud::before,
-        .cloud::after {
-            content: '';
-            position: absolute;
-            background: rgba(255, 255, 255, 0.7);
-            border-radius: 50px;
-        }
-        
-        .cloud1 {
-            width: 120px;
-            height: 40px;
-            top: 15%;
-            left: 10%;
-            animation-delay: 0s;
-        }
-        
-        .cloud1::before {
-            width: 60px;
-            height: 60px;
-            top: -30px;
-            left: 10px;
-        }
-        
-        .cloud1::after {
-            width: 80px;
-            height: 80px;
-            top: -40px;
-            right: 10px;
-        }
-        
-        .cloud2 {
-            width: 150px;
-            height: 50px;
-            top: 25%;
-            right: 15%;
-            animation-delay: -5s;
-        }
-        
-        .cloud2::before {
-            width: 70px;
-            height: 70px;
-            top: -35px;
-            left: 20px;
-        }
-        
-        .cloud2::after {
-            width: 90px;
-            height: 90px;
-            top: -45px;
-            right: 20px;
-        }
-        
-        .cloud3 {
-            width: 100px;
-            height: 35px;
-            top: 8%;
-            left: 50%;
-            animation-delay: -10s;
-        }
-        
-        .cloud3::before {
-            width: 50px;
-            height: 50px;
-            top: -25px;
-            left: 15px;
-        }
-        
-        .cloud3::after {
-            width: 70px;
-            height: 70px;
-            top: -35px;
-            right: 15px;
-        }
-        
-        /* 水面反射效果 */
-        .water-reflection {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 35vh;
-            background: linear-gradient(180deg,
-                rgba(70, 130, 180, 0.3) 0%,
-                rgba(95, 158, 160, 0.4) 30%,
-                rgba(139, 176, 174, 0.5) 60%,
-                rgba(160, 196, 196, 0.6) 100%
-            );
-            z-index: 0;
-            opacity: 0.7;
-            backdrop-filter: blur(2px);
-        }
-        
-        /* 水面波紋 */
-        .water-reflection::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 200"><path d="M0,100 Q300,80 600,100 T1200,100" stroke="rgba(255,255,255,0.1)" stroke-width="2" fill="none"/><path d="M0,120 Q300,100 600,120 T1200,120" stroke="rgba(255,255,255,0.08)" stroke-width="2" fill="none"/></svg>') repeat-x;
-            background-size: 1200px 200px;
-            animation: wave 10s linear infinite;
-            opacity: 0.5;
-        }
-        
-        /* 沙丘/草地背景 */
-        .festival-landing::before {
-            content: '';
-            position: absolute;
-            bottom: 35vh;
-            left: -15%;
-            width: 150%;
-            height: 40vh;
-            background: linear-gradient(180deg,
-                rgba(34, 139, 34, 0.4) 0%,      /* 森林綠 */
-                rgba(50, 205, 50, 0.5) 20%,     /* 酸橙綠 */
-                rgba(144, 238, 144, 0.6) 40%,   /* 淺綠色 */
-                rgba(250, 232, 186, 0.7) 60%,   /* 沙色 */
-                rgba(234, 179, 113, 0.8) 80%,   /* 沙金色 */
-                rgba(217, 119, 6, 0.6) 100%     /* 深沙色 */
-            );
-            border-radius: 70% 30% 0 0;
-            z-index: 0;
-            filter: drop-shadow(0 -6px 18px rgba(15, 23, 42, 0.25));
-        }
-        
-        /* 第二層草地/沙丘 */
-        .festival-landing::after {
-            content: '';
-            position: absolute;
-            bottom: 35vh;
-            left: -5%;
-            width: 130%;
-            height: 35vh;
-            background: linear-gradient(180deg,
-                rgba(50, 205, 50, 0.3) 0%,
-                rgba(144, 238, 144, 0.4) 30%,
-                rgba(250, 232, 186, 0.5) 60%,
-                rgba(234, 179, 113, 0.6) 100%
-            );
-            border-radius: 60% 40% 0 0;
-            z-index: 0;
-            opacity: 0.9;
-            transform: translateY(3vh);
-        }
-        
-        /* 建築裝飾元素 */
-        .building-decoration {
-            position: absolute;
-            bottom: 38vh;
-            right: 5%;
-            width: 120px;
-            height: 80px;
-            background: linear-gradient(135deg,
-                rgba(30, 30, 30, 0.6) 0%,
-                rgba(50, 50, 50, 0.6) 100%
-            );
-            clip-path: polygon(0 100%, 0 40%, 20% 40%, 20% 20%, 40% 20%, 40% 40%, 60% 40%, 60% 20%, 80% 20%, 80% 40%, 100% 40%, 100% 100%);
-            z-index: 1;
-            opacity: 0.4;
-            filter: blur(1px);
-        }
-        
-        .building-decoration::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 30%;
-            background: rgba(34, 139, 34, 0.5);
-            clip-path: polygon(0 100%, 0 0, 100% 0, 100% 100%);
-        }
-        
-        /* 紀念碑裝飾 */
-        .monument-decoration {
-            position: absolute;
-            bottom: 38vh;
-            left: 8%;
-            width: 20px;
-            height: 100px;
-            background: linear-gradient(180deg,
-                rgba(200, 200, 200, 0.6) 0%,
-                rgba(180, 180, 180, 0.6) 100%
-            );
-            z-index: 1;
-            opacity: 0.4;
-            border-radius: 2px;
-            filter: blur(0.5px);
-        }
-        
-        .monument-decoration::after {
-            content: '';
-            position: absolute;
-            top: -5px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 8px;
-            height: 8px;
-            background: rgba(50, 50, 50, 0.6);
-            border-radius: 50%;
-        }
         
         .festival-container {
             max-width: 1000px;
@@ -357,33 +79,13 @@
             z-index: 2;
             backdrop-filter: blur(20px);
             border: 2px solid rgba(255, 255, 255, 0.4);
+            margin-top: 220px; /* 為頂部圖片留出空間 */
         }
         
-        /* 裝飾性光暈 */
-        .festival-container::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -20%;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(102, 126, 234, 0.15) 0%, transparent 70%);
-            border-radius: 50%;
-            z-index: -1;
-            animation: float 6s ease-in-out infinite;
-        }
-        
-        .festival-container::after {
-            content: '';
-            position: absolute;
-            bottom: -30%;
-            left: -15%;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(234, 179, 113, 0.2) 0%, transparent 70%);
-            border-radius: 50%;
-            z-index: -1;
-            animation: float 8s ease-in-out infinite reverse;
+        @media (max-width: 768px) {
+            .festival-container {
+                margin-top: 170px;
+            }
         }
         
         .festival-header {
@@ -907,21 +609,10 @@
         </div>
     </div>
     
-    <div class="wave-decoration">    </div>
-    
-    <!-- 雲朵裝飾 -->
-    <div class="cloud cloud1"></div>
-    <div class="cloud cloud2"></div>
-    <div class="cloud cloud3"></div>
-    
-    <!-- 水面反射 -->
-    <div class="water-reflection"></div>
-    
-    <!-- 建築裝飾 -->
-    <div class="building-decoration"></div>
-    <div class="monument-decoration"></div>
-    
     <div class="festival-landing">
+        <!-- 頂部裝飾圖片 -->
+        <div class="festival-header-image"></div>
+        
         <div class="festival-container">
             <div class="festival-header">
                 <h1 class="festival-title" data-i18n="festivalTitle">2026年壯圍沙丘地景藝術生活節</h1>
@@ -1110,37 +801,120 @@
             const isMobile = window.innerWidth <= 768;
             const isHighRes = window.devicePixelRatio > 1 || window.innerWidth >= 1920;
             
-            // 根據設備選擇圖片（如果沒有對應版本，使用標準版本）
+            // 根據設備選擇圖片（使用實際存在的圖片）
             let imageUrl;
             if (isMobile) {
-                imageUrl = 'images/zhuangwei-sand-dune-bg-mobile.jpg';
+                // 手機版使用較小的圖片
+                imageUrl = 'images/1599985739-2673550860-g.jpg';
             } else if (isHighRes && window.innerWidth >= 1920) {
-                imageUrl = 'images/zhuangwei-sand-dune-bg-4k.jpg';
+                // 高解析度使用 PNG 版本
+                imageUrl = 'images/atl_m_180013860_231.png';
             } else {
-                imageUrl = 'images/zhuangwei-sand-dune-bg.jpg';
+                // 標準桌面版使用主要圖片
+                imageUrl = 'images/S__46940919-scaled.jpg';
             }
             
-            // 如果沒有找到對應版本，嘗試使用標準版本
-            const fallbackUrl = 'images/zhuangwei-sand-dune-bg.jpg';
+            // 備用圖片列表（如果主要圖片載入失敗）
+            const fallbackImages = [
+                'images/S__46940919-scaled.jpg',
+                'images/1599985739-2673550860-g.jpg',
+                'images/atl_m_180013860_231.png'
+            ];
             
-            // 預載入圖片
+            // 預載入圖片 - 優化載入策略
+            const landing = document.querySelector('.festival-landing');
+            if (landing) {
+                landing.classList.add('image-loading');
+            }
+            
             const img = new Image();
-            img.onload = function() {
-                // 圖片載入成功，添加類別以顯示圖片
-                const landing = document.querySelector('.festival-landing');
-                if (landing) {
-                    landing.classList.add('image-loaded');
-                }
-            };
+            
+            // 設置載入優先級（低優先級，不阻塞其他資源）
+            if ('fetchPriority' in img) {
+                img.fetchPriority = 'low';
+            }
+            
+            // 設置 loading 屬性（lazy loading）
+            if ('loading' in img) {
+                img.loading = 'lazy';
+            }
+            
+            // 使用 decode API 異步解碼，提升性能
+            if ('decode' in img) {
+                img.onload = function() {
+                    img.decode().then(function() {
+                        if (landing) {
+                            landing.classList.remove('image-loading');
+                            landing.classList.add('image-loaded');
+                        }
+                    }).catch(function() {
+                        // 解碼失敗，但仍顯示圖片
+                        if (landing) {
+                            landing.classList.remove('image-loading');
+                            landing.classList.add('image-loaded');
+                        }
+                    });
+                };
+            } else {
+                // 不支援 decode API 的瀏覽器
+                img.onload = function() {
+                    if (landing) {
+                        landing.classList.remove('image-loading');
+                        landing.classList.add('image-loaded');
+                    }
+                };
+            }
+            
             img.onerror = function() {
-                // 圖片載入失敗，使用備用漸變背景
-                console.warn('背景圖片載入失敗，使用備用漸變背景');
-                const landing = document.querySelector('.festival-landing');
-                if (landing) {
-                    landing.classList.add('image-failed');
-                }
+                // 嘗試載入備用圖片
+                loadFallbackImage(landing, fallbackImages, imageUrl);
             };
+            
+            // 開始載入圖片
             img.src = imageUrl;
+            
+            // 備用圖片載入函數
+            function loadFallbackImage(element, fallbacks, currentUrl) {
+                if (!element || !fallbacks || fallbacks.length === 0) {
+                    console.warn('背景圖片載入失敗，使用備用漸變背景');
+                    if (element) {
+                        element.classList.add('image-failed');
+                        element.classList.remove('image-loading');
+                    }
+                    return;
+                }
+                
+                // 過濾掉當前已嘗試的圖片
+                const availableFallbacks = fallbacks.filter(url => url !== currentUrl);
+                if (availableFallbacks.length === 0) {
+                    if (element) {
+                        element.classList.add('image-failed');
+                        element.classList.remove('image-loading');
+                    }
+                    return;
+                }
+                
+                // 嘗試載入第一個備用圖片
+                const fallbackImg = new Image();
+                if ('fetchPriority' in fallbackImg) {
+                    fallbackImg.fetchPriority = 'low';
+                }
+                
+                fallbackImg.onload = function() {
+                    if (element) {
+                        element.classList.remove('image-loading');
+                        element.classList.add('image-loaded');
+                    }
+                };
+                fallbackImg.onerror = function() {
+                    console.warn('所有背景圖片載入失敗，使用備用漸變背景');
+                    if (element) {
+                        element.classList.add('image-failed');
+                        element.classList.remove('image-loading');
+                    }
+                };
+                fallbackImg.src = availableFallbacks[0];
+            }
         })();
         
         // 初始化翻譯
