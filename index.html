@@ -25,18 +25,23 @@
         
         .festival-landing {
             min-height: 100vh;
+            /* 使用真實圖片作為背景，並提供漸變覆蓋層 */
             background: 
-                /* 雲朵效果 */
-                radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 15%),
-                radial-gradient(circle at 60% 30%, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0) 12%),
-                radial-gradient(circle at 80% 15%, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0) 10%),
-                /* 明亮藍天 */
+                /* 覆蓋層：增強可讀性（可調整透明度） */
+                linear-gradient(180deg, 
+                    rgba(135, 206, 235, 0.2) 0%,
+                    rgba(70, 130, 180, 0.3) 50%,
+                    rgba(47, 79, 79, 0.4) 100%
+                ),
+                /* 真實圖片背景 */
+                url('images/zhuangwei-sand-dune-bg.jpg') center center / cover no-repeat,
+                /* 備用漸變背景（圖片載入失敗時顯示） */
                 linear-gradient(180deg,
-                    #87CEEB 0%,      /* 明亮天空藍 */
-                    #4A90E2 30%,    /* 海洋藍 */
-                    #1E90FF 60%,    /* 天藍色 */
-                    #4682B4 85%,    /* 鋼藍色 */
-                    #2F4F4F 100%    /* 深灰藍 */
+                    #87CEEB 0%,
+                    #4A90E2 30%,
+                    #1E90FF 60%,
+                    #4682B4 85%,
+                    #2F4F4F 100%
                 );
             display: flex;
             align-items: center;
@@ -44,6 +49,71 @@
             padding: 20px;
             position: relative;
             overflow: hidden;
+        }
+        
+        /* 響應式圖片：根據螢幕尺寸載入不同解析度 */
+        @media (max-width: 768px) {
+            .festival-landing {
+                background: 
+                    linear-gradient(180deg, 
+                        rgba(135, 206, 235, 0.2) 0%,
+                        rgba(70, 130, 180, 0.3) 50%,
+                        rgba(47, 79, 79, 0.4) 100%
+                    ),
+                    url('images/zhuangwei-sand-dune-bg-mobile.jpg') center center / cover no-repeat,
+                    url('images/zhuangwei-sand-dune-bg.jpg') center center / cover no-repeat,
+                    linear-gradient(180deg,
+                        #87CEEB 0%,
+                        #4A90E2 30%,
+                        #1E90FF 60%,
+                        #4682B4 85%,
+                        #2F4F4F 100%
+                    );
+            }
+        }
+        
+        @media (min-width: 1920px) {
+            .festival-landing {
+                background: 
+                    linear-gradient(180deg, 
+                        rgba(135, 206, 235, 0.2) 0%,
+                        rgba(70, 130, 180, 0.3) 50%,
+                        rgba(47, 79, 79, 0.4) 100%
+                    ),
+                    url('images/zhuangwei-sand-dune-bg-4k.jpg') center center / cover no-repeat,
+                    url('images/zhuangwei-sand-dune-bg.jpg') center center / cover no-repeat,
+                    linear-gradient(180deg,
+                        #87CEEB 0%,
+                        #4A90E2 30%,
+                        #1E90FF 60%,
+                        #4682B4 85%,
+                        #2F4F4F 100%
+                    );
+            }
+        }
+        
+        /* 圖片載入動畫 */
+        .festival-landing::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg,
+                #87CEEB 0%,
+                #4A90E2 30%,
+                #1E90FF 60%,
+                #4682B4 85%,
+                #2F4F4F 100%
+            );
+            z-index: -2;
+            opacity: 1;
+            transition: opacity 0.5s ease-in-out;
+        }
+        
+        .festival-landing.image-loaded::before {
+            opacity: 0;
         }
         
         /* 雲朵動畫 */
@@ -1034,6 +1104,45 @@
     </div>
     
     <script>
+        // 圖片預載入與響應式處理
+        (function() {
+            // 檢測設備類型和螢幕尺寸
+            const isMobile = window.innerWidth <= 768;
+            const isHighRes = window.devicePixelRatio > 1 || window.innerWidth >= 1920;
+            
+            // 根據設備選擇圖片（如果沒有對應版本，使用標準版本）
+            let imageUrl;
+            if (isMobile) {
+                imageUrl = 'images/zhuangwei-sand-dune-bg-mobile.jpg';
+            } else if (isHighRes && window.innerWidth >= 1920) {
+                imageUrl = 'images/zhuangwei-sand-dune-bg-4k.jpg';
+            } else {
+                imageUrl = 'images/zhuangwei-sand-dune-bg.jpg';
+            }
+            
+            // 如果沒有找到對應版本，嘗試使用標準版本
+            const fallbackUrl = 'images/zhuangwei-sand-dune-bg.jpg';
+            
+            // 預載入圖片
+            const img = new Image();
+            img.onload = function() {
+                // 圖片載入成功，添加類別以顯示圖片
+                const landing = document.querySelector('.festival-landing');
+                if (landing) {
+                    landing.classList.add('image-loaded');
+                }
+            };
+            img.onerror = function() {
+                // 圖片載入失敗，使用備用漸變背景
+                console.warn('背景圖片載入失敗，使用備用漸變背景');
+                const landing = document.querySelector('.festival-landing');
+                if (landing) {
+                    landing.classList.add('image-failed');
+                }
+            };
+            img.src = imageUrl;
+        })();
+        
         // 初始化翻譯
         document.addEventListener('DOMContentLoaded', function() {
             // 確保 I18n 已載入
