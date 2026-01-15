@@ -207,8 +207,7 @@
                 break;
             case '圖畫':
             case 'art':
-                // 之後實現
-                alert('圖畫功能開發中...');
+                handleArtExperience(missionData);
                 break;
             default:
                 // 預設為鼓勵話
@@ -373,6 +372,104 @@
                 console.log('[nature-interaction] 自動播放被阻擋，等待使用者點擊');
             });
         }
+    }
+
+    // 處理圖畫體驗
+    function handleArtExperience(missionData) {
+        const natureResultArea = document.getElementById('nature-result-area');
+        const natureResultContent = document.getElementById('nature-result-content');
+        const natureResultTitle = document.getElementById('nature-result-title');
+
+        if (!natureResultArea || !natureResultContent) {
+            console.error('[nature-interaction] 結果區域元素未找到');
+            return;
+        }
+
+        // 停止語音與音樂，避免疊音
+        try {
+            window.speechSynthesis?.cancel();
+        } catch (err) {
+            console.warn('[nature-interaction] 停止語音失敗:', err);
+        }
+
+        if (externalAudioPlayer) {
+            externalAudioPlayer.pause();
+            externalAudioPlayer.src = '';
+        }
+
+        if (missionMusicPlayer) {
+            missionMusicPlayer.pause();
+            missionMusicPlayer.currentTime = 0;
+        }
+
+        const artImages = [
+            {
+                src: 'images/1599985739-2673550860-g.jpg',
+                label: '沙丘夕光'
+            },
+            {
+                src: 'images/atl_m_180013860_231.png',
+                label: '海岸剪影'
+            },
+            {
+                src: 'images/S__46940919-scaled.jpg',
+                label: '沙丘地景'
+            }
+        ];
+
+        const chosenImage = artImages[Math.floor(Math.random() * artImages.length)];
+
+        natureResultArea.style.display = 'block';
+        if (natureResultTitle) {
+            natureResultTitle.textContent = '🎨 與自然互動：圖畫';
+        }
+
+        natureResultContent.innerHTML = '';
+
+        const img = document.createElement('img');
+        img.src = chosenImage.src;
+        img.alt = chosenImage.label;
+        img.style.cssText = 'width: 100%; border-radius: 14px; margin-bottom: 12px; display: block;';
+        natureResultContent.appendChild(img);
+
+        const narration = generateArtNarration(missionData, chosenImage.label);
+        const textBlock = document.createElement('p');
+        textBlock.textContent = narration;
+        textBlock.style.cssText = 'line-height: 1.8;';
+        natureResultContent.appendChild(textBlock);
+
+        const replayButton = document.createElement('button');
+        replayButton.type = 'button';
+        replayButton.className = 'btn-nature-interaction';
+        replayButton.style.cssText = 'margin-top: 10px; width: 100%;';
+        replayButton.textContent = '🔊 再聽一次';
+        replayButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            speakEncouragement(narration);
+        });
+        natureResultContent.appendChild(replayButton);
+
+        speakEncouragement(narration);
+    }
+
+    // 生成圖畫體驗文字（結合圖片、地點、關別、英雄之旅）
+    function generateArtNarration(missionData, imageLabel) {
+        const missionOrder = missionData?.order || 1;
+        const missionTitle = missionData?.title || '海風中的呢喃';
+        const locationName = missionData?.locationName || '蜜月灣';
+        const baseMessage = `你現在在「${locationName}」進行「第${missionOrder}關${missionTitle}」，眼前浮現的是「${imageLabel}」。`;
+
+        const templates = [
+            '這幅畫像把沙丘與海風的呼吸收進心裡，提醒你：英雄之旅不只是前進，更是與自然對話。請慢慢感受風的節奏，讓內心變得安穩而清澈。',
+            '在這片地景裡，光影像是在為你指引方向。你的每一步都被大地記住，別忘了在旅途中溫柔地看見自己。',
+            '畫面裡的線條像海浪也像心跳，與此刻的你同步。願你帶著這份溫暖，繼續英雄之旅的下一段。',
+            '自然以最安靜的方式陪著你，沙丘的曲線像是對你的祝福。把這份平靜收藏起來，成為你前行的力量。',
+            '你與這片景色彼此映照，像在彼此說一聲「辛苦了」。讓這幅畫成為你的心靈補給站。'
+        ];
+
+        const template = templates[Math.floor(Math.random() * templates.length)];
+        return `${baseMessage}${template}`;
     }
 
     // 生成鼓勵話（AI 自動生成）
