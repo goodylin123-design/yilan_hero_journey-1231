@@ -219,13 +219,7 @@
                     return;
                 }
                 
-                // 檢查位置驗證
-                if (!window.isLocationVerified(taskKey)) {
-                    window.blockTaskContent(taskKey);
-                    return;
-                }
-
-                // 初始化與自然互動功能
+                // 初始化與自然互動功能（無論位置驗證是否通過都初始化）
                 if (typeof window.NatureInteraction !== 'undefined') {
                     // 獲取任務資料
                     let missionData = null;
@@ -238,14 +232,22 @@
                         missionData = {
                             id: 'wave',
                             locationName: '蜜月灣',
-                            title: '第一關海風中的呢喃'
+                            title: '海風中的呢喃'
                         };
                     }
                     
                     // 延遲初始化，確保 DOM 已完全載入
                     setTimeout(() => {
+                        console.log('[wave.html] 初始化與自然互動功能，任務資料:', missionData);
                         window.NatureInteraction.init(missionData);
-                    }, 100);
+                    }, 200);
+                } else {
+                    console.warn('[wave.html] NatureInteraction 未載入');
+                }
+                
+                // 檢查位置驗證（在初始化之後）
+                if (!window.isLocationVerified(taskKey)) {
+                    window.blockTaskContent(taskKey);
                 }
             }, 500);
         });

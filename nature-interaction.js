@@ -10,21 +10,32 @@
     // 初始化與自然互動功能
     function initNatureInteraction(missionData) {
         const btnNatureInteraction = document.getElementById('btn-nature-interaction');
-        const natureInteractionArea = document.getElementById('nature-interaction-area');
         const qrReaderNature = document.getElementById('qr-reader-nature');
         const natureResultArea = document.getElementById('nature-result-area');
 
-        if (!btnNatureInteraction || !natureInteractionArea) {
-            console.warn('[nature-interaction] 元素未找到');
+        if (!btnNatureInteraction) {
+            console.warn('[nature-interaction] 按鈕元素未找到');
             return;
         }
 
+        if (!qrReaderNature) {
+            console.warn('[nature-interaction] QR reader 元素未找到');
+            return;
+        }
+
+        console.log('[nature-interaction] 初始化完成，任務資料:', missionData);
+
         // 點擊按鈕直接開啟鏡頭掃描
-        btnNatureInteraction.addEventListener('click', () => {
+        btnNatureInteraction.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            console.log('[nature-interaction] 按鈕被點擊，當前掃描狀態:', isScanning);
+            
             if (isScanning) {
                 stopScanning();
             } else {
-                // 直接開始掃描，不改變按鈕文字
+                // 直接開始掃描
                 startScanning(qrReaderNature, missionData);
             }
         });
@@ -33,13 +44,17 @@
         const btnCloseResult = document.getElementById('btn-close-nature-result');
         if (btnCloseResult) {
             btnCloseResult.addEventListener('click', () => {
-                natureResultArea.style.display = 'none';
+                if (natureResultArea) {
+                    natureResultArea.style.display = 'none';
+                }
             });
         }
     }
 
     // 開始掃描 QR code
     function startScanning(qrReaderElement, missionData) {
+        console.log('[nature-interaction] 開始掃描，QR reader 元素:', qrReaderElement);
+        
         if (!qrReaderElement) {
             console.error('[nature-interaction] QR reader 元素未找到');
             return;
@@ -49,19 +64,31 @@
         
         // 檢查 Html5Qrcode 是否可用
         if (typeof Html5Qrcode === 'undefined') {
+            console.error('[nature-interaction] Html5Qrcode 未載入');
             alert('QR code 掃描功能未載入，請重新整理頁面');
             return;
         }
 
+        console.log('[nature-interaction] 準備啟動相機...');
+        
         isScanning = true;
         qrReaderElement.style.display = 'block';
-        // 不改變按鈕文字，保持原樣，但可以改變樣式提示正在掃描
+        
+        // 更新按鈕狀態
         if (btnNatureInteraction) {
             btnNatureInteraction.innerHTML = '<span>📷 掃描中... 點擊停止</span>';
             btnNatureInteraction.style.opacity = '0.8';
         }
 
+        // 清除之前的掃描器（如果存在）
+        if (html5QrcodeScanner) {
+            html5QrcodeScanner.clear();
+            html5QrcodeScanner = null;
+        }
+
         html5QrcodeScanner = new Html5Qrcode("qr-reader-nature");
+        
+        console.log('[nature-interaction] 啟動相機掃描...');
         
         html5QrcodeScanner.start(
             { facingMode: "environment" }, // 使用後置鏡頭
@@ -71,14 +98,18 @@
             },
             (decodedText, decodedResult) => {
                 // QR 碼掃描成功
+                console.log('[nature-interaction] 掃描成功:', decodedText);
                 handleQRCodeScanned(decodedText, missionData);
             },
             (errorMessage) => {
                 // 掃描錯誤（忽略，繼續掃描）
+                // console.log('[nature-interaction] 掃描中...', errorMessage);
             }
-        ).catch((err) => {
+        ).then(() => {
+            console.log('[nature-interaction] 相機啟動成功');
+        }).catch((err) => {
             console.error("[nature-interaction] 無法啟動相機:", err);
-            alert('無法啟動相機，請確認已授予相機權限');
+            alert('無法啟動相機，請確認已授予相機權限。錯誤：' + err.message);
             stopScanning();
         });
     }
