@@ -155,7 +155,7 @@ const TRANSLATIONS = {
         scanQRNext: '📷 掃描 QR 碼進入下一個任務',
         scanQRNextDesc: '完成此任務後，掃描下一個任務的 QR 碼繼續旅程',
         btnScanQR: '📷 掃描 QR 碼',
-        backToHome: '← 返回首頁',
+        backToHome: '← 返回英雄之旅首頁',
         // 第二關：山風拂面（礁溪櫻花陵園）
         rainTitle: '🍃 山風拂面',
         rainSubtitle: '📍 礁溪櫻花陵園・第二關',
@@ -825,7 +825,7 @@ const TRANSLATIONS = {
         scanQRNext: '📷 扫描 QR 码进入下一个任务',
         scanQRNextDesc: '完成此任务后，扫描下一个任务的 QR 码继续旅程',
         btnScanQR: '📷 扫描 QR 码',
-        backToHome: '← 返回首页',
+        backToHome: '← 返回英雄之旅首页',
         // rain.html 頁面
         rainTitle: '🌧 兰阳细雨陪伴任务',
         rainSubtitle: '📍 壮围沙丘生态园区・第二关',
@@ -1460,7 +1460,7 @@ const TRANSLATIONS = {
         scanQRNext: '📷 Scan QR Code to Enter Next Mission',
         scanQRNextDesc: 'After completing this mission, scan the QR code for the next mission to continue your journey',
         btnScanQR: '📷 Scan QR Code',
-        backToHome: '← Back to Home',
+        backToHome: '← Back to Hero Journey Home',
         // rain.html page
         rainTitle: '🌧 Lanyang Rain Companion',
         rainSubtitle: '📍 Zhuangwei Sand Dune Ecological Park・Stage 2',
@@ -2105,7 +2105,7 @@ const TRANSLATIONS = {
         scanQRNext: '📷 QRコードをスキャンして次のミッションに入る',
         scanQRNextDesc: 'このミッションを完了した後、次のミッションのQRコードをスキャンして旅を続けます',
         btnScanQR: '📷 QRコードをスキャン',
-        backToHome: '← ホームに戻る',
+        backToHome: '← 英雄の旅ホームへ戻る',
         // rain.html ページ
         rainTitle: '🌧 蘭陽の雨の同伴',
         rainSubtitle: '📍 壮圍沙丘生態園區・第二関',
@@ -2744,7 +2744,7 @@ const TRANSLATIONS = {
         scanQRNext: '📷 QR 코드 스캔하여 다음 미션 입장',
         scanQRNextDesc: '이 미션을 완료한 후, 다음 미션의 QR 코드를 스캔하여 여정을 계속하세요',
         btnScanQR: '📷 QR 코드 스캔',
-        backToHome: '← 홈으로 돌아가기',
+        backToHome: '← 영웅 여정 홈으로',
         // rain.html 페이지
         rainTitle: '🌧 란양 비 동반',
         rainSubtitle: '📍 좡웨이 사구 생태공원・2단계',

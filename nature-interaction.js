@@ -7,6 +7,8 @@
     let html5QrcodeScanner = null;
     let isScanning = false;
     let externalAudioPlayer = null;
+    let lastPlaybackToken = 0;
+    let isPlayingAudio = false;
 
     const EXTERNAL_TTS_ENABLED = true;
     const EXTERNAL_TTS_LANG = 'zh-TW';
@@ -274,28 +276,23 @@
             // 使用多種方式確保語音播放
             console.log('[nature-interaction] 準備播放語音，文字長度:', encouragementText.length);
             
-            // 方法1：立即嘗試播放
+            // 只播放一次，避免疊音
             speakEncouragement(encouragementText);
             
-            // 方法2：延遲播放（處理手機瀏覽器的限制）
-            setTimeout(() => {
-                console.log('[nature-interaction] 延遲播放語音');
-                speakEncouragement(encouragementText);
-            }, 300);
-            
-            // 方法3：如果前兩次都失敗，在用戶點擊結果區域時播放
+            // 提供手動重播（避免自動重複導致回音）
             if (natureResultContent) {
-                const playOnClick = () => {
-                    console.log('[nature-interaction] 用戶點擊，播放語音');
+                const replayButton = document.createElement('button');
+                replayButton.type = 'button';
+                replayButton.className = 'btn-nature-interaction';
+                replayButton.style.cssText = 'margin-top: 10px; width: 100%;';
+                replayButton.textContent = '🔊 重新播放';
+                replayButton.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    console.log('[nature-interaction] 手動重播語音');
                     speakEncouragement(encouragementText);
-                    natureResultContent.removeEventListener('click', playOnClick);
-                };
-                natureResultContent.addEventListener('click', playOnClick);
-                // 添加提示文字
-                const hint = document.createElement('p');
-                hint.style.cssText = 'text-align: center; color: #64748B; font-size: 0.9rem; margin-top: 10px;';
-                hint.textContent = '💡 點擊上方文字可重新播放';
-                natureResultContent.appendChild(hint);
+                });
+                natureResultContent.appendChild(replayButton);
             }
         } catch (error) {
             console.error('[nature-interaction] 生成鼓勵話失敗:', error);
@@ -419,6 +416,9 @@
             return Promise.reject(new Error('empty text'));
         }
 
+        const playbackToken = Date.now();
+        lastPlaybackToken = playbackToken;
+
         if (externalAudioPlayer) {
             externalAudioPlayer.pause();
             externalAudioPlayer.src = '';
@@ -433,6 +433,9 @@
 
         return new Promise((resolve, reject) => {
             const tryNextProvider = () => {
+                if (lastPlaybackToken !== playbackToken) {
+                    return;
+                }
                 providerIndex += 1;
                 if (providerIndex < EXTERNAL_TTS_PROVIDERS.length) {
                     console.warn('[nature-interaction] 外部 TTS 來源失敗，改用:', EXTERNAL_TTS_PROVIDERS[providerIndex]);
@@ -443,6 +446,9 @@
             };
 
             const playPart = () => {
+                if (lastPlaybackToken !== playbackToken) {
+                    return;
+                }
                 const provider = EXTERNAL_TTS_PROVIDERS[providerIndex];
                 const url = buildExternalTTSUrl(parts[index], provider);
                 if (!url) {
@@ -459,10 +465,14 @@
             };
 
             externalAudioPlayer.onended = () => {
+                if (lastPlaybackToken !== playbackToken) {
+                    return;
+                }
                 index += 1;
                 if (index < parts.length) {
                     playPart();
                 } else {
+                    isPlayingAudio = false;
                     resolve();
                 }
             };
@@ -477,6 +487,8 @@
 
     // 語音播放入口：優先使用外部 TTS，失敗再回退語音合成
     function speakEncouragement(text) {
+        lastPlaybackToken = Date.now();
+        isPlayingAudio = true;
         if (FORCE_SPEECH_SYNTHESIS_ON_IOS && isIosSafari()) {
             console.log('[nature-interaction] iOS Safari：強制使用內建語音');
             playSpeechSynthesis(text);
@@ -504,6 +516,7 @@
         }
 
         try {
+            const playbackToken = lastPlaybackToken;
             // 停止任何正在播放的語音
             window.speechSynthesis.cancel();
             
@@ -540,7 +553,11 @@
                 };
 
                 utterance.onend = () => {
+                    if (lastPlaybackToken !== playbackToken) {
+                        return;
+                    }
                     console.log('[nature-interaction] 語音播放完成');
+                    isPlayingAudio = false;
                 };
 
                 // 檢查語音合成是否可用
