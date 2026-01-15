@@ -9,6 +9,7 @@
     let externalAudioPlayer = null;
     let lastPlaybackToken = 0;
     let isPlayingAudio = false;
+    let missionMusicPlayer = null;
 
     const EXTERNAL_TTS_ENABLED = true;
     const EXTERNAL_TTS_LANG = 'zh-TW';
@@ -202,8 +203,7 @@
                 break;
             case '音樂':
             case 'music':
-                // 之後實現
-                alert('音樂功能開發中...');
+                handleMusicPlayback();
                 break;
             case '圖畫':
             case 'art':
@@ -302,6 +302,76 @@
             if (natureResultContent) {
                 natureResultContent.innerHTML = '<p>生成鼓勵話時發生錯誤，請稍後再試。</p>';
             }
+        }
+    }
+
+    // 處理音樂播放
+    function handleMusicPlayback() {
+        const natureResultArea = document.getElementById('nature-result-area');
+        const natureResultContent = document.getElementById('nature-result-content');
+        const natureResultTitle = document.getElementById('nature-result-title');
+
+        if (!natureResultArea || !natureResultContent) {
+            console.error('[nature-interaction] 結果區域元素未找到');
+            return;
+        }
+
+        // 停止語音播放，避免疊音
+        try {
+            window.speechSynthesis?.cancel();
+        } catch (err) {
+            console.warn('[nature-interaction] 停止語音失敗:', err);
+        }
+
+        if (externalAudioPlayer) {
+            externalAudioPlayer.pause();
+            externalAudioPlayer.src = '';
+        }
+
+        natureResultArea.style.display = 'block';
+        if (natureResultTitle) {
+            natureResultTitle.textContent = '🎵 英雄之旅音樂';
+        }
+
+        // 顯示播放器
+        natureResultContent.innerHTML = '';
+        const desc = document.createElement('p');
+        desc.textContent = '已為你準備「擺渡蘭陽英雄之旅」音檔。';
+        natureResultContent.appendChild(desc);
+
+        if (!missionMusicPlayer) {
+            missionMusicPlayer = new Audio('擺渡蘭陽英雄之旅.mp3');
+            missionMusicPlayer.preload = 'auto';
+        } else {
+            missionMusicPlayer.pause();
+            missionMusicPlayer.currentTime = 0;
+        }
+
+        const playButton = document.createElement('button');
+        playButton.type = 'button';
+        playButton.className = 'btn-nature-interaction';
+        playButton.style.cssText = 'margin-top: 10px; width: 100%;';
+        playButton.textContent = '▶️ 立即播放';
+
+        playButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            const playPromise = missionMusicPlayer.play();
+            if (playPromise && typeof playPromise.catch === 'function') {
+                playPromise.catch((err) => {
+                    console.warn('[nature-interaction] 音樂播放失敗:', err);
+                });
+            }
+        });
+
+        natureResultContent.appendChild(playButton);
+
+        // 嘗試自動播放（若瀏覽器允許）
+        const autoPlayPromise = missionMusicPlayer.play();
+        if (autoPlayPromise && typeof autoPlayPromise.catch === 'function') {
+            autoPlayPromise.catch(() => {
+                console.log('[nature-interaction] 自動播放被阻擋，等待使用者點擊');
+            });
         }
     }
 
