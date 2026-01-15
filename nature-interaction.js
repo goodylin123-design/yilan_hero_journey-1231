@@ -493,15 +493,20 @@
                 // 檢測設備類型
                 const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
                 
-                // 使用更自然的語音參數
-                if (isMobile) {
+                // 使用更自然、柔和的語音參數
+                if (isIosSafari()) {
+                    utterance.rate = 0.82; // iOS Safari：更柔和
+                    utterance.pitch = 1.05; // 稍微提高音調更優美
+                    utterance.volume = 0.95; // 稍降音量更舒服
+                } else if (isMobile) {
                     utterance.rate = 0.85; // 手機版：稍慢但自然
                     utterance.pitch = 1.0; // 正常音調
+                    utterance.volume = 1.0;
                 } else {
                     utterance.rate = 0.9; // 桌面版：接近正常語速
                     utterance.pitch = 1.0; // 正常音調
+                    utterance.volume = 1.0;
                 }
-                utterance.volume = 1.0; // 最大音量
 
                 utterance.onerror = (event) => {
                     console.error('[nature-interaction] 語音合成錯誤:', event);
