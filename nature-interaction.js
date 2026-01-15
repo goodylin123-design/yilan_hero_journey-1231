@@ -35,8 +35,8 @@
     }
 
     function getCurrentLanguage() {
-        if (window.I18N && typeof window.I18N.getCurrentLanguage === 'function') {
-            return window.I18N.getCurrentLanguage();
+        if (window.I18n && typeof window.I18n.getCurrentLanguage === 'function') {
+            return window.I18n.getCurrentLanguage();
         }
         return 'zh-TW';
     }
@@ -72,8 +72,8 @@
     }
 
     function t(key, fallback = '') {
-        if (window.I18N && typeof window.I18N.t === 'function') {
-            const value = window.I18N.t(key);
+        if (window.I18n && typeof window.I18n.t === 'function') {
+            const value = window.I18n.t(key);
             if (value && value !== key) {
                 return value;
             }
