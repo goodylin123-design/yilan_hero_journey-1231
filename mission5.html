@@ -135,6 +135,25 @@
                 </div>
             </section>
 
+            <!-- 與自然互動區域 -->
+            <section class="nature-interaction-section card">
+                <h3 data-i18n="natureInteractionTitle">🌿 與自然互動</h3>
+                <p data-i18n="natureInteractionDesc">掃描 QR code，與大自然進行不同的互動體驗</p>
+                <button type="button" class="btn-nature-interaction" id="btn-nature-interaction">
+                    <span data-i18n="natureInteractionButton">📷 與自然互動</span>
+                </button>
+                <div id="qr-reader-nature" style="display: none; margin-top: 20px;"></div>
+                
+                <!-- 互動結果區域 -->
+                <div id="nature-result-area" class="nature-result-area" style="display: none;">
+                    <div class="nature-result-header">
+                        <h4 id="nature-result-title" data-i18n="natureInteractionTitle">🌿 與自然互動</h4>
+                        <button type="button" class="btn-close-result" id="btn-close-nature-result">×</button>
+                    </div>
+                    <div id="nature-result-content" class="nature-result-content"></div>
+                </div>
+            </section>
+
             <!-- QR 碼掃描區域 -->
             <section class="qr-section card">
                 <h3 data-i18n="scanQRNext">📷 掃描 QR 碼進入下一個任務</h3>
@@ -158,12 +177,14 @@
     
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
     <script src="i18n.js"></script>
+    <script src="missions-data.js"></script>
     <script src="task-progress.js"></script>
     <script src="location-check.js"></script>
     <script src="esg-stats.js"></script>
     <script src="traveler-store.js"></script>
     <script src="task-script.js"></script>
     <script src="ai-dialogue.js"></script>
+    <script src="nature-interaction.js"></script>
     <script src="mission5-script.js"></script>
     <script src="index-i18n.js"></script>
     <script>
@@ -187,6 +208,29 @@
                 // 檢查位置驗證
                 if (!window.isLocationVerified(taskKey)) {
                     window.blockTaskContent(taskKey);
+                }
+
+                // 初始化與自然互動功能
+                if (typeof window.NatureInteraction !== 'undefined') {
+                    let missionData = null;
+                    if (window.MISSIONS) {
+                        missionData = window.MISSIONS.find(mission => mission.key === 'mission5') || null;
+                    }
+                    if (!missionData) {
+                        missionData = {
+                            id: 'star-wish',
+                            key: 'mission5',
+                            order: 5,
+                            locationName: window.I18n ? window.I18n.t('mission5Loc') : '東港榕樹公園',
+                            title: window.I18n ? window.I18n.t('mission5Title') : '星空下的祈願'
+                        };
+                    }
+                    setTimeout(() => {
+                        console.log('[mission5.html] 初始化與自然互動功能，任務資料:', missionData);
+                        window.NatureInteraction.init(missionData);
+                    }, 200);
+                } else {
+                    console.warn('[mission5.html] NatureInteraction 未載入');
                 }
             }, 500);
         });
