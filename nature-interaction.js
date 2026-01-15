@@ -330,9 +330,9 @@
             setTimeout(() => {
                 const utterance = new SpeechSynthesisUtterance(text);
                 utterance.lang = 'zh-TW'; // 繁體中文
-                utterance.rate = 0.9; // 稍慢一點，更自然
-                utterance.pitch = 1.0;
-                utterance.volume = 1.0;
+                utterance.rate = 0.75; // 更慢的速度，提高清晰度（手機版建議 0.7-0.8）
+                utterance.pitch = 1.0; // 保持正常音調
+                utterance.volume = 1.0; // 最大音量
 
                 utterance.onerror = (event) => {
                     console.error('[nature-interaction] 語音合成錯誤:', event);
@@ -384,16 +384,49 @@
 
     // 設置語音並播放
     function setVoiceAndSpeak(utterance, voices) {
-        // 嘗試找到中文語音
-        const chineseVoice = voices.find(voice => 
-            voice.lang.includes('zh') || voice.lang.includes('TW') || voice.lang.includes('CN')
+        // 優先選擇高品質的中文語音
+        // 優先順序：zh-TW > zh-CN > 其他中文語音
+        let chineseVoice = voices.find(voice => 
+            voice.lang === 'zh-TW' || voice.lang === 'zh-TW-TW'
         );
+        
+        if (!chineseVoice) {
+            chineseVoice = voices.find(voice => 
+                voice.lang === 'zh-CN' || voice.lang === 'zh-CN-CN'
+            );
+        }
+        
+        if (!chineseVoice) {
+            chineseVoice = voices.find(voice => 
+                voice.lang.includes('zh') && (voice.lang.includes('TW') || voice.lang.includes('CN'))
+            );
+        }
+        
+        if (!chineseVoice) {
+            chineseVoice = voices.find(voice => 
+                voice.lang.includes('zh')
+            );
+        }
         
         if (chineseVoice) {
             utterance.voice = chineseVoice;
             console.log('[nature-interaction] 使用語音:', chineseVoice.name, chineseVoice.lang);
+            
+            // 如果是手機，進一步調整參數
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            if (isMobile) {
+                utterance.rate = 0.7; // 手機版更慢，提高清晰度
+                utterance.pitch = 0.95; // 稍微降低音調，更清晰
+                console.log('[nature-interaction] 手機版：調整語音參數以提高清晰度');
+            }
         } else {
             console.warn('[nature-interaction] 未找到中文語音，使用預設語音');
+            // 即使沒有中文語音，也調整參數以提高清晰度
+            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+            if (isMobile) {
+                utterance.rate = 0.7;
+                utterance.pitch = 0.95;
+            }
         }
 
         // 播放語音
