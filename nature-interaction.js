@@ -11,9 +11,10 @@
     const EXTERNAL_TTS_ENABLED = true;
     const EXTERNAL_TTS_LANG = 'zh-TW';
     const EXTERNAL_TTS_CHAR_LIMIT = 180;
-    const EXTERNAL_TTS_PROVIDERS = ['streamelements', 'google'];
+    const EXTERNAL_TTS_PROVIDERS = ['voicerss', 'streamelements', 'google'];
     const EXTERNAL_TTS_VOICE = 'Zhiyu';
     const FORCE_SPEECH_SYNTHESIS_ON_IOS = true;
+    const VOICERSS_API_KEY = ''; // TODO: 填入 VoiceRSS API Key
 
     const TW_FEMALE_VOICE_KEYWORDS = [
         'Mei-Jia',
@@ -378,6 +379,23 @@
     }
 
     function buildExternalTTSUrl(text, provider) {
+        if (provider === 'voicerss') {
+            if (!VOICERSS_API_KEY) {
+                console.warn('[nature-interaction] VoiceRSS 未設定 API Key，跳過');
+                return '';
+            }
+            const params = new URLSearchParams({
+                key: VOICERSS_API_KEY,
+                src: text,
+                hl: 'zh-tw',
+                c: 'MP3',
+                f: '44khz_16bit_stereo',
+                r: '0',
+                v: 'f'
+            });
+            return `https://api.voicerss.org/?${params.toString()}`;
+        }
+
         if (provider === 'streamelements') {
             const params = new URLSearchParams({
                 voice: EXTERNAL_TTS_VOICE,
@@ -427,6 +445,10 @@
             const playPart = () => {
                 const provider = EXTERNAL_TTS_PROVIDERS[providerIndex];
                 const url = buildExternalTTSUrl(parts[index], provider);
+                if (!url) {
+                    tryNextProvider();
+                    return;
+                }
                 externalAudioPlayer.src = url;
                 const playPromise = externalAudioPlayer.play();
                 if (playPromise && typeof playPromise.catch === 'function') {
@@ -495,9 +517,9 @@
                 
                 // 使用更自然、柔和的語音參數
                 if (isIosSafari()) {
-                    utterance.rate = 0.82; // iOS Safari：更柔和
-                    utterance.pitch = 1.05; // 稍微提高音調更優美
-                    utterance.volume = 0.95; // 稍降音量更舒服
+                    utterance.rate = 0.8; // iOS Safari：更溫暖柔和
+                    utterance.pitch = 1.03; // 略高更親切
+                    utterance.volume = 0.93; // 稍降音量更舒服
                 } else if (isMobile) {
                     utterance.rate = 0.85; // 手機版：稍慢但自然
                     utterance.pitch = 1.0; // 正常音調
