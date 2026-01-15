@@ -186,7 +186,7 @@
         // 檢查 Html5Qrcode 是否可用
         if (typeof Html5Qrcode === 'undefined') {
             console.error('[nature-interaction] Html5Qrcode 未載入');
-            alert('QR code 掃描功能未載入，請重新整理頁面');
+            alert(t('natureQrNotLoaded', 'QR code 掃描功能未載入，請重新整理頁面'));
             return;
         }
 
@@ -197,7 +197,7 @@
         
         // 更新按鈕狀態
         if (btnNatureInteraction) {
-            btnNatureInteraction.innerHTML = '<span>📷 掃描中... 點擊停止</span>';
+            btnNatureInteraction.innerHTML = `<span>${t('natureScanInProgress', '📷 掃描中... 點擊停止')}</span>`;
             btnNatureInteraction.style.opacity = '0.8';
         }
 
@@ -230,7 +230,8 @@
             console.log('[nature-interaction] 相機啟動成功');
         }).catch((err) => {
             console.error("[nature-interaction] 無法啟動相機:", err);
-            alert('無法啟動相機，請確認已授予相機權限。錯誤：' + err.message);
+            const baseMessage = t('natureCameraError', '無法啟動相機，請確認已授予相機權限。');
+            alert(`${baseMessage} ${err?.message ? `(${err.message})` : ''}`.trim());
             stopScanning();
         });
     }
@@ -253,7 +254,7 @@
             qrReaderNature.style.display = 'none';
         }
         if (btnNatureInteraction) {
-            btnNatureInteraction.innerHTML = '<span>📷 與自然互動</span>';
+            btnNatureInteraction.innerHTML = `<span>${t('natureInteractionButton', '📷 與自然互動')}</span>`;
             btnNatureInteraction.style.opacity = '1';
         }
         

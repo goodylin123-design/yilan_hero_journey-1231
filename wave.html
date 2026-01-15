@@ -231,8 +231,10 @@
                     if (!missionData) {
                         missionData = {
                             id: 'wave',
-                            locationName: '蜜月灣',
-                            title: '海風中的呢喃'
+                            key: 'mission1',
+                            order: 1,
+                            locationName: window.I18N ? window.I18N.t('missionWaveLoc') : '蜜月灣',
+                            title: window.I18N ? window.I18N.t('mission1Title') : '海風中的呢喃'
                         };
                     }
                     
