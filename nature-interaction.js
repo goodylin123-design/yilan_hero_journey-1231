@@ -13,6 +13,23 @@
     const EXTERNAL_TTS_CHAR_LIMIT = 180;
     const EXTERNAL_TTS_PROVIDERS = ['streamelements', 'google'];
     const EXTERNAL_TTS_VOICE = 'Zhiyu';
+    const FORCE_SPEECH_SYNTHESIS_ON_IOS = true;
+
+    const TW_FEMALE_VOICE_KEYWORDS = [
+        'Mei-Jia',
+        '美佳',
+        '美嘉',
+        'Mei Jia',
+        'Female',
+        '女'
+    ];
+
+    function isIosSafari() {
+        const ua = navigator.userAgent;
+        const isIOS = /iPhone|iPad|iPod/i.test(ua);
+        const isSafari = /Safari/i.test(ua) && !/CriOS|FxiOS|EdgiOS/i.test(ua);
+        return isIOS && isSafari;
+    }
 
     // 初始化與自然互動功能
     function initNatureInteraction(missionData) {
@@ -438,6 +455,12 @@
 
     // 語音播放入口：優先使用外部 TTS，失敗再回退語音合成
     function speakEncouragement(text) {
+        if (FORCE_SPEECH_SYNTHESIS_ON_IOS && isIosSafari()) {
+            console.log('[nature-interaction] iOS Safari：強制使用內建語音');
+            playSpeechSynthesis(text);
+            return;
+        }
+
         if (EXTERNAL_TTS_ENABLED) {
             console.log('[nature-interaction] 使用外部 TTS 播放');
             playExternalTTS(text)
@@ -530,27 +553,36 @@
 
     // 設置語音並播放
     function setVoiceAndSpeak(utterance, voices) {
-        // 優先選擇高品質的中文語音
-        // 優先順序：zh-TW > zh-CN > 其他中文語音
-        let chineseVoice = voices.find(voice => 
+        // 優先選擇高品質、台灣女聲的中文語音
+        // 優先順序：zh-TW 女聲關鍵字 > zh-TW > zh-Hant > zh-CN > 其他中文語音
+        const zhTwVoices = voices.filter(voice => 
             voice.lang === 'zh-TW' || voice.lang === 'zh-TW-TW'
         );
+
+        let chineseVoice = zhTwVoices.find(voice => {
+            const name = (voice.name || '').toLowerCase();
+            return TW_FEMALE_VOICE_KEYWORDS.some(keyword => name.includes(keyword.toLowerCase()));
+        });
         
         if (!chineseVoice) {
-            chineseVoice = voices.find(voice => 
+            chineseVoice = zhTwVoices[0];
+        }
+        
+        if (!chineseVoice) {
+            chineseVoice = voices.find(voice =>
+                voice.lang && voice.lang.toLowerCase().includes('zh-hant')
+            );
+        }
+        
+        if (!chineseVoice) {
+            chineseVoice = voices.find(voice =>
                 voice.lang === 'zh-CN' || voice.lang === 'zh-CN-CN'
             );
         }
-        
+
         if (!chineseVoice) {
-            chineseVoice = voices.find(voice => 
-                voice.lang.includes('zh') && (voice.lang.includes('TW') || voice.lang.includes('CN'))
-            );
-        }
-        
-        if (!chineseVoice) {
-            chineseVoice = voices.find(voice => 
-                voice.lang.includes('zh')
+            chineseVoice = voices.find(voice =>
+                voice.lang && voice.lang.toLowerCase().includes('zh')
             );
         }
         
