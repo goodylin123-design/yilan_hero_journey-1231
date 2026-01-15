@@ -220,12 +220,7 @@
                     return;
                 }
                 
-                // 檢查位置驗證
-                if (!window.isLocationVerified(taskKey)) {
-                    window.blockTaskContent(taskKey);
-                }
-
-                // 初始化與自然互動功能
+                // 初始化與自然互動功能（無論位置驗證是否通過都初始化）
                 if (typeof window.NatureInteraction !== 'undefined') {
                     let missionData = null;
                     if (window.MISSIONS) {
@@ -246,6 +241,11 @@
                     }, 200);
                 } else {
                     console.warn('[dawn.html] NatureInteraction 未載入');
+                }
+
+                // 檢查位置驗證（在初始化之後）
+                if (!window.isLocationVerified(taskKey)) {
+                    window.blockTaskContent(taskKey);
                 }
             }, 500);
         });
