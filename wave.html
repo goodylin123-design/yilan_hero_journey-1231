@@ -148,6 +148,25 @@
                 </div>
             </section>
 
+            <!-- 與自然互動區域 -->
+            <section class="nature-interaction-section card">
+                <h3>🌿 與自然互動</h3>
+                <p>掃描 QR code，與大自然進行不同的互動體驗</p>
+                <button type="button" class="btn-nature-interaction" id="btn-nature-interaction">
+                    <span>📷 與自然互動</span>
+                </button>
+                <div id="qr-reader-nature" style="display: none; margin-top: 20px;"></div>
+                
+                <!-- 互動結果區域 -->
+                <div id="nature-result-area" class="nature-result-area" style="display: none;">
+                    <div class="nature-result-header">
+                        <h4 id="nature-result-title">🌿 與自然互動</h4>
+                        <button type="button" class="btn-close-result" id="btn-close-nature-result">×</button>
+                    </div>
+                    <div id="nature-result-content" class="nature-result-content"></div>
+                </div>
+            </section>
+
             <!-- QR 碼掃描區域 -->
             <section class="qr-section card">
                 <h3 data-i18n="scanQRNext">📷 掃描 QR 碼進入下一個任務</h3>
@@ -171,12 +190,14 @@
     
     <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
     <script src="i18n.js"></script>
+    <script src="missions-data.js"></script>
     <script src="task-progress.js"></script>
     <script src="location-check.js"></script>
     <script src="esg-stats.js"></script>
     <script src="traveler-store.js"></script>
     <script src="task-script.js"></script>
     <script src="ai-dialogue.js"></script>
+    <script src="nature-interaction.js"></script>
     <script src="wave-script.js"></script>
     <script src="hero-guide.js"></script>
     <script src="index-i18n.js"></script>
@@ -201,6 +222,30 @@
                 // 檢查位置驗證
                 if (!window.isLocationVerified(taskKey)) {
                     window.blockTaskContent(taskKey);
+                    return;
+                }
+
+                // 初始化與自然互動功能
+                if (typeof window.NatureInteraction !== 'undefined') {
+                    // 獲取任務資料
+                    let missionData = null;
+                    if (window.MISSIONS) {
+                        missionData = window.MISSIONS.find(m => m.id === taskKey);
+                    }
+                    
+                    // 如果找不到，使用預設值
+                    if (!missionData) {
+                        missionData = {
+                            id: 'wave',
+                            locationName: '蜜月灣',
+                            title: '第一關海風中的呢喃'
+                        };
+                    }
+                    
+                    // 延遲初始化，確保 DOM 已完全載入
+                    setTimeout(() => {
+                        window.NatureInteraction.init(missionData);
+                    }, 100);
                 }
             }, 500);
         });
