@@ -57,6 +57,10 @@
         if (lang && lang.startsWith('zh')) {
             return EXTERNAL_TTS_PROVIDERS;
         }
+        // 韓文在外部 TTS 上容易出現壓縮感，優先用內建語音
+        if (lang && lang.startsWith('ko')) {
+            return [];
+        }
         return ['voicerss', 'google'];
     }
 
@@ -818,6 +822,9 @@
 
         const ttsLang = getTtsLanguage();
         const providers = getExternalProvidersForLang(ttsLang);
+        if (!providers || providers.length === 0) {
+            return Promise.reject(new Error('external tts disabled for this language'));
+        }
         const playbackToken = Date.now();
         lastPlaybackToken = playbackToken;
 
@@ -897,7 +904,9 @@
             return;
         }
 
-        if (EXTERNAL_TTS_ENABLED) {
+        const ttsLang = getTtsLanguage();
+        const providers = getExternalProvidersForLang(ttsLang);
+        if (EXTERNAL_TTS_ENABLED && providers.length > 0) {
             console.log('[nature-interaction] 使用外部 TTS 播放');
             playExternalTTS(text)
                 .catch((error) => {
@@ -1053,7 +1062,15 @@
                 return voiceLang.startsWith(targetLang) || voiceLang.startsWith(langPrefix);
             });
 
-            const selectedVoice = candidates.find(voice => voice.localService) || candidates[0];
+            let selectedVoice = candidates.find(voice => voice.localService) || candidates[0];
+            if (langPrefix === 'ko') {
+                // 優先選擇韓文常見人聲（例如 Yuna / Korean）
+                const koPreferred = candidates.find(voice => {
+                    const name = (voice.name || '').toLowerCase();
+                    return name.includes('yuna') || name.includes('korean') || name.includes('korea');
+                });
+                selectedVoice = koPreferred || selectedVoice;
+            }
             if (selectedVoice) {
                 utterance.voice = selectedVoice;
                 console.log('[nature-interaction] 使用語音:', selectedVoice.name, selectedVoice.lang);
