@@ -300,7 +300,9 @@
             // 自動導向第一關並啟動與自然互動
             const params = new URLSearchParams(window.location.search);
             if (params.get('auto') === 'nature') {
-                window.location.href = 'wave.html?auto=nature';
+                const type = params.get('type');
+                const target = type ? `wave.html?auto=nature&type=${encodeURIComponent(type)}` : 'wave.html?auto=nature';
+                window.location.href = target;
                 return;
             }
             

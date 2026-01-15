@@ -10,6 +10,7 @@
     let lastPlaybackToken = 0;
     let isPlayingAudio = false;
     let missionMusicPlayer = null;
+    let currentMissionData = null;
 
     const EXTERNAL_TTS_ENABLED = true;
     const EXTERNAL_TTS_CHAR_LIMIT = 180;
@@ -134,6 +135,8 @@
         const btnNatureInteraction = document.getElementById('btn-nature-interaction');
         const qrReaderNature = document.getElementById('qr-reader-nature');
         const natureResultArea = document.getElementById('nature-result-area');
+
+        currentMissionData = missionData || currentMissionData;
 
         if (!btnNatureInteraction) {
             console.warn('[nature-interaction] 按鈕元素未找到');
@@ -337,6 +340,27 @@
         // 預設返回鼓勵話
         console.log('[nature-interaction] 使用預設類型: 鼓勵話');
         return '鼓勵話';
+    }
+
+    function triggerInteraction(interactionType, missionData = null) {
+        const data = missionData || currentMissionData;
+        switch (interactionType) {
+            case '鼓勵話':
+            case 'encouragement':
+                handleEncouragement(data);
+                break;
+            case '音樂':
+            case 'music':
+                handleMusicPlayback();
+                break;
+            case '圖畫':
+            case 'art':
+                handleArtExperience(data);
+                break;
+            default:
+                handleEncouragement(data);
+                break;
+        }
     }
 
     // 處理鼓勵話功能
@@ -1105,6 +1129,7 @@
     // 公開 API
     window.NatureInteraction = {
         init: initNatureInteraction,
-        stopScanning: stopScanning
+        stopScanning: stopScanning,
+        triggerInteraction: triggerInteraction
     };
 })();
