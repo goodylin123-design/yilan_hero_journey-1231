@@ -209,10 +209,10 @@
             
             // 延遲執行確保所有腳本已載入
             setTimeout(function() {
-                // 確保函數已載入
-                if (typeof window.isLocationVerified === 'undefined' || typeof window.blockTaskContent === 'undefined') {
-                    console.error('[dawn.html] 位置檢測函數未載入');
-                    return;
+                // 確保函數已載入（若未載入仍可使用與自然互動）
+                const canCheckLocation = typeof window.isLocationVerified === 'function' && typeof window.blockTaskContent === 'function';
+                if (!canCheckLocation) {
+                    console.error('[dawn.html] 位置檢測函數未載入，略過位置驗證');
                 }
                 
                 // 先檢查任務是否解鎖
@@ -244,7 +244,7 @@
                 }
 
                 // 檢查位置驗證（在初始化之後）
-                if (!window.isLocationVerified(taskKey)) {
+                if (canCheckLocation && !window.isLocationVerified(taskKey)) {
                     window.blockTaskContent(taskKey);
                 }
             }, 500);
