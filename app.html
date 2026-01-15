@@ -296,6 +296,13 @@
                 }
             });
             console.log('[app.html] 已清除所有測試模式標記');
+
+            // 自動導向第一關並啟動與自然互動
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('auto') === 'nature') {
+                window.location.href = 'wave.html?auto=nature';
+                return;
+            }
             
             function updateTaskProgress() {
                 const progress = TaskProgress.getTaskProgress();

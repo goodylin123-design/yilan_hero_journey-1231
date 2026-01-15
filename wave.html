@@ -242,6 +242,19 @@
                     setTimeout(() => {
                         console.log('[wave.html] 初始化與自然互動功能，任務資料:', missionData);
                         window.NatureInteraction.init(missionData);
+
+                        // 若網址含 auto=nature，自動啟動掃描
+                        const params = new URLSearchParams(window.location.search);
+                        if (params.get('auto') === 'nature') {
+                            const btn = document.getElementById('btn-nature-interaction');
+                            if (btn) {
+                                setTimeout(() => {
+                                    btn.click();
+                                    // 清除參數避免重複觸發
+                                    history.replaceState(null, '', window.location.pathname);
+                                }, 300);
+                            }
+                        }
                     }, 200);
                 } else {
                     console.warn('[wave.html] NatureInteraction 未載入');
