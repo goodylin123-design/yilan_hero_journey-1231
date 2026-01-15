@@ -94,12 +94,26 @@
         mission10: 'mission10Loc'
     };
 
+    function stripEmoji(text) {
+        if (!text) {
+            return text;
+        }
+        return text
+            .replace(/[\u{1F300}-\u{1FAFF}]/gu, '')
+            .replace(/[\u{2600}-\u{27BF}]/gu, '')
+            .replace(/[\u{FE00}-\u{FE0F}]/gu, '')
+            .replace(/[\u{200D}]/gu, '')
+            .replace(/\s{2,}/g, ' ')
+            .trim();
+    }
+
     function getMissionTitle(missionData) {
         if (!missionData) {
             return '';
         }
         const key = missionData.key ? `${missionData.key}Title` : null;
-        return key ? t(key, missionData.title || '') : (missionData.title || '');
+        const title = key ? t(key, missionData.title || '') : (missionData.title || '');
+        return stripEmoji(title);
     }
 
     function getMissionLocation(missionData) {
@@ -108,7 +122,7 @@
         }
         const locationKey = missionData.key ? MISSION_LOCATION_KEYS[missionData.key] : null;
         const rawLocation = locationKey ? t(locationKey, missionData.locationName || '') : (missionData.locationName || '');
-        return rawLocation.replace(/^📍\s*/, '');
+        return stripEmoji(rawLocation.replace(/^📍\s*/, ''));
     }
 
     // 初始化與自然互動功能
