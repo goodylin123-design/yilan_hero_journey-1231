@@ -426,31 +426,40 @@
             'lyricsVerse1Line2',
             'lyricsVerse1Line3',
             'lyricsVerse1Line4',
+            '',
             'lyricsChorus1Line1',
             'lyricsChorus1Line2',
             'lyricsChorus1Line3',
             'lyricsChorus1Line4',
+            '',
             'lyricsVerse2Line1',
             'lyricsVerse2Line2',
             'lyricsVerse2Line3',
             'lyricsVerse2Line4',
+            '',
             'lyricsVerse3Line1',
             'lyricsVerse3Line2',
             'lyricsVerse3Line3',
             'lyricsVerse3Line4',
+            '',
             'lyricsChorus2Line1',
             'lyricsChorus2Line2',
             'lyricsChorus2Line3',
             'lyricsChorus2Line4',
+            '',
             'lyricsVerse4Line1',
             'lyricsVerse4Line2',
             'lyricsVerse4Line3',
             'lyricsVerse4Line4',
+            '',
             'lyricsOutroLine1',
             'lyricsOutroLine2',
             'lyricsOutroLine3'
         ];
-        lyricsList.textContent = lyricKeys.map((key) => t(key, '')).filter(Boolean).join('\n');
+        lyricsList.textContent = lyricKeys
+            .map((key) => (key ? t(key, '') : ''))
+            .join('\n')
+            .trim();
         natureResultContent.appendChild(lyricsList);
 
         if (!missionMusicPlayer) {
