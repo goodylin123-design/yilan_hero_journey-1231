@@ -26,11 +26,28 @@
         console.log('[nature-interaction] 初始化完成，任務資料:', missionData);
 
         // 點擊按鈕直接開啟鏡頭掃描
+        // 在按鈕點擊時預先初始化語音合成（解決手機瀏覽器需要用戶交互的限制）
         btnNatureInteraction.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
             
             console.log('[nature-interaction] 按鈕被點擊，當前掃描狀態:', isScanning);
+            
+            // 預先初始化語音合成（解決手機瀏覽器限制）
+            if ('speechSynthesis' in window) {
+                // 獲取語音列表，這會觸發語音合成的初始化
+                window.speechSynthesis.getVoices();
+                // 播放一個無聲的語音來「解鎖」語音合成功能
+                try {
+                    const testUtterance = new SpeechSynthesisUtterance('');
+                    testUtterance.volume = 0;
+                    window.speechSynthesis.speak(testUtterance);
+                    window.speechSynthesis.cancel();
+                    console.log('[nature-interaction] 語音合成已預先初始化');
+                } catch (err) {
+                    console.warn('[nature-interaction] 預先初始化語音合成失敗:', err);
+                }
+            }
             
             if (isScanning) {
                 stopScanning();
@@ -228,8 +245,33 @@
                 </div>
             `;
 
-            // 直接使用語音合成播放（不等待用戶操作）
+            // 在手機上，語音合成可能需要延遲觸發或需要用戶交互
+            // 使用多種方式確保語音播放
+            console.log('[nature-interaction] 準備播放語音，文字長度:', encouragementText.length);
+            
+            // 方法1：立即嘗試播放
             speakEncouragement(encouragementText);
+            
+            // 方法2：延遲播放（處理手機瀏覽器的限制）
+            setTimeout(() => {
+                console.log('[nature-interaction] 延遲播放語音');
+                speakEncouragement(encouragementText);
+            }, 300);
+            
+            // 方法3：如果前兩次都失敗，在用戶點擊結果區域時播放
+            if (natureResultContent) {
+                const playOnClick = () => {
+                    console.log('[nature-interaction] 用戶點擊，播放語音');
+                    speakEncouragement(encouragementText);
+                    natureResultContent.removeEventListener('click', playOnClick);
+                };
+                natureResultContent.addEventListener('click', playOnClick);
+                // 添加提示文字
+                const hint = document.createElement('p');
+                hint.style.cssText = 'text-align: center; color: #64748B; font-size: 0.9rem; margin-top: 10px;';
+                hint.textContent = '💡 點擊上方文字可重新播放';
+                natureResultContent.appendChild(hint);
+            }
         } catch (error) {
             console.error('[nature-interaction] 生成鼓勵話失敗:', error);
             if (natureResultArea) {
@@ -280,24 +322,96 @@
             return;
         }
 
-        // 停止任何正在播放的語音
-        window.speechSynthesis.cancel();
+        try {
+            // 停止任何正在播放的語音
+            window.speechSynthesis.cancel();
+            
+            // 等待一小段時間確保 cancel 完成
+            setTimeout(() => {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'zh-TW'; // 繁體中文
+                utterance.rate = 0.9; // 稍慢一點，更自然
+                utterance.pitch = 1.0;
+                utterance.volume = 1.0;
 
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'zh-TW'; // 繁體中文
-        utterance.rate = 0.9; // 稍慢一點，更自然
-        utterance.pitch = 1.0;
-        utterance.volume = 1.0;
+                utterance.onerror = (event) => {
+                    console.error('[nature-interaction] 語音合成錯誤:', event);
+                    console.error('[nature-interaction] 錯誤詳情:', event.error);
+                };
 
-        utterance.onerror = (event) => {
-            console.error('[nature-interaction] 語音合成錯誤:', event);
-        };
+                utterance.onstart = () => {
+                    console.log('[nature-interaction] 語音開始播放');
+                };
 
-        utterance.onend = () => {
-            console.log('[nature-interaction] 語音播放完成');
-        };
+                utterance.onend = () => {
+                    console.log('[nature-interaction] 語音播放完成');
+                };
 
-        window.speechSynthesis.speak(utterance);
+                // 檢查語音合成是否可用
+                let voices = window.speechSynthesis.getVoices();
+                console.log('[nature-interaction] 可用語音數量:', voices.length);
+                
+                // 如果語音列表為空，等待語音載入完成
+                if (voices.length === 0) {
+                    console.log('[nature-interaction] 語音列表為空，等待載入...');
+                    const checkVoices = () => {
+                        voices = window.speechSynthesis.getVoices();
+                        if (voices.length > 0) {
+                            console.log('[nature-interaction] 語音列表已載入，數量:', voices.length);
+                            setVoiceAndSpeak(utterance, voices);
+                        } else {
+                            // 如果還是空的，直接播放（使用預設語音）
+                            console.warn('[nature-interaction] 語音列表仍為空，使用預設語音播放');
+                            window.speechSynthesis.speak(utterance);
+                        }
+                    };
+                    
+                    // 監聽語音列表載入事件
+                    window.speechSynthesis.onvoiceschanged = checkVoices;
+                    
+                    // 如果 onvoiceschanged 沒有觸發，等待一段時間後再試
+                    setTimeout(() => {
+                        checkVoices();
+                    }, 500);
+                } else {
+                    setVoiceAndSpeak(utterance, voices);
+                }
+            }, 50);
+        } catch (error) {
+            console.error('[nature-interaction] 播放語音時發生錯誤:', error);
+        }
+    }
+
+    // 設置語音並播放
+    function setVoiceAndSpeak(utterance, voices) {
+        // 嘗試找到中文語音
+        const chineseVoice = voices.find(voice => 
+            voice.lang.includes('zh') || voice.lang.includes('TW') || voice.lang.includes('CN')
+        );
+        
+        if (chineseVoice) {
+            utterance.voice = chineseVoice;
+            console.log('[nature-interaction] 使用語音:', chineseVoice.name, chineseVoice.lang);
+        } else {
+            console.warn('[nature-interaction] 未找到中文語音，使用預設語音');
+        }
+
+        // 播放語音
+        try {
+            window.speechSynthesis.speak(utterance);
+            console.log('[nature-interaction] 已調用 speak()');
+            
+            // 檢查是否真的開始播放（某些瀏覽器需要用戶交互）
+            setTimeout(() => {
+                if (window.speechSynthesis.speaking || window.speechSynthesis.pending) {
+                    console.log('[nature-interaction] 語音正在播放或等待中');
+                } else {
+                    console.warn('[nature-interaction] 語音可能未開始播放，可能需要用戶交互');
+                }
+            }, 200);
+        } catch (err) {
+            console.error('[nature-interaction] speak() 調用失敗:', err);
+        }
     }
 
     // 公開 API
