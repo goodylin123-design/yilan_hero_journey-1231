@@ -201,7 +201,7 @@
     <script src="ai-dialogue.js"></script>
     <script src="nature-interaction.js"></script>
     <script src="dawn-script.js"></script>
-    <script src="page-i18n.js"></script>
+    <script src="index-i18n.js"></script>
     <script>
         // 頁面載入時檢查任務解鎖和位置（最後執行，確保所有腳本已載入）
         document.addEventListener('DOMContentLoaded', function() {
@@ -209,10 +209,10 @@
             
             // 延遲執行確保所有腳本已載入
             setTimeout(function() {
-                // 確保函數已載入（若未載入仍可使用與自然互動）
-                const canCheckLocation = typeof window.isLocationVerified === 'function' && typeof window.blockTaskContent === 'function';
-                if (!canCheckLocation) {
-                    console.error('[dawn.html] 位置檢測函數未載入，略過位置驗證');
+                // 確保函數已載入
+                if (typeof window.isLocationVerified === 'undefined' || typeof window.blockTaskContent === 'undefined') {
+                    console.error('[dawn.html] 位置檢測函數未載入');
+                    return;
                 }
                 
                 // 先檢查任務是否解鎖
@@ -244,7 +244,7 @@
                 }
 
                 // 檢查位置驗證（在初始化之後）
-                if (canCheckLocation && !window.isLocationVerified(taskKey)) {
+                if (!window.isLocationVerified(taskKey)) {
                     window.blockTaskContent(taskKey);
                 }
             }, 500);
