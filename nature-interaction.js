@@ -6,6 +6,13 @@
 
     let html5QrcodeScanner = null;
     let isScanning = false;
+    let externalAudioPlayer = null;
+
+    const EXTERNAL_TTS_ENABLED = true;
+    const EXTERNAL_TTS_LANG = 'zh-TW';
+    const EXTERNAL_TTS_CHAR_LIMIT = 180;
+    const EXTERNAL_TTS_PROVIDERS = ['streamelements', 'google'];
+    const EXTERNAL_TTS_VOICE = 'Zhiyu';
 
     // 初始化與自然互動功能
     function initNatureInteraction(missionData) {
@@ -315,8 +322,137 @@
         return fullMessage;
     }
 
-    // 語音合成播放鼓勵話
+    // 外部 TTS（語音生成）輔助
+    function splitTextForTTS(text, limit) {
+        if (!text) {
+            return [];
+        }
+
+        const sentences = text.match(/[^。！？!?；;，,、]+[。！？!?；;，,、]?/g) || [text];
+        const parts = [];
+        let buffer = '';
+
+        sentences.forEach((sentence) => {
+            if ((buffer + sentence).length <= limit) {
+                buffer += sentence;
+                return;
+            }
+
+            if (buffer) {
+                parts.push(buffer);
+                buffer = '';
+            }
+
+            if (sentence.length <= limit) {
+                buffer = sentence;
+                return;
+            }
+
+            for (let i = 0; i < sentence.length; i += limit) {
+                parts.push(sentence.slice(i, i + limit));
+            }
+        });
+
+        if (buffer) {
+            parts.push(buffer);
+        }
+
+        return parts;
+    }
+
+    function buildExternalTTSUrl(text, provider) {
+        if (provider === 'streamelements') {
+            const params = new URLSearchParams({
+                voice: EXTERNAL_TTS_VOICE,
+                text
+            });
+            return `https://api.streamelements.com/kappa/v2/speech?${params.toString()}`;
+        }
+
+        const params = new URLSearchParams({
+            client: 'gtx',
+            tl: EXTERNAL_TTS_LANG,
+            q: text
+        });
+        return `https://translate.googleapis.com/translate_tts?${params.toString()}`;
+    }
+
+    function playExternalTTS(text) {
+        const parts = splitTextForTTS(text, EXTERNAL_TTS_CHAR_LIMIT);
+
+        if (parts.length === 0) {
+            return Promise.reject(new Error('empty text'));
+        }
+
+        if (externalAudioPlayer) {
+            externalAudioPlayer.pause();
+            externalAudioPlayer.src = '';
+        }
+
+        externalAudioPlayer = new Audio();
+        externalAudioPlayer.preload = 'auto';
+        externalAudioPlayer.crossOrigin = 'anonymous';
+
+        let index = 0;
+        let providerIndex = 0;
+
+        return new Promise((resolve, reject) => {
+            const tryNextProvider = () => {
+                providerIndex += 1;
+                if (providerIndex < EXTERNAL_TTS_PROVIDERS.length) {
+                    console.warn('[nature-interaction] 外部 TTS 來源失敗，改用:', EXTERNAL_TTS_PROVIDERS[providerIndex]);
+                    playPart();
+                } else {
+                    reject(new Error('all external tts providers failed'));
+                }
+            };
+
+            const playPart = () => {
+                const provider = EXTERNAL_TTS_PROVIDERS[providerIndex];
+                const url = buildExternalTTSUrl(parts[index], provider);
+                externalAudioPlayer.src = url;
+                const playPromise = externalAudioPlayer.play();
+                if (playPromise && typeof playPromise.catch === 'function') {
+                    playPromise.catch(() => {
+                        tryNextProvider();
+                    });
+                }
+            };
+
+            externalAudioPlayer.onended = () => {
+                index += 1;
+                if (index < parts.length) {
+                    playPart();
+                } else {
+                    resolve();
+                }
+            };
+
+            externalAudioPlayer.onerror = (event) => {
+                tryNextProvider();
+            };
+
+            playPart();
+        });
+    }
+
+    // 語音播放入口：優先使用外部 TTS，失敗再回退語音合成
     function speakEncouragement(text) {
+        if (EXTERNAL_TTS_ENABLED) {
+            console.log('[nature-interaction] 使用外部 TTS 播放');
+            playExternalTTS(text)
+                .catch((error) => {
+                    console.warn('[nature-interaction] 外部 TTS 失敗，改用語音合成:', error);
+                    playSpeechSynthesis(text);
+                });
+            return;
+        }
+
+        playSpeechSynthesis(text);
+    }
+
+    // 語音合成播放鼓勵話
+    function playSpeechSynthesis(text) {
         if (!('speechSynthesis' in window)) {
             console.warn('[nature-interaction] 瀏覽器不支援語音合成');
             return;
