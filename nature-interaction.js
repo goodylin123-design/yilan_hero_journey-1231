@@ -945,6 +945,11 @@
                     utterance.rate = 0.8; // iOS Safari：更溫暖柔和
                     utterance.pitch = 1.03; // 略高更親切
                     utterance.volume = 0.93; // 稍降音量更舒服
+                } else if (ttsLang && ttsLang.toLowerCase().startsWith('ko')) {
+                    // 韓文語速稍慢，避免過快
+                    utterance.rate = 0.8;
+                    utterance.pitch = 1.0;
+                    utterance.volume = 1.0;
                 } else if (isMobile) {
                     utterance.rate = 0.85; // 手機版：稍慢但自然
                     utterance.pitch = 1.0; // 正常音調
