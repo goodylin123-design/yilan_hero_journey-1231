@@ -330,8 +330,18 @@
             setTimeout(() => {
                 const utterance = new SpeechSynthesisUtterance(text);
                 utterance.lang = 'zh-TW'; // 繁體中文
-                utterance.rate = 0.75; // 更慢的速度，提高清晰度（手機版建議 0.7-0.8）
-                utterance.pitch = 1.0; // 保持正常音調
+                
+                // 檢測設備類型
+                const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                
+                // 使用更自然的語音參數
+                if (isMobile) {
+                    utterance.rate = 0.85; // 手機版：稍慢但自然
+                    utterance.pitch = 1.0; // 正常音調
+                } else {
+                    utterance.rate = 0.9; // 桌面版：接近正常語速
+                    utterance.pitch = 1.0; // 正常音調
+                }
                 utterance.volume = 1.0; // 最大音量
 
                 utterance.onerror = (event) => {
@@ -412,21 +422,9 @@
             utterance.voice = chineseVoice;
             console.log('[nature-interaction] 使用語音:', chineseVoice.name, chineseVoice.lang);
             
-            // 如果是手機，進一步調整參數
-            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            if (isMobile) {
-                utterance.rate = 0.7; // 手機版更慢，提高清晰度
-                utterance.pitch = 0.95; // 稍微降低音調，更清晰
-                console.log('[nature-interaction] 手機版：調整語音參數以提高清晰度');
-            }
+            // 不在此處覆蓋參數，保持之前在創建 utterance 時設置的自然參數
         } else {
             console.warn('[nature-interaction] 未找到中文語音，使用預設語音');
-            // 即使沒有中文語音，也調整參數以提高清晰度
-            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            if (isMobile) {
-                utterance.rate = 0.7;
-                utterance.pitch = 0.95;
-            }
         }
 
         // 播放語音
