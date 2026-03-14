@@ -91,7 +91,15 @@
     <script src="esg-stats.js"></script>
     <script src="traveler-store.js"></script>
     <script src="points-redeem.js"></script>
-    <script src="page-i18n.js"></script>
+    <script src="index-i18n.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var back = document.querySelector('.back-link');
+            if (back && back.getAttribute('href') === 'app.html') {
+                back.href = new URL('app.html', window.location.href).href;
+            }
+        });
+    </script>
 </body>
 </html>
 

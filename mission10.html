@@ -206,6 +206,8 @@
     <script>
         // 頁面載入時檢查任務解鎖和位置（最後執行，確保所有腳本已載入）
         document.addEventListener('DOMContentLoaded', function() {
+            var back = document.querySelector('.back-link');
+            if (back && back.getAttribute('href') === 'app.html') { back.href = new URL('app.html', window.location.href).href; }
             const taskKey = 'mission10';
             
             // 延遲執行確保所有腳本已載入
