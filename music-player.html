@@ -201,29 +201,6 @@
                 touch-action: manipulation;
                 -webkit-tap-highlight-color: rgba(59, 130, 246, 0.2);
             }
-            /* iPhone Safari：大按鈕返回首頁，避免連結被攔截 */
-            .back-btn-ios {
-                display: inline-block !important;
-                margin-top: 12px;
-                padding: 14px 24px;
-                min-height: 48px;
-                background: linear-gradient(135deg, #3B82F6, #2563EB);
-                color: #fff !important;
-                font-weight: 600;
-                border: none;
-                border-radius: 25px;
-                text-align: center;
-                touch-action: manipulation;
-                -webkit-tap-highlight-color: transparent;
-                box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
-                cursor: pointer;
-                font-size: 1rem;
-            }
-            .back-btn-ios:active { opacity: 0.9; }
-            #back-btn-ios { margin-top: 12px; text-decoration: none; color: #fff; }
-        }
-        @media (min-width: 769px) {
-            .back-btn-ios { display: none !important; }
         }
     </style>
 </head>
@@ -260,8 +237,6 @@
         
         <header class="header">
             <a href="app.html" class="back-link" data-i18n="backToHome">← 返回英雄之旅首頁</a>
-            <!-- 返回：點擊前先停止並釋放音訊，再導向，避免 iPhone 出現「重複發生問題」 -->
-            <a href="app.html" class="back-btn-ios" id="back-btn-ios" data-i18n="backToHome">返回英雄之旅首頁</a>
             <h1 class="title" data-i18n="musicPlayerTitle">🎵 英雄主題音樂</h1>
             <p class="subtitle" data-i18n="musicPlayerSubtitle">擺渡蘭陽英雄之歌</p>
         </header>
@@ -272,17 +247,10 @@
                     <h2 class="music-title" data-i18n="musicTitle">《擺渡蘭陽・英雄之旅》</h2>
                     <p class="music-subtitle" data-i18n="musicSubtitle">英雄主題音樂 · 海岸療癒系</p>
                     
-                    <!-- 隱藏的 audio 元素；playsinline + preload 有助於行動裝置 -->
-                    <audio id="hero-music-audio" loop playsinline preload="auto">
+                    <audio id="hero-music-audio" loop playsinline>
                         <source src="擺渡蘭陽英雄之旅.mp3" type="audio/mpeg">
                         您的瀏覽器不支援音訊播放。
                     </audio>
-                    
-                    <!-- iPhone Safari 備援：直接開音樂檔在新分頁聆聽（較不易中斷） -->
-                    <p class="music-fallback-hint" style="margin-top:12px; font-size:0.9rem; color:#64748B;">
-                        若頁面內播放不穩定，可 <a href="擺渡蘭陽英雄之旅.mp3" target="_blank" rel="noopener" id="open-music-new-tab">在此開啟音樂</a> 用新分頁聆聽。
-                    </p>
-                    
                     <div class="music-controls">
                         <button type="button" class="btn-music btn-play" id="btn-play-music">
                             <span>▶️</span>
@@ -392,137 +360,68 @@
             const volumeControl = document.getElementById('volume-control');
             const volumeValue = document.getElementById('volume-value');
 
-            // 返回首頁前先停止並釋放音訊，再導向（避免 iPhone 卸載頁面時「重複發生問題」）
-            function goBack(e) {
-                if (e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                }
-                const a = document.getElementById('hero-music-audio');
-                if (a) {
-                    a.pause();
-                    a.currentTime = 0;
-                    a.removeAttribute('src');
-                    a.load();
-                }
-                window.location.href = 'app.html';
-            }
-            document.querySelectorAll('.back-link, .back-btn-ios').forEach(function(el) {
-                el.addEventListener('click', goBack);
-                el.addEventListener('touchend', function(ev) {
-                    goBack(ev);
-                }, { passive: false });
-            });
-
             if (!audio) return;
 
-            // 設定初始音量
             audio.volume = 0.7;
             volumeControl.value = 70;
 
-            // 音量控制
             volumeControl.addEventListener('input', (e) => {
-                const volume = parseInt(e.target.value) / 100;
-                audio.volume = volume;
+                audio.volume = parseInt(e.target.value) / 100;
                 volumeValue.textContent = e.target.value + '%';
             });
 
-            function setPlayingUI() {
+            btnPlay.addEventListener('click', () => {
+                if (audio && !isPlaying) {
+                    audio.play().then(() => {
+                        statusText.textContent = '正在播放...';
+                        statusIndicator.classList.add('playing');
+                        btnPlay.style.display = 'none';
+                        btnStop.style.display = 'flex';
+                        isPlaying = true;
+                    }).catch((err) => {
+                        console.error('播放失敗:', err);
+                        statusText.textContent = '播放失敗，請再試一次';
+                    });
+                }
+            });
+
+            btnStop.addEventListener('click', () => {
+                if (audio && isPlaying) {
+                    audio.pause();
+                    audio.currentTime = 0;
+                    statusText.textContent = '已停止';
+                    statusIndicator.classList.remove('playing');
+                    btnPlay.style.display = 'flex';
+                    btnStop.style.display = 'none';
+                    isPlaying = false;
+                }
+            });
+
+            audio.addEventListener('play', () => {
                 statusText.textContent = '正在播放...';
                 statusIndicator.classList.add('playing');
                 btnPlay.style.display = 'none';
                 btnStop.style.display = 'flex';
                 isPlaying = true;
-            }
-            function setStoppedUI(msg) {
-                statusText.textContent = msg || '已暫停';
+            });
+            audio.addEventListener('pause', () => {
+                statusText.textContent = '已暫停';
                 statusIndicator.classList.remove('playing');
                 btnPlay.style.display = 'flex';
                 btnStop.style.display = 'none';
                 isPlaying = false;
-            }
-
-            // 播放：不依賴 fetch，直接用頁面 audio；等可播再 play（iPhone 較穩）
-            function playWhenReady() {
-                return new Promise((resolve, reject) => {
-                    if (audio.readyState >= 3) {
-                        audio.play().then(resolve).catch(reject);
-                        return;
-                    }
-                    let done = false;
-                    const t = setTimeout(() => {
-                        if (done) return;
-                        done = true;
-                        audio.removeEventListener('canplaythrough', onReady);
-                        audio.removeEventListener('error', onErr);
-                        if (audio.readyState >= 2) audio.play().then(resolve).catch(reject);
-                        else reject(new Error('timeout'));
-                    }, 20000);
-                    const finish = (err) => {
-                        if (done) return;
-                        done = true;
-                        clearTimeout(t);
-                        audio.removeEventListener('canplaythrough', onReady);
-                        audio.removeEventListener('error', onErr);
-                        if (err) reject(err);
-                        else audio.play().then(resolve).catch(reject);
-                    };
-                    const onReady = () => finish(null);
-                    const onErr = (e) => finish(e);
-                    audio.addEventListener('canplaythrough', onReady, { once: true });
-                    audio.addEventListener('error', onErr, { once: true });
-                });
-            }
-            function startPlay() {
-                if (!audio || isPlaying) return;
-                statusText.textContent = '準備播放…';
-                playWhenReady().then(setPlayingUI).catch(function(err) {
-                    console.error('播放失敗:', err);
-                    statusText.textContent = '播放失敗，請再試一次或點下方「在此開啟音樂」';
-                });
-            }
-
-            btnPlay.addEventListener('click', startPlay);
-
-            // 停止按鈕
-            btnStop.addEventListener('click', () => {
-                if (audio && isPlaying) {
-                    audio.pause();
-                    audio.currentTime = 0;
-                    setStoppedUI();
-                }
             });
-
-            // 監聽音訊事件
-            audio.addEventListener('play', setPlayingUI);
-            audio.addEventListener('pause', setStoppedUI);
-
-            audio.addEventListener('ended', setStoppedUI);
-
+            audio.addEventListener('ended', () => {
+                statusText.textContent = '播放完成';
+                statusIndicator.classList.remove('playing');
+                btnPlay.style.display = 'flex';
+                btnStop.style.display = 'none';
+                isPlaying = false;
+            });
             audio.addEventListener('error', (e) => {
-                console.error('音訊載入錯誤:', e);
-                statusText.textContent = '音樂載入失敗，請檢查檔案是否存在';
-                alert('無法載入音樂檔案。請確認「擺渡蘭陽英雄之旅.mp3」檔案存在於網站目錄中。');
+                console.error('音訊錯誤:', e);
+                statusText.textContent = '音樂載入失敗';
             });
-
-            // 顯示音樂時長（僅當頁面上有該元素時，避免行動裝置報錯）
-            audio.addEventListener('loadedmetadata', () => {
-                const el = document.getElementById('info-duration');
-                if (el) {
-                    const duration = audio.duration;
-                    const minutes = Math.floor(duration / 60);
-                    const seconds = Math.floor(duration % 60);
-                    el.textContent = `${minutes}:${String(seconds).padStart(2, '0')}（可循環播放）`;
-                }
-            });
-
-            // 行動裝置：頁面被背景化時瀏覽器常會暫停音訊，恢復時同步 UI
-            document.addEventListener('visibilitychange', () => {
-                if (document.visibilityState === 'visible' && audio && audio.paused && isPlaying) {
-                    setStoppedUI('已暫停（可點擊播放繼續）');
-                }
-            });
-
         });
     </script>
     <script src="i18n.js"></script>
