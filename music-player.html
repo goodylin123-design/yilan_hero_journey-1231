@@ -220,10 +220,10 @@
                 font-size: 1rem;
             }
             .back-btn-ios:active { opacity: 0.9; }
-            .back-form-ios { display: block; margin: 12px 0 0; }
+            #back-btn-ios { margin-top: 12px; text-decoration: none; color: #fff; }
         }
         @media (min-width: 769px) {
-            .back-form-ios { display: none !important; }
+            .back-btn-ios { display: none !important; }
         }
     </style>
 </head>
@@ -260,10 +260,8 @@
         
         <header class="header">
             <a href="app.html" class="back-link" data-i18n="backToHome">← 返回英雄之旅首頁</a>
-            <!-- iPhone Safari：表單提交 = 純 HTML 導向，不依賴任何 JavaScript -->
-            <form action="app.html" method="get" class="back-form-ios">
-                <button type="submit" class="back-btn-ios" data-i18n="backToHome">返回英雄之旅首頁</button>
-            </form>
+            <!-- 返回：點擊前先停止並釋放音訊，再導向，避免 iPhone 出現「重複發生問題」 -->
+            <a href="app.html" class="back-btn-ios" id="back-btn-ios" data-i18n="backToHome">返回英雄之旅首頁</a>
             <h1 class="title" data-i18n="musicPlayerTitle">🎵 英雄主題音樂</h1>
             <p class="subtitle" data-i18n="musicPlayerSubtitle">擺渡蘭陽英雄之歌</p>
         </header>
@@ -393,6 +391,28 @@
             const statusText = document.getElementById('status-text');
             const volumeControl = document.getElementById('volume-control');
             const volumeValue = document.getElementById('volume-value');
+
+            // 返回首頁前先停止並釋放音訊，再導向（避免 iPhone 卸載頁面時「重複發生問題」）
+            function goBack(e) {
+                if (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+                const a = document.getElementById('hero-music-audio');
+                if (a) {
+                    a.pause();
+                    a.currentTime = 0;
+                    a.removeAttribute('src');
+                    a.load();
+                }
+                window.location.href = 'app.html';
+            }
+            document.querySelectorAll('.back-link, .back-btn-ios').forEach(function(el) {
+                el.addEventListener('click', goBack);
+                el.addEventListener('touchend', function(ev) {
+                    goBack(ev);
+                }, { passive: false });
+            });
 
             if (!audio) return;
 
