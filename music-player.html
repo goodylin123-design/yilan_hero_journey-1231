@@ -352,6 +352,7 @@
     <script>
         let audio = null;
         let isPlaying = false;
+        let blobUrl = null; // 完整下載後的 blob URL，避免手機串流中斷
 
         document.addEventListener('DOMContentLoaded', () => {
             audio = document.getElementById('hero-music-audio');
@@ -361,6 +362,7 @@
             const statusText = document.getElementById('status-text');
             const volumeControl = document.getElementById('volume-control');
             const volumeValue = document.getElementById('volume-value');
+            const mp3Url = '擺渡蘭陽英雄之旅.mp3';
 
             // 設定初始音量
             audio.volume = 0.7;
@@ -373,61 +375,60 @@
                 volumeValue.textContent = e.target.value + '%';
             });
 
-            // 播放按鈕
-            btnPlay.addEventListener('click', () => {
-                if (audio && !isPlaying) {
-                    audio.play().then(() => {
-                        statusText.textContent = '正在播放...';
-                        statusIndicator.classList.add('playing');
-                        btnPlay.style.display = 'none';
-                        btnStop.style.display = 'flex';
-                        isPlaying = true;
-                    }).catch((error) => {
-                        console.error('播放失敗:', error);
-                        statusText.textContent = '播放失敗，請檢查瀏覽器設定';
-                        alert('無法播放音樂。請確認瀏覽器允許自動播放音訊，或點擊頁面後再試。');
-                    });
-                }
-            });
-
-            // 停止按鈕
-            btnStop.addEventListener('click', () => {
-                if (audio && isPlaying) {
-                    audio.pause();
-                    audio.currentTime = 0; // 重置到開頭
-                    statusText.textContent = '已停止';
-                    statusIndicator.classList.remove('playing');
-                    btnPlay.style.display = 'flex';
-                    btnStop.style.display = 'none';
-                    isPlaying = false;
-                }
-            });
-
-            // 監聽音訊事件
-            audio.addEventListener('play', () => {
+            function setPlayingUI() {
                 statusText.textContent = '正在播放...';
                 statusIndicator.classList.add('playing');
                 btnPlay.style.display = 'none';
                 btnStop.style.display = 'flex';
                 isPlaying = true;
-            });
-
-            audio.addEventListener('pause', () => {
-                statusText.textContent = '已暫停';
+            }
+            function setStoppedUI(msg) {
+                statusText.textContent = msg || '已暫停';
                 statusIndicator.classList.remove('playing');
                 btnPlay.style.display = 'flex';
                 btnStop.style.display = 'none';
                 isPlaying = false;
+            }
+
+            // 播放：手機先完整下載再播，避免播到一半因網路中斷
+            async function startPlay() {
+                if (!audio || isPlaying) return;
+                try {
+                    if (!blobUrl) {
+                        statusText.textContent = '載入中…';
+                        const res = await fetch(mp3Url);
+                        if (!res.ok) throw new Error('無法下載音樂');
+                        const blob = await res.blob();
+                        if (blobUrl) URL.revokeObjectURL(blobUrl);
+                        blobUrl = URL.createObjectURL(blob);
+                        audio.src = blobUrl;
+                        audio.load();
+                    }
+                    await audio.play();
+                    setPlayingUI();
+                } catch (err) {
+                    console.error('播放失敗:', err);
+                    statusText.textContent = '播放失敗，請再試一次';
+                    if (!blobUrl) audio.src = mp3Url; //  fallback 用原本網址
+                }
+            }
+
+            btnPlay.addEventListener('click', () => startPlay());
+
+            // 停止按鈕
+            btnStop.addEventListener('click', () => {
+                if (audio && isPlaying) {
+                    audio.pause();
+                    audio.currentTime = 0;
+                    setStoppedUI();
+                }
             });
 
-            audio.addEventListener('ended', () => {
-                // 由於設定了 loop，理論上不會觸發 ended
-                statusText.textContent = '播放完成';
-                statusIndicator.classList.remove('playing');
-                btnPlay.style.display = 'flex';
-                btnStop.style.display = 'none';
-                isPlaying = false;
-            });
+            // 監聽音訊事件
+            audio.addEventListener('play', setPlayingUI);
+            audio.addEventListener('pause', setStoppedUI);
+
+            audio.addEventListener('ended', setStoppedUI);
 
             audio.addEventListener('error', (e) => {
                 console.error('音訊載入錯誤:', e);
@@ -448,29 +449,37 @@
 
             // 行動裝置：頁面被背景化時瀏覽器常會暫停音訊，恢復時同步 UI
             document.addEventListener('visibilitychange', () => {
-                if (document.visibilityState === 'visible' && audio) {
-                    if (!audio.paused) return;
-                    if (isPlaying) {
-                        statusText.textContent = '已暫停（可點擊播放繼續）';
-                        statusIndicator.classList.remove('playing');
-                        btnPlay.style.display = 'flex';
-                        btnStop.style.display = 'none';
-                        isPlaying = false;
-                    }
+                if (document.visibilityState === 'visible' && audio && audio.paused && isPlaying) {
+                    setStoppedUI('已暫停（可點擊播放繼續）');
                 }
             });
 
-            // 確保「返回英雄之旅首頁」在行動裝置上可點擊（避免被層級或觸控延遲影響）
-            const backLink = document.querySelector('.back-link[href="app.html"]');
-            if (backLink) {
-                backLink.addEventListener('click', function(e) {
-                    const href = this.getAttribute('href');
-                    if (href && (window.location.href === this.href || true)) {
-                        e.preventDefault();
-                        window.location.href = href;
-                    }
-                });
+            // 「返回英雄之旅首頁」：用事件委派 + touchend，確保手機必能返回
+            function goToApp(link) {
+                const url = link.href || link.getAttribute('href');
+                if (url) window.location.assign(url);
             }
+            document.addEventListener('click', function(e) {
+                const link = e.target.closest('a.back-link');
+                if (link) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    goToApp(link);
+                }
+            }, true);
+            document.addEventListener('touchend', function(e) {
+                const link = e.target.closest('a.back-link');
+                if (link) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    goToApp(link);
+                }
+            }, { passive: false, capture: true });
+
+            // 離開頁面時釋放 blob URL
+            window.addEventListener('beforeunload', () => {
+                if (blobUrl) URL.revokeObjectURL(blobUrl);
+            });
         });
     </script>
     <script src="i18n.js"></script>
