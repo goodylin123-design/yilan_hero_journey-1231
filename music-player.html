@@ -220,9 +220,10 @@
                 font-size: 1rem;
             }
             .back-btn-ios:active { opacity: 0.9; }
+            .back-form-ios { display: block; margin: 12px 0 0; }
         }
         @media (min-width: 769px) {
-            .back-btn-ios { display: none !important; }
+            .back-form-ios { display: none !important; }
         }
     </style>
 </head>
@@ -259,8 +260,10 @@
         
         <header class="header">
             <a href="app.html" class="back-link" data-i18n="backToHome">← 返回英雄之旅首頁</a>
-            <!-- iPhone Safari：button + 內建 onclick 同步導向，避免無法返回 -->
-            <button type="button" class="back-btn-ios" id="back-btn-ios" data-i18n="backToHome" onclick="window.location.href='app.html'">返回英雄之旅首頁</button>
+            <!-- iPhone Safari：表單提交 = 純 HTML 導向，不依賴任何 JavaScript -->
+            <form action="app.html" method="get" class="back-form-ios">
+                <button type="submit" class="back-btn-ios" data-i18n="backToHome">返回英雄之旅首頁</button>
+            </form>
             <h1 class="title" data-i18n="musicPlayerTitle">🎵 英雄主題音樂</h1>
             <p class="subtitle" data-i18n="musicPlayerSubtitle">擺渡蘭陽英雄之歌</p>
         </header>
@@ -271,11 +274,16 @@
                     <h2 class="music-title" data-i18n="musicTitle">《擺渡蘭陽・英雄之旅》</h2>
                     <p class="music-subtitle" data-i18n="musicSubtitle">英雄主題音樂 · 海岸療癒系</p>
                     
-                    <!-- 隱藏的 audio 元素；playsinline 有助於部分行動裝置連續播放 -->
-                    <audio id="hero-music-audio" loop playsinline>
+                    <!-- 隱藏的 audio 元素；playsinline + preload 有助於行動裝置 -->
+                    <audio id="hero-music-audio" loop playsinline preload="auto">
                         <source src="擺渡蘭陽英雄之旅.mp3" type="audio/mpeg">
                         您的瀏覽器不支援音訊播放。
                     </audio>
+                    
+                    <!-- iPhone Safari 備援：直接開音樂檔在新分頁聆聽（較不易中斷） -->
+                    <p class="music-fallback-hint" style="margin-top:12px; font-size:0.9rem; color:#64748B;">
+                        若頁面內播放不穩定，可 <a href="擺渡蘭陽英雄之旅.mp3" target="_blank" rel="noopener" id="open-music-new-tab">在此開啟音樂</a> 用新分頁聆聽。
+                    </p>
                     
                     <div class="music-controls">
                         <button type="button" class="btn-music btn-play" id="btn-play-music">
@@ -376,7 +384,6 @@
     <script>
         let audio = null;
         let isPlaying = false;
-        let blobUrl = null; // 完整下載後的 blob URL，避免手機串流中斷
 
         document.addEventListener('DOMContentLoaded', () => {
             audio = document.getElementById('hero-music-audio');
@@ -386,7 +393,8 @@
             const statusText = document.getElementById('status-text');
             const volumeControl = document.getElementById('volume-control');
             const volumeValue = document.getElementById('volume-value');
-            const mp3Url = '擺渡蘭陽英雄之旅.mp3';
+
+            if (!audio) return;
 
             // 設定初始音量
             audio.volume = 0.7;
@@ -414,7 +422,7 @@
                 isPlaying = false;
             }
 
-            // 播放：等 canplaythrough 再 play（iPhone Safari 較穩定）
+            // 播放：不依賴 fetch，直接用頁面 audio；等可播再 play（iPhone 較穩）
             function playWhenReady() {
                 return new Promise((resolve, reject) => {
                     if (audio.readyState >= 3) {
@@ -445,38 +453,16 @@
                     audio.addEventListener('error', onErr, { once: true });
                 });
             }
-            async function startPlay() {
+            function startPlay() {
                 if (!audio || isPlaying) return;
-                try {
-                    if (!blobUrl) {
-                        statusText.textContent = '載入中…';
-                        try {
-                            const res = await fetch(mp3Url);
-                            if (!res.ok) throw new Error('無法下載');
-                            const blob = await res.blob();
-                            if (blobUrl) URL.revokeObjectURL(blobUrl);
-                            blobUrl = URL.createObjectURL(blob);
-                            audio.src = blobUrl;
-                            audio.load();
-                        } catch (fetchErr) {
-                            console.warn('fetch 失敗，改用直接播放', fetchErr);
-                            audio.src = mp3Url;
-                            audio.load();
-                        }
-                    }
-                    await playWhenReady();
-                    setPlayingUI();
-                } catch (err) {
+                statusText.textContent = '準備播放…';
+                playWhenReady().then(setPlayingUI).catch(function(err) {
                     console.error('播放失敗:', err);
-                    statusText.textContent = '播放失敗，請再試一次';
-                    if (!blobUrl) {
-                        audio.src = mp3Url;
-                        audio.load();
-                    }
-                }
+                    statusText.textContent = '播放失敗，請再試一次或點下方「在此開啟音樂」';
+                });
             }
 
-            btnPlay.addEventListener('click', () => startPlay());
+            btnPlay.addEventListener('click', startPlay);
 
             // 停止按鈕
             btnStop.addEventListener('click', () => {
@@ -517,10 +503,6 @@
                 }
             });
 
-            // 離開頁面時釋放 blob URL
-            window.addEventListener('beforeunload', () => {
-                if (blobUrl) URL.revokeObjectURL(blobUrl);
-            });
         });
     </script>
     <script src="i18n.js"></script>
