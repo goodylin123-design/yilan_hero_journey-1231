@@ -187,6 +187,21 @@
                 transform: scale(1.2);
             }
         }
+        /* 行動裝置：返回連結可點擊區域加大、減少觸控延遲、確保在最上層 */
+        @media (max-width: 768px) {
+            .back-link {
+                position: relative;
+                z-index: 10;
+                min-height: 44px;
+                min-width: 44px;
+                padding: 12px 16px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                touch-action: manipulation;
+                -webkit-tap-highlight-color: rgba(59, 130, 246, 0.2);
+            }
+        }
     </style>
 </head>
 <body>
@@ -232,8 +247,8 @@
                     <h2 class="music-title" data-i18n="musicTitle">《擺渡蘭陽・英雄之旅》</h2>
                     <p class="music-subtitle" data-i18n="musicSubtitle">英雄主題音樂 · 海岸療癒系</p>
                     
-                    <!-- 隱藏的 audio 元素 -->
-                    <audio id="hero-music-audio" loop>
+                    <!-- 隱藏的 audio 元素；playsinline 有助於部分行動裝置連續播放 -->
+                    <audio id="hero-music-audio" loop playsinline>
                         <source src="擺渡蘭陽英雄之旅.mp3" type="audio/mpeg">
                         您的瀏覽器不支援音訊播放。
                     </audio>
@@ -420,14 +435,42 @@
                 alert('無法載入音樂檔案。請確認「擺渡蘭陽英雄之旅.mp3」檔案存在於網站目錄中。');
             });
 
-            // 顯示音樂時長（載入後）
+            // 顯示音樂時長（僅當頁面上有該元素時，避免行動裝置報錯）
             audio.addEventListener('loadedmetadata', () => {
-                const duration = audio.duration;
-                const minutes = Math.floor(duration / 60);
-                const seconds = Math.floor(duration % 60);
-                document.getElementById('info-duration').textContent = 
-                    `${minutes}:${String(seconds).padStart(2, '0')}（可循環播放）`;
+                const el = document.getElementById('info-duration');
+                if (el) {
+                    const duration = audio.duration;
+                    const minutes = Math.floor(duration / 60);
+                    const seconds = Math.floor(duration % 60);
+                    el.textContent = `${minutes}:${String(seconds).padStart(2, '0')}（可循環播放）`;
+                }
             });
+
+            // 行動裝置：頁面被背景化時瀏覽器常會暫停音訊，恢復時同步 UI
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible' && audio) {
+                    if (!audio.paused) return;
+                    if (isPlaying) {
+                        statusText.textContent = '已暫停（可點擊播放繼續）';
+                        statusIndicator.classList.remove('playing');
+                        btnPlay.style.display = 'flex';
+                        btnStop.style.display = 'none';
+                        isPlaying = false;
+                    }
+                }
+            });
+
+            // 確保「返回英雄之旅首頁」在行動裝置上可點擊（避免被層級或觸控延遲影響）
+            const backLink = document.querySelector('.back-link[href="app.html"]');
+            if (backLink) {
+                backLink.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    if (href && (window.location.href === this.href || true)) {
+                        e.preventDefault();
+                        window.location.href = href;
+                    }
+                });
+            }
         });
     </script>
     <script src="i18n.js"></script>
