@@ -201,6 +201,28 @@
                 touch-action: manipulation;
                 -webkit-tap-highlight-color: rgba(59, 130, 246, 0.2);
             }
+            /* iPhone Safari：大按鈕返回首頁，避免連結被攔截 */
+            .back-btn-ios {
+                display: inline-block !important;
+                margin-top: 12px;
+                padding: 14px 24px;
+                min-height: 48px;
+                background: linear-gradient(135deg, #3B82F6, #2563EB);
+                color: #fff !important;
+                font-weight: 600;
+                border: none;
+                border-radius: 25px;
+                text-align: center;
+                touch-action: manipulation;
+                -webkit-tap-highlight-color: transparent;
+                box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
+                cursor: pointer;
+                font-size: 1rem;
+            }
+            .back-btn-ios:active { opacity: 0.9; }
+        }
+        @media (min-width: 769px) {
+            .back-btn-ios { display: none !important; }
         }
     </style>
 </head>
@@ -237,6 +259,8 @@
         
         <header class="header">
             <a href="app.html" class="back-link" data-i18n="backToHome">← 返回英雄之旅首頁</a>
+            <!-- iPhone Safari：button + 內建 onclick 同步導向，避免無法返回 -->
+            <button type="button" class="back-btn-ios" id="back-btn-ios" data-i18n="backToHome" onclick="window.location.href='app.html'">返回英雄之旅首頁</button>
             <h1 class="title" data-i18n="musicPlayerTitle">🎵 英雄主題音樂</h1>
             <p class="subtitle" data-i18n="musicPlayerSubtitle">擺渡蘭陽英雄之歌</p>
         </header>
@@ -390,26 +414,65 @@
                 isPlaying = false;
             }
 
-            // 播放：手機先完整下載再播，避免播到一半因網路中斷
+            // 播放：等 canplaythrough 再 play（iPhone Safari 較穩定）
+            function playWhenReady() {
+                return new Promise((resolve, reject) => {
+                    if (audio.readyState >= 3) {
+                        audio.play().then(resolve).catch(reject);
+                        return;
+                    }
+                    let done = false;
+                    const t = setTimeout(() => {
+                        if (done) return;
+                        done = true;
+                        audio.removeEventListener('canplaythrough', onReady);
+                        audio.removeEventListener('error', onErr);
+                        if (audio.readyState >= 2) audio.play().then(resolve).catch(reject);
+                        else reject(new Error('timeout'));
+                    }, 20000);
+                    const finish = (err) => {
+                        if (done) return;
+                        done = true;
+                        clearTimeout(t);
+                        audio.removeEventListener('canplaythrough', onReady);
+                        audio.removeEventListener('error', onErr);
+                        if (err) reject(err);
+                        else audio.play().then(resolve).catch(reject);
+                    };
+                    const onReady = () => finish(null);
+                    const onErr = (e) => finish(e);
+                    audio.addEventListener('canplaythrough', onReady, { once: true });
+                    audio.addEventListener('error', onErr, { once: true });
+                });
+            }
             async function startPlay() {
                 if (!audio || isPlaying) return;
                 try {
                     if (!blobUrl) {
                         statusText.textContent = '載入中…';
-                        const res = await fetch(mp3Url);
-                        if (!res.ok) throw new Error('無法下載音樂');
-                        const blob = await res.blob();
-                        if (blobUrl) URL.revokeObjectURL(blobUrl);
-                        blobUrl = URL.createObjectURL(blob);
-                        audio.src = blobUrl;
-                        audio.load();
+                        try {
+                            const res = await fetch(mp3Url);
+                            if (!res.ok) throw new Error('無法下載');
+                            const blob = await res.blob();
+                            if (blobUrl) URL.revokeObjectURL(blobUrl);
+                            blobUrl = URL.createObjectURL(blob);
+                            audio.src = blobUrl;
+                            audio.load();
+                        } catch (fetchErr) {
+                            console.warn('fetch 失敗，改用直接播放', fetchErr);
+                            audio.src = mp3Url;
+                            audio.load();
+                        }
                     }
-                    await audio.play();
+                    await playWhenReady();
                     setPlayingUI();
                 } catch (err) {
                     console.error('播放失敗:', err);
                     statusText.textContent = '播放失敗，請再試一次';
-                    if (!blobUrl) audio.src = mp3Url; //  fallback 用原本網址
+                    if (!blobUrl) {
+                        audio.src = mp3Url;
+                        audio.load();
+                    }
                 }
             }
 
@@ -453,28 +516,6 @@
                     setStoppedUI('已暫停（可點擊播放繼續）');
                 }
             });
-
-            // 「返回英雄之旅首頁」：用事件委派 + touchend，確保手機必能返回
-            function goToApp(link) {
-                const url = link.href || link.getAttribute('href');
-                if (url) window.location.assign(url);
-            }
-            document.addEventListener('click', function(e) {
-                const link = e.target.closest('a.back-link');
-                if (link) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    goToApp(link);
-                }
-            }, true);
-            document.addEventListener('touchend', function(e) {
-                const link = e.target.closest('a.back-link');
-                if (link) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    goToApp(link);
-                }
-            }, { passive: false, capture: true });
 
             // 離開頁面時釋放 blob URL
             window.addEventListener('beforeunload', () => {
