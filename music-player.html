@@ -187,21 +187,6 @@
                 transform: scale(1.2);
             }
         }
-        /* 行動裝置：返回連結可點擊區域加大、減少觸控延遲、確保在最上層 */
-        @media (max-width: 768px) {
-            .back-link {
-                position: relative;
-                z-index: 10;
-                min-height: 44px;
-                min-width: 44px;
-                padding: 12px 16px;
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                touch-action: manipulation;
-                -webkit-tap-highlight-color: rgba(59, 130, 246, 0.2);
-            }
-        }
     </style>
 </head>
 <body>
@@ -352,6 +337,12 @@
         let isPlaying = false;
 
         document.addEventListener('DOMContentLoaded', () => {
+            // 與其他子頁面一致：返回連結用絕對網址，避免手機瀏覽器解析錯誤
+            var back = document.querySelector('.back-link');
+            if (back && back.getAttribute('href') === 'app.html') {
+                back.href = new URL('app.html', window.location.href).href;
+            }
+
             audio = document.getElementById('hero-music-audio');
             const btnPlay = document.getElementById('btn-play-music');
             const btnStop = document.getElementById('btn-stop-music');
@@ -425,7 +416,7 @@
         });
     </script>
     <script src="i18n.js"></script>
-    <script src="page-i18n.js"></script>
+    <script src="index-i18n.js"></script>
 </body>
 </html>
 
