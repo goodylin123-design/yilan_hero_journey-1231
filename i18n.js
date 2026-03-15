@@ -535,6 +535,7 @@ const TRANSLATIONS = {
         aboutSongDesc2: '這首音樂適合在進行任務時播放，營造海岸療癒氛圍，陪伴你走過每一段內在成長的旅程。',
         musicTip: '💡 提示：建議使用耳機或外接喇叭以獲得最佳聆聽體驗。播放時可搭配歌詞一起欣賞。',
         lyrics: '📝 歌詞',
+        lyricsCredit: '本歌曲由林攸信於2026/1/6與AI共同協作生成',
         // music-player.html 歌詞翻譯
         lyricsVerse1Line1: '請來蘭陽，浪為你點燈',
         lyricsVerse1Line2: '海的呼吸，靠近一個人',
@@ -1263,6 +1264,7 @@ const TRANSLATIONS = {
         aboutSongDesc2: '这首音乐适合在进行任务时播放，营造海岸疗愈氛围，陪伴你走过每一段内在成长的旅程。',
         musicTip: '💡 提示：建议使用耳机或外接喇叭以获得最佳聆听体验。播放时可搭配歌词一起欣赏。',
         lyrics: '📝 歌词',
+        lyricsCredit: '本歌曲由林攸信于2026/1/6与AI共同协作生成',
         // music-player.html 歌词翻译
         lyricsVerse1Line1: '请来兰阳，浪为你点灯',
         lyricsVerse1Line2: '海的呼吸，靠近一个人',
@@ -1959,6 +1961,7 @@ const TRANSLATIONS = {
         aboutSongDesc2: 'This music is suitable for playing during missions, creating a coastal healing atmosphere and accompanying you through each stage of inner growth.',
         musicTip: '💡 Tip: It is recommended to use headphones or external speakers for the best listening experience. You can enjoy it along with the lyrics while playing.',
         lyrics: '📝 Lyrics',
+        lyricsCredit: 'This song was co-created by Yu-Hsin Lin and AI on 2026/1/6',
         // music-player.html lyrics translations
         lyricsVerse1Line1: 'Come to Lanyang, waves light your way',
         lyricsVerse1Line2: 'The sea\'s breath draws near to one person',
@@ -2651,6 +2654,7 @@ const TRANSLATIONS = {
         aboutSongDesc2: 'この音楽はミッション中に再生するのに適しており、海岸のヒーリング雰囲気を作り出し、内面成長の各段階を通じてあなたに付き添います。',
         musicTip: '💡 ヒント：最高のリスニング体験のために、ヘッドフォンまたは外部スピーカーの使用を推奨します。再生中に歌詞と一緒に楽しむことができます。',
         lyrics: '📝 歌詞',
+        lyricsCredit: '本楽曲は林攸信が2026年1月6日にAIと共同で制作',
         // music-player.html 歌詞翻訳
         lyricsVerse1Line1: '蘭陽に来て、波があなたのために灯を点す',
         lyricsVerse1Line2: '海の呼吸、一人の人に近づく',
@@ -3351,6 +3355,7 @@ const TRANSLATIONS = {
         aboutSongDesc2: '이 음악은 미션 중에 재생하기에 적합하며, 해안 힐링 분위기를 조성하고 내면 성장의 각 단계를 통해 당신과 함께합니다.',
         musicTip: '💡 팁: 최고의 청취 경험을 위해 헤드폰 또는 외부 스피커 사용을 권장합니다. 재생 중에 가사와 함께 즐길 수 있습니다.',
         lyrics: '📝 가사',
+        lyricsCredit: '본 곡은 임유신이 2026/1/6에 AI와 공동 제작',
         // music-player.html 가사 번역
         lyricsVerse1Line1: '란양에 오세요, 파도가 당신을 위해 등불을 켭니다',
         lyricsVerse1Line2: '바다의 호흡, 한 사람에게 가까이',
